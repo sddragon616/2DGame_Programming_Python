@@ -1,0 +1,4 @@
+import Project_FrameWork
+import Scene000_Logo
+
+Project_FrameWork.run(Scene000_Logo)
