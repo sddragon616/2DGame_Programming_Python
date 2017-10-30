@@ -1,5 +1,5 @@
 from pico2d import *
-import Project_FrameWork
+import Project_SceneFrameWork
 import Scene002_TestField
 
 name = "Title_Scene"
@@ -21,17 +21,17 @@ def handle_events():
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
-            Project_FrameWork.quit()
+            Project_SceneFrameWork.quit()
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
-                Project_FrameWork.quit()
+                Project_SceneFrameWork.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
-                Project_FrameWork.scene_change(Scene002_TestField)
+                Project_SceneFrameWork.scene_change(Scene002_TestField)
 
 
 def draw():
     clear_canvas()
-    image.draw(Project_FrameWork.Window_W/2, Project_FrameWork.Window_H/2)
+    image.draw(Project_SceneFrameWork.Window_W/2, Project_SceneFrameWork.Window_H/2)
     update_canvas()
 
 

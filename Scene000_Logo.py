@@ -1,4 +1,4 @@
-import Project_FrameWork
+import Project_SceneFrameWork
 from pico2d import *
 import Scene001_Title
 
@@ -9,7 +9,7 @@ logo_time = 0.0
 
 def enter():
     global image
-    open_canvas(Project_FrameWork.Window_W, Project_FrameWork.Window_H)
+    open_canvas(Project_SceneFrameWork.Window_W, Project_SceneFrameWork.Window_H)
     image = load_image('GoldDragon_Logo_1024x773-by_solstice_arctic_luna-d6yrudl.png')
 
 
@@ -23,7 +23,7 @@ def update():
     global logo_time
     if logo_time > 1.0:
         logo_time = 0
-        Project_FrameWork.scene_push(Scene001_Title)
+        Project_SceneFrameWork.scene_push(Scene001_Title)
     delay(0.01)
     logo_time += 0.01
 
@@ -31,7 +31,7 @@ def update():
 def draw():
     global image
     clear_canvas()
-    image.draw(Project_FrameWork.Window_W / 2, Project_FrameWork.Window_H / 2)
+    image.draw(Project_SceneFrameWork.Window_W / 2, Project_SceneFrameWork.Window_H / 2)
     update_canvas()
 
 
