@@ -12,7 +12,7 @@ def enter():
     global user
     user = ObjectData002_SwordMan.SwordMan(500, 600)
     if image is None:
-        image = load_image('TestField_1024x768.png')
+        image = load_image('Resource_Image\\TestField_1024x768.png')
 
 
 def exit():

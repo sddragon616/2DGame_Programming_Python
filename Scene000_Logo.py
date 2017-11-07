@@ -1,5 +1,6 @@
 import Project_SceneFrameWork
 from pico2d import *
+import os
 import Scene001_Title
 
 name = "LogoScene"
@@ -7,10 +8,13 @@ image = None
 logo_time = 0.0
 
 
+
+
 def enter():
     global image
     open_canvas(Project_SceneFrameWork.Window_W, Project_SceneFrameWork.Window_H)
-    image = load_image('GoldDragon_Logo_1024x773-by_solstice_arctic_luna-d6yrudl.png')
+    hide_lattice()
+    image = load_image('Resource_Image\\GoldDragon_Logo_1024x773-by_solstice_arctic_luna-d6yrudl.png')
 
 
 def exit():

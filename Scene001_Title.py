@@ -9,7 +9,7 @@ image = None
 def enter():
     global image
     if image is None:
-        image = load_image('TITLE_1024x806.png')
+        image = load_image('Resource_Image\\TITLE_1024x806.png')
 
 
 def exit():

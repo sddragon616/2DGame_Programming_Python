@@ -19,7 +19,7 @@ class Player(BaseUnit):
                  strength, defense, magic, magic_resist, move_speed, atk_speed):
         super(Player, self).__init__(hp, max_hp, mp, max_mp, stamina, max_stamina,
                                      strength, defense, magic, magic_resist, move_speed, atk_speed)
-        self.image = load_image("Player001_SwordMan.png")
+        self.image = load_image("Resource_Image\\Player001_SwordMan.png")
         self.LEVEL = 1
         self.Ability_Point = 0
         self.Skill_Point = 0
