@@ -1,3 +1,6 @@
+import time
+from pico2d import *
+
 running = None
 stack = None
 Window_W = 1024
@@ -28,18 +31,34 @@ def scene_pop():
         stack[-1].resume()
 
 
+def get_frame_time():
+    global current_time
+
+    frame_time = get_time() - current_time
+    current_time += frame_time
+    return frame_time
+
+
 def run(start_scene):
     global running, stack
     running = True
     stack = [start_scene]
     start_scene.enter()
+    current_time = time.clock()
     while running:
-        stack[-1].handle_events()
-        stack[-1].update()
-        stack[-1].draw()
+        frame_time = time.clock() - current_time
+        current_time += frame_time
+        stack[-1].handle_events(frame_time)
+        stack[-1].update(frame_time)
+        stack[-1].draw(frame_time)
     while len(stack) > 0:
         stack[-1].exit()
         stack.pop()
+
+
+def reset_time():
+    global current_time
+    current_time = time.clock()
 
 
 def quit():

@@ -17,7 +17,7 @@ def exit():
     del image
 
 
-def handle_events():
+def handle_events(frame_time):
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -29,13 +29,13 @@ def handle_events():
                 Project_SceneFrameWork.scene_change(Scene002_TestField)
 
 
-def draw():
+def draw(frame_time):
     clear_canvas()
     image.draw(Project_SceneFrameWork.Window_W/2, Project_SceneFrameWork.Window_H/2)
     update_canvas()
 
 
-def update(): pass
+def update(frame_time): pass
 
 
 def pause(): pass
