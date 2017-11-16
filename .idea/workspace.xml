@@ -3,13 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="50685533-4b67-49f3-a331-f658d1316402" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ObjectData001_BasePlayer.py" afterPath="$PROJECT_DIR$/ObjectData001_BasePlayer.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ObjectData002_SwordMan.py" afterPath="$PROJECT_DIR$/ObjectData002_SwordMan.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Project_SceneFrameWork.py" afterPath="$PROJECT_DIR$/Project_SceneFrameWork.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scene000_Logo.py" afterPath="$PROJECT_DIR$/Scene000_Logo.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scene001_Title.py" afterPath="$PROJECT_DIR$/Scene001_Title.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scene002_TestField.py" afterPath="$PROJECT_DIR$/Scene002_TestField.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UnitData/SwordMan.txt" afterPath="$PROJECT_DIR$/UnitData/SwordMan.txt" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,8 +16,8 @@
       <file leaf-file-name="ObjectData001_BasePlayer.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ObjectData001_BasePlayer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+            <state relative-caret-position="228">
+              <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -166,7 +159,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="398" />
     <option name="y" value="143" />
     <option name="width" value="1063" />
@@ -187,6 +180,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -208,7 +202,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -306,8 +299,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2109375" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -549,8 +541,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ObjectData001_BasePlayer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+        <state relative-caret-position="228">
+          <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding />
         </state>
       </provider>
