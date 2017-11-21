@@ -240,3 +240,44 @@ class Player(BaseUnit):
 
     def get_bb(self):
         return self.x - SizeX / 2, self.y - SizeY / 2, self.x + SizeX / 2, self.y + SizeY / 2
+
+    #근접 평타공격 충돌체크
+    def get_melee_atk_hb(self):
+        if self.dir == 2:
+            return self.x - (self.attack_size / 2), self.melee_atk_p_y1 - SizeY / 4 - (self.attack_size / 2), self.x + (
+                self.attack_size / 2), self.melee_atk_p_y1 - SizeY / 4 + (self.attack_size / 2)
+        elif self.dir == 8:
+            return self.x - (self.attack_size / 2), self.melee_atk_p_y2 + SizeY / 4 - (self.attack_size / 2), self.x + (
+                self.attack_size / 2), self.melee_atk_p_y2 + SizeY / 4 + (self.attack_size / 2)
+        elif self.dir == 4:
+            return self.melee_atk_p_x1 - SizeX / 2 - (self.attack_size / 2), self.y - (self.attack_size / 2), \
+                   self.melee_atk_p_x1 - SizeX / 2 + (self.attack_size / 2), self.y + (self.attack_size / 2)
+        elif self.dir == 6:
+            return self.melee_atk_p_x2 + SizeX / 2 - (self.attack_size / 2), self.y - (self.attack_size / 2), \
+                   self.melee_atk_p_x2 + SizeX / 2 + (self.attack_size / 2), self.y + (self.attack_size / 2)
+        elif self.dir == 7:
+            return self.melee_atk_p_x1 - (self.attack_size / 2), self.melee_atk_p_y2 - (self.attack_size / 2), \
+                   self.melee_atk_p_x1 + (self.attack_size / 2), self.melee_atk_p_y2 + (self.attack_size / 2)
+        elif self.dir == 9:
+            return self.melee_atk_p_x2 - (self.attack_size / 2), self.melee_atk_p_y2 - (self.attack_size / 2), \
+                   self.melee_atk_p_x2 + (self.attack_size / 2), self.melee_atk_p_y2 + (self.attack_size / 2)
+        elif self.dir == 1:
+            return self.melee_atk_p_x1 - (self.attack_size / 2), self.melee_atk_p_y1 - (self.attack_size / 2), \
+                   self.melee_atk_p_x1 + (self.attack_size / 2), self.melee_atk_p_y1 + (self.attack_size / 2)
+        elif self.dir == 3:
+            return self.melee_atk_p_x2 - (self.attack_size / 2), self.melee_atk_p_y1 - (self.attack_size / 2), \
+                   self.melee_atk_p_x2 + (self.attack_size / 2), self.melee_atk_p_y1 + (self.attack_size / 2)
+
+    def melee_atk_collide(self, enemy):
+        left_a, bottom_a, right_a, top_a = self.get_melee_atk_hb()
+        left_b, bottom_b, right_b, top_b = enemy.get_bb()
+        if left_a > right_b:
+            return False
+        if right_a < left_b:
+            return False
+        if top_a < bottom_b:
+            return False
+        if bottom_a > top_b:
+            return False
+        return True
+

@@ -5,11 +5,13 @@ import ObjectData002_SwordMan
 name = "TestField"
 image = None
 user = None
+fly = None
 
 
 def enter():
     global image
     global user
+    global fly
     user = ObjectData002_SwordMan.SwordMan(500, 600)
     if image is None:
         image = load_image('Resource_Image\\TestField_1024x768.png')
@@ -18,8 +20,10 @@ def enter():
 def exit():
     global image
     global user
+    global fly
     del user
     del image
+    del fly
 
 
 def handle_events(frame_time):
@@ -39,6 +43,8 @@ def draw(frame_time):
     clear_canvas()
     image.draw(Project_SceneFrameWork.Window_W/2, Project_SceneFrameWork.Window_H/2)
     user.draw()
+    fly.draw()
+    fly.draw_bb()
     user.draw_bb()
     update_canvas()
 
