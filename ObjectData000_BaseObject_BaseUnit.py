@@ -1,7 +1,10 @@
+from pico2d import *
+
+
 class BaseObject:
     def __init__(self, hp, max_hp, defense, magic_resist, move_speed):
         self.name = self.__class__.__name__     # 현재 클래스의 이름
-        self.image = 'Test_img.png'              # 객체의 이미지 초기화
+        self.image = 'Test_img.png'             # 객체의 이미지 초기화
         self.x, self.y = 0, 0                   # 객체의 좌표값 초기화
         self.HP = hp                            # 현재 체력
         self.MAX_HP = max_hp                    # 최대 체력
@@ -31,6 +34,12 @@ class BaseObject:
             self.HP = self.HP + heal        # 힐량 효과만큼 회복
         else:
             self.HP = self.MAX_HP           # 최대 체력을 넘어서는 회복 불가
+
+    def get_bb(self):
+        return self.x - 50, self.y - 50, self.x + 50, self.y + 50
+
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb())
 
 
 class BaseUnit(BaseObject):
@@ -67,6 +76,18 @@ class BaseUnit(BaseObject):
             self.STAMINA = self.STAMINA + heal        # 힐량 효과만큼 회복
         else:
             self.STAMINA = self.MAX_STAMINA           # 최대 기력을 넘어서는 회복 불가
+
+    def get_hbs(self, point_x, point_y, hit_size):
+        return point_x - (hit_size / 2), point_y - (hit_size / 2), point_x + (hit_size / 2), point_y + (hit_size / 2)
+
+    def get_hbr(self, point_x, point_y, hit_size_x, hit_size_y):
+        return point_x - (hit_size_x / 2), point_y - (hit_size_y / 2), point_x + (hit_size_x / 2), point_y + (hit_size_y / 2)
+
+    def draw_hbs(self, point_x, point_y, hit_size):
+        draw_rectangle(*self.get_hbs(point_x, point_y, hit_size))
+
+    def draw_hbr(self, point_x, point_y, hit_size_x, hit_size_y):
+        draw_rectangle(*self.get_hbr(point_x, point_y, hit_size_x, hit_size_y))
 
 
 if __name__ == '__main__':

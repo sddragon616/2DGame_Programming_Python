@@ -39,6 +39,7 @@ def draw(frame_time):
     clear_canvas()
     image.draw(Project_SceneFrameWork.Window_W/2, Project_SceneFrameWork.Window_H/2)
     user.draw()
+    user.draw_bb()
     update_canvas()
 
 
@@ -50,6 +51,20 @@ def pause(): pass
 
 
 def resume(): pass
+
+
+def collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+    if left_a > right_b:
+        return False
+    if right_a < left_b:
+        return False
+    if top_a < bottom_b:
+        return False
+    if bottom_a > top_b:
+        return False
+    return True
 
 
 if __name__ == '__main__':

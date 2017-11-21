@@ -24,3 +24,4 @@ class SwordMan(Player):
         super(SwordMan, self).show_stat()
         print('\n')
 
+

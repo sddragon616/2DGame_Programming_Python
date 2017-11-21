@@ -5,6 +5,7 @@ running = None
 stack = None
 Window_W = 1024
 Window_H = 768
+current_time = get_time()
 
 
 def scene_change(scene):
