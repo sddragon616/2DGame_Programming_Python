@@ -1,9 +1,10 @@
 from pico2d import *
+import Project_SceneFrameWork
+
+PIXEL_PER_METER = (32.0 / 1.0)  # 32pixel == 1m
 
 
 class BaseObject:
-    PIXEL_PER_METER = (32.0 / 1.0)  # 32pixel == 1m
-
     def __init__(self, hp, max_hp, defense, magic_resist, move_speed):
         self.name = self.__class__.__name__     # 현재 클래스의 이름
         self.image = load_image('Resource_Image\\Test_img.png')             # 객체의 이미지 초기화
@@ -31,15 +32,36 @@ class BaseObject:
         else:
             return False
 
-    def hit_by_str(self, dmg):
-        hit = max(dmg - self.DEF, 1)  # 물리 방어력에 따른 들어오는 최종 데미지 연산식
-        self.HP = self.HP - hit
-        self.death()
+    def knock_back(self):
+        if self.dir is 2:
+            self.y = min(Project_SceneFrameWork.Window_H, self.y + self.height)
+        if self.dir is 8:
+            self.y = max(0, self.y - self.height)
+        elif self.dir is 6:
+            self.x = max(0, self.x - self.width)
+        elif self.dir is 4:
+            self.x = min(Project_SceneFrameWork.Window_W, self.x + self.width)
+        elif self.dir is 9:
+            self.x = max(0, self.x - self.width)
+            self.y = max(0, self.y - self.height)
+        elif self.dir is 7:
+            self.x = min(Project_SceneFrameWork.Window_W, self.x + self.width)
+            self.y = max(0, self.y - self.height)
+        elif self.dir is 3:
+            self.x = max(0, self.x - self.width)
+            self.y = min(Project_SceneFrameWork.Window_H, self.y + self.height)
+        elif self.dir is 1:
+            self.x = min(Project_SceneFrameWork.Window_W, self.x + self.width)
+            self.y = min(Project_SceneFrameWork.Window_H, self.y + self.height)
+
+    def hit_by_str(self, damage):
+        hit_damage = max(damage - self.DEF, 1)  # 물리 방어력에 따른 들어오는 최종 데미지 연산식
+        self.HP = self.HP - hit_damage
+        print('대상의 남은 HP %d ' % self.HP)
 
     def hit_by_mag(self, dmg):
         hit = max(dmg - self.MR, 1)  # 마법 저향력에 따른 들어오는 최종 데미지 연산식
         self.HP = self.HP - hit
-        self.death()
 
     def hp_heal(self, heal):
         self.HP = min(self.HP + heal, self.MAX_HP)        # 힐량 효과만큼 회복
@@ -63,6 +85,21 @@ class BaseUnit(BaseObject):
         self.STR = strength             # 물리 공격력
         self.INT = magic                # 마법 공격력
         self.ATK_SPEED = atk_speed      # 공격속도
+
+        # 프레임 타임 애니메이션 관련 변수들 정의
+        self.total_frames_run = 0.0
+        self.total_frames_atk = 0.0
+        self.life_time = 0.0
+        self.RUN_SPEED_KMPH = self.MOVE_SPEED  # Km / Hour
+        self.RUN_SPEED_MPM = (self.RUN_SPEED_KMPH * 1000.0 / 60.0)
+        self.RUN_SPEED_MPS = (self.RUN_SPEED_MPM / 60.0)
+        self.RUN_SPEED_PPS = (self.RUN_SPEED_MPS * PIXEL_PER_METER)
+        self.TIME_PER_ACTION_run = 0.5
+        self.ACTION_PER_TIME_run = 1.0 / self.TIME_PER_ACTION_run
+        self.FRAMES_PER_ACTION_run = 8
+        self.TIME_PER_ACTION_atk = 2.5
+        self.ACTION_PER_TIME_atk = self.ATK_SPEED / self.TIME_PER_ACTION_atk
+        self.FRAMES_PER_ACTION_atk = 8
 
     def show_stat(self):
         print('이름: {}'.format(self.name))

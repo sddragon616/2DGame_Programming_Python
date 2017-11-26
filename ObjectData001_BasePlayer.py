@@ -1,9 +1,9 @@
 from pico2d import *
 from ObjectData000_BaseObject_BaseUnit import *
+from ObjectData004_Item import *
 import Project_SceneFrameWork
 
 # define
-
 STAND = 0   # 서 있기
 WALK = 1    # 걷기
 DOWN = 2    # 다운
@@ -28,34 +28,21 @@ class Player(BaseUnit):
         self.Ability_Point = 0
         self.Skill_Point = 0
 
+        self.HpPotion = HpPotion(3)    # HP 포션 3개 소지
         self.dir = 2            # 캐릭터가 바라보고 있는 방향을 나타내는 변수. 숫자 키패드의 위치로 판단
 
         self.state = STAND      # 캐릭터의 현재 모션 상태를 나타내고 있는 변수
 
+        # 모션 출력용 프레임 조절 변수 (직접적인 스프라이트 위치와 무관)
         self.walk_motion = 0
         self.attack_motion = 0
-
-        # 프레임 타임 애니메이션 관련 변수들 정의
-        self.total_frames_run = 0.0
-        self.total_frames_atk = 0.0
-        self.life_time = 0.0
-        self.RUN_SPEED_KMPH = self.MOVE_SPEED  # Km / Hour
-        self.RUN_SPEED_MPM = (self.RUN_SPEED_KMPH * 1000.0 / 60.0)
-        self.RUN_SPEED_MPS = (self.RUN_SPEED_MPM / 60.0)
-        self.RUN_SPEED_PPS = (self.RUN_SPEED_MPS * PIXEL_PER_METER)
-        self.TIME_PER_ACTION_run = 0.5
-        self.ACTION_PER_TIME_run = 1.0 / self.TIME_PER_ACTION_run
-        self.FRAMES_PER_ACTION_run = 8
-        self.TIME_PER_ACTION_atk = 2.5
-        self.ACTION_PER_TIME_atk = self.ATK_SPEED / self.TIME_PER_ACTION_atk
-        self.FRAMES_PER_ACTION_atk = 8
 
         # 공격범위 변수.
         self.melee_atk_point_LeftX = self.x - self.width / 2
         self.melee_atk_point_DownY = self.y - self.height / 4
         self.melee_atk_point_RightX = self.x + self.width / 2
         self.melee_atk_point_UpY = self.y + self.height / 4
-        self.attack_size = 40
+        self.attack_size = 40   # 공격범위 1.25m
 
         # 디버깅용 바운딩박스 출력
         self.box_draw = False
@@ -238,15 +225,20 @@ class Player(BaseUnit):
             else:
                 self.dir = 2
             self.state = WALK
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_z):
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_z):      # z 키 - 일반 근접 공격
             self.state = MELEE_ATTACK
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_p):
-            self.show_stat()
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_o):
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_o):      # o 키 - 히트박스, 바운딩박스 그리기
             if self.box_draw:
                 self.box_draw = False
             else:
                 self.box_draw = True
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_u):  # u 키 - Player
+            self.show_stat()
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_i):  # i 키 - 아이템 창
+            print('HP Potion : {}'.format(self.HpPotion.number))
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_h):  # h 키 - HP 포션 단축키
+            self.HpPotion.use(self)
+
         if (event.type, self.state) == (SDL_KEYUP, SDLK_LEFT):
             if self.dir == 7:
                 self.dir = 8
@@ -289,29 +281,6 @@ class Player(BaseUnit):
         super(Player, self).hit_by_mag(damage)
         self.knock_back()
 
-    def knock_back(self):
-        if self.dir is 2:
-            self.y = min(Project_SceneFrameWork.Window_H, self.y + self.height / 2)
-        if self.dir is 8:
-            self.y = max(0, self.y - self.height / 2)
-        elif self.dir is 6:
-            self.x = max(0, self.x - self.width / 2)
-        elif self.dir is 4:
-            self.x = min(Project_SceneFrameWork.Window_W, self.x + self.width / 2)
-        elif self.dir is 9:
-            self.x = max(0, self.x - self.width / 2)
-            self.y = max(0, self.y - self.height / 2)
-        elif self.dir is 7:
-            self.x = min(Project_SceneFrameWork.Window_W, self.x + self.width / 2)
-            self.y = max(0, self.y - self.height / 2)
-        elif self.dir is 3:
-            self.x = max(0, self.x - self.width / 2)
-            self.y = min(Project_SceneFrameWork.Window_H, self.y + self.height / 2)
-        elif self.dir is 1:
-            self.x = min(Project_SceneFrameWork.Window_W, self.x + self.width / 2)
-            self.y = min(Project_SceneFrameWork.Window_H, self.y + self.height / 2)
-
-
     # 충돌체크용 히트박스
     def get_bb(self):
         return self.x - self.width / 2, self.y - self.height / 2, self.x + self.width / 2, self.y + self.height / 2
@@ -319,29 +288,45 @@ class Player(BaseUnit):
     # 근접 평타공격 충돌체크 박스
     def get_melee_atk_hb(self):
         if self.dir == 2:
-            return self.x - (self.attack_size / 2), self.melee_atk_point_DownY - self.height / 4 - (self.attack_size / 2), \
-                   self.x + (self.attack_size / 2), self.melee_atk_point_DownY - self.height / 4 + (self.attack_size / 2)
+            return self.x - (self.attack_size / 2), \
+                   self.melee_atk_point_DownY - self.height / 4 - (self.attack_size / 2), \
+                   self.x + (self.attack_size / 2), \
+                   self.melee_atk_point_DownY - self.height / 4 + (self.attack_size / 2)
         elif self.dir == 8:
-            return self.x - (self.attack_size / 2), self.melee_atk_point_UpY + self.height / 4 - (self.attack_size / 2), \
-                   self.x + (self.attack_size / 2), self.melee_atk_point_UpY + self.height / 4 + (self.attack_size / 2)
+            return self.x - (self.attack_size / 2), \
+                   self.melee_atk_point_UpY + self.height / 4 - (self.attack_size / 2), \
+                   self.x + (self.attack_size / 2), \
+                   self.melee_atk_point_UpY + self.height / 4 + (self.attack_size / 2)
         elif self.dir == 4:
-            return self.melee_atk_point_LeftX - self.width / 2 - (self.attack_size / 2), self.y - (self.attack_size / 2), \
-                   self.melee_atk_point_LeftX - self.width / 2 + (self.attack_size / 2), self.y + (self.attack_size / 2)
+            return self.melee_atk_point_LeftX - self.width / 2 - (self.attack_size / 2), \
+                   self.y - (self.attack_size / 2), \
+                   self.melee_atk_point_LeftX - self.width / 2 + (self.attack_size / 2), \
+                   self.y + (self.attack_size / 2)
         elif self.dir == 6:
-            return self.melee_atk_point_RightX + self.width / 2 - (self.attack_size / 2), self.y - (self.attack_size / 2), \
-                   self.melee_atk_point_RightX + self.width / 2 + (self.attack_size / 2), self.y + (self.attack_size / 2)
+            return self.melee_atk_point_RightX + self.width / 2 - (self.attack_size / 2), \
+                   self.y - (self.attack_size / 2), \
+                   self.melee_atk_point_RightX + self.width / 2 + (self.attack_size / 2), \
+                   self.y + (self.attack_size / 2)
         elif self.dir == 7:
-            return self.melee_atk_point_LeftX - (self.attack_size / 2), self.melee_atk_point_UpY - (self.attack_size / 2), \
-                   self.melee_atk_point_LeftX + (self.attack_size / 2), self.melee_atk_point_UpY + (self.attack_size / 2)
+            return self.melee_atk_point_LeftX - (self.attack_size / 2), \
+                   self.melee_atk_point_UpY - (self.attack_size / 2), \
+                   self.melee_atk_point_LeftX + (self.attack_size / 2), \
+                   self.melee_atk_point_UpY + (self.attack_size / 2)
         elif self.dir == 9:
-            return self.melee_atk_point_RightX - (self.attack_size / 2), self.melee_atk_point_UpY - (self.attack_size / 2), \
-                   self.melee_atk_point_RightX + (self.attack_size / 2), self.melee_atk_point_UpY + (self.attack_size / 2)
+            return self.melee_atk_point_RightX - (self.attack_size / 2), \
+                   self.melee_atk_point_UpY - (self.attack_size / 2), \
+                   self.melee_atk_point_RightX + (self.attack_size / 2), \
+                   self.melee_atk_point_UpY + (self.attack_size / 2)
         elif self.dir == 1:
-            return self.melee_atk_point_LeftX - (self.attack_size / 2), self.melee_atk_point_DownY - (self.attack_size / 2), \
-                   self.melee_atk_point_LeftX + (self.attack_size / 2), self.melee_atk_point_DownY + (self.attack_size / 2)
+            return self.melee_atk_point_LeftX - (self.attack_size / 2), \
+                   self.melee_atk_point_DownY - (self.attack_size / 2), \
+                   self.melee_atk_point_LeftX + (self.attack_size / 2), \
+                   self.melee_atk_point_DownY + (self.attack_size / 2)
         elif self.dir == 3:
-            return self.melee_atk_point_RightX - (self.attack_size / 2), self.melee_atk_point_DownY - (self.attack_size / 2), \
-                   self.melee_atk_point_RightX + (self.attack_size / 2), self.melee_atk_point_DownY + (self.attack_size / 2)
+            return self.melee_atk_point_RightX - (self.attack_size / 2), \
+                   self.melee_atk_point_DownY - (self.attack_size / 2), \
+                   self.melee_atk_point_RightX + (self.attack_size / 2), \
+                   self.melee_atk_point_DownY + (self.attack_size / 2)
 
     # 근접 평타공격 객체간 충돌체크
     def melee_atk_collide(self, enemy):
@@ -355,4 +340,5 @@ class Player(BaseUnit):
             return False
         if bottom_a > top_b:
             return False
-        return True
+        if self.state is MELEE_ATTACK:
+            return True

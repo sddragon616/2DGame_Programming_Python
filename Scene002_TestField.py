@@ -1,5 +1,6 @@
 from pico2d import *
 import Project_SceneFrameWork
+import Scene003_Interface
 import ObjectData002_SwordMan
 import ObjectData003_Monster
 
@@ -13,10 +14,10 @@ def enter():
     global image
     global user
     global flies
-    user = ObjectData002_SwordMan.SwordMan(500, 600)
+    user = ObjectData002_SwordMan.SwordMan(512, 384)
     flies = [ObjectData003_Monster.Fly() for index in range(10)]
     if image is None:
-        image = load_image('Resource_Image\\TestField_1024x768.png')
+        image = load_image('Resource_Image\\TestField0_1024x768.png')
 
 
 def exit():
@@ -39,11 +40,18 @@ def handle_events(frame_time):
                 Project_SceneFrameWork.quit()
             else:
                 user.handle_events(event)
+            if (event.type, event.key) == (SDL_KEYDOWN, SDLK_u):
+                Project_SceneFrameWork.scene_push(Scene003_Interface)
 
 
 def draw(frame_time):
     clear_canvas()
-    image.draw(Project_SceneFrameWork.Window_W/2, Project_SceneFrameWork.Window_H/2)
+    draw_scene(frame_time)
+    update_canvas()
+
+
+def draw_scene(frame_time):
+    image.draw(Project_SceneFrameWork.Window_W / 2, Project_SceneFrameWork.Window_H / 2)
     user.draw()
     if user.box_draw:
         user.draw_bb()
@@ -51,8 +59,6 @@ def draw(frame_time):
         fly.draw()
         if user.box_draw:
             fly.draw_bb()
-
-    update_canvas()
 
 
 def update(frame_time):
@@ -63,8 +69,8 @@ def update(frame_time):
             user.hit_by_str(fly.STR)
         if user.melee_atk_collide(fly):
             fly.hit_by_str(user.STR)
-            if fly.exp_pay:
-                flies.remove(fly)
+        if fly.exp_pay:             # 몬스터가 쓰러져서 경험치를 지급했는가?
+            flies.remove(fly)
 
 
 def pause(): pass

@@ -1,6 +1,7 @@
 from ObjectData001_BasePlayer import *
 import json
 
+
 SwordMan_data_file = open('UnitData\\SwordMan.txt', 'r')
 SwordMan_Data = json.load(SwordMan_data_file)
 SwordMan_data_file.close()
@@ -23,5 +24,9 @@ class SwordMan(Player):
     def show_stat(self):
         super(SwordMan, self).show_stat()
         print('\n')
+
+    def handle_events(self, event):
+        super(SwordMan, self).handle_events(event)
+
 
 

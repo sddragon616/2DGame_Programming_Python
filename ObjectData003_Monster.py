@@ -7,11 +7,15 @@ Monster_data_file = open('UnitData\\Monster.txt', 'r')
 Monster_Data = json.load(Monster_data_file)
 Monster_data_file.close()
 
-
+# define
 STAND = 0  # 서 있기
 WALK = 1   # 걷기
 
 PIXEL_PER_METER = (32.0 / 1.0)           # 32pixel == 1m
+
+NON_PREEMPTIVE = 0  # 공격받기 전 까지는 비 선제 공격
+PREEMPTIVE = 1      # 시야 내 발견 시 선제 공격
+CHASE = 2           # 시작부터 추적
 
 
 class Monster(BaseUnit):
@@ -26,25 +30,89 @@ class Monster(BaseUnit):
         self.MAX_STAMINA = max_stamina  # 최대 SP, 물리 스킬을 사용하기 위한 자원
         self.STR = strength             # 물리 공격력
         self.MAG = magic                # 마법 공격력
-        self.sight = sight  # 몬스터의 시야
-        self.get_exp = experience  # 몬스터를 쓰러뜨리면 획득할 수 있는 경험치량
-
+        self.sight = sight              # 몬스터의 시야
+        self.get_exp = experience       # 몬스터를 쓰러뜨리면 획득할 수 있는 경험치량
+        self.AI_type = 0                # 해당 몬스터의 인공지능 형태
         self.image = None
         self.dir = 2
-
+        self.state = STAND
         self.exp_pay = False            # 이 몬스터가 경험치를 지급했는가 여부
+        self.contact = False            # 이 몬스터가 유저를 인식했는가 여부
         self.box_draw = False
 
     def update(self, frame_time, user):
-        if self.recognize(user):
-            self.auto_intelligence(frame_time, user)
-        if self.death() is True:
+        if self.death() is True:            # 대상이 사망했는가>
             if self.exp_pay is False:
                 self.get_experience(user)
                 self.exp_pay = True
+        else:                               # 대상이 사망하지 않았다면0
+            if self.AI_type is PREEMPTIVE:
+                if self.recognize(user) and user.death() is False:      # 생존중인 플레이어가 시야 내에 접근하였을 때
+                    self.contact = True     # 플레이어를 인식
+            elif self.AI_type is NON_PREEMPTIVE:
+                if self.HP < self.MAX_HP:   # 플레이어에게 피격당하여 HP가 깎였을 때
+                    self.contact = True     # 플레이어를 인식
+            elif self.AI_type is CHASE:
+                self.contact = True         # 플레이어를 인식
+            if user.death() is True:    # 플레이어가 사망하였을 때
+                self.state = STAND      # 대기
+                self.contact = False    # 플레이어 인식을 해제
+            if self.contact:            # 플레이어를 인식한 경우
+                self.state = WALK
+                self.auto_intelligence(frame_time, user)
+            distance = self.RUN_SPEED_PPS * frame_time
+            self.total_frames_run += self.FRAMES_PER_ACTION_run * self.ACTION_PER_TIME_run * frame_time
+            self.frame = int(self.total_frames_run) % 3
+            # 바라보는 방향에 따라, 현재 걷기 상태라면 이동한다.
+            if self.state is WALK:
+                if self.dir is 2:
+                    self.y = max(0, self.y - distance)
+                elif self.dir is 8:
+                    self.y = min(Project_SceneFrameWork.Window_H, self.y + distance)
+                elif self.dir is 4:
+                    self.x = max(0, self.x - distance)
+                elif self.dir is 6:
+                    self.x = min(Project_SceneFrameWork.Window_W, self.x + distance)
+                elif self.dir is 1:
+                    self.x = max(0, self.x - distance)
+                    self.y = max(0, self.y - distance)
+                elif self.dir is 3:
+                    self.x = min(Project_SceneFrameWork.Window_W, self.x + distance)
+                    self.y = max(0, self.y - distance)
+                elif self.dir is 7:
+                    self.x = max(0, self.x - distance)
+                    self.y = min(Project_SceneFrameWork.Window_H, self.y + distance)
+                elif self.dir is 9:
+                    self.x = min(Project_SceneFrameWork.Window_W, self.x + distance)
+                    self.y = min(Project_SceneFrameWork.Window_H, self.y + distance)
 
     def auto_intelligence(self, frame_time, user):
-        user.get_bb()
+        if user.x < self.x:
+            if user.y < self.y:
+                self.dir = 1
+            elif user.y > self.y:
+                self.dir = 7
+            else:
+                self.dir = 4
+        elif user.x > self.x:
+            if user.y < self.y:
+                self.dir = 3
+            elif user.y > self.y:
+                self.dir = 9
+            else:
+                self.dir = 6
+        elif user.y > self.y:
+            self.dir = 8
+        elif user.y < self.y:
+            self.dir = 2
+
+    def hit_by_str(self, damage):
+        super(Monster, self).hit_by_str(damage)
+        self.knock_back()
+
+    def hit_by_mag(self, damage):
+        super(Monster, self).hit_by_mag(damage)
+        self.knock_back()
 
     def get_experience(self, user):
         user.get_exp(self.get_exp)
@@ -85,13 +153,34 @@ class Fly(Monster):
                                   Monster_Data['Fly']['Sight'], Monster_Data['Fly']['Experience'])
         self.width = self.height = 32
         self.image = load_image('Resource_Image\\Monster001_fly.png')
-        self.dir = 2
-        self.state = STAND
+        self.dir = randint(1, 9)
+        if self.dir == 5:
+            self.dir = 2
+        self.AI_type = PREEMPTIVE
         self.x, self.y = randint(0, 1024), randint(0, 768)
 
     def draw(self):
-        if self.dir == 2 or self.dir == 5:
+        if self.dir is 2:
             self.image.clip_draw(self.frame * self.width, self.height * 9 + 16, self.width, self.height, self.x, self.y)
+        elif self.dir is 8:
+            self.image.clip_draw(self.frame * self.width, self.height * 5 + 16, self.width, self.height, self.x, self.y)
+        elif self.dir is 4:
+            self.image.clip_draw(self.frame * self.width, self.height * 7 + 16, self.width, self.height, self.x, self.y)
+        elif self.dir is 6:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 7 + 16,
+                                 self.width, self.height, self.x, self.y)
+        elif self.dir is 1:
+            self.image.clip_draw(self.frame * self.width, self.height * 8 + 16,
+                                 self.width, self.height, self.x, self.y)
+        elif self.dir is 3:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 8 + 16,
+                                 self.width, self.height, self.x, self.y)
+        elif self.dir is 7:
+            self.image.clip_draw(self.frame * self.width, self.height * 6 + 16,
+                                 self.width, self.height, self.x, self.y)
+        elif self.dir is 9:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 6 + 16,
+                                 self.width, self.height, self.x, self.y)
 
     def get_bb(self):
         return self.x - self.width / 4, self.y - self.height / 4, self.x + self.width / 4, self.y + self.height / 4
