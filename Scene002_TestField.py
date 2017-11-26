@@ -1,18 +1,20 @@
 from pico2d import *
 import Project_SceneFrameWork
 import ObjectData002_SwordMan
+import ObjectData003_Monster
 
 name = "TestField"
 image = None
 user = None
-fly = None
+flies = []
 
 
 def enter():
     global image
     global user
-    global fly
+    global flies
     user = ObjectData002_SwordMan.SwordMan(500, 600)
+    flies = [ObjectData003_Monster.Fly() for index in range(10)]
     if image is None:
         image = load_image('Resource_Image\\TestField_1024x768.png')
 
@@ -20,10 +22,10 @@ def enter():
 def exit():
     global image
     global user
-    global fly
+    global flies
     del user
     del image
-    del fly
+    del flies
 
 
 def handle_events(frame_time):
@@ -43,14 +45,26 @@ def draw(frame_time):
     clear_canvas()
     image.draw(Project_SceneFrameWork.Window_W/2, Project_SceneFrameWork.Window_H/2)
     user.draw()
-    fly.draw()
-    fly.draw_bb()
-    user.draw_bb()
+    if user.box_draw:
+        user.draw_bb()
+    for fly in flies:
+        fly.draw()
+        if user.box_draw:
+            fly.draw_bb()
+
     update_canvas()
 
 
 def update(frame_time):
     user.update(frame_time)
+    for fly in flies:
+        fly.update(frame_time, user)
+        if collide(user, fly):
+            user.hit_by_str(fly.STR)
+        if user.melee_atk_collide(fly):
+            fly.hit_by_str(user.STR)
+            if fly.exp_pay:
+                flies.remove(fly)
 
 
 def pause(): pass

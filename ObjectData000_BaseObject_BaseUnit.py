@@ -6,8 +6,9 @@ class BaseObject:
 
     def __init__(self, hp, max_hp, defense, magic_resist, move_speed):
         self.name = self.__class__.__name__     # 현재 클래스의 이름
-        self.image = 'Test_img.png'             # 객체의 이미지 초기화
-        self.x, self.y = 0, 0                   # 객체의 좌표값 초기화
+        self.image = load_image('Resource_Image\\Test_img.png')             # 객체의 이미지 초기화
+        self.width, self.height = 0, 0          # 객체의 가로 길이, 세로 길이 초기화
+        self.x, self.y = 2, 2                   # 객체의 좌표값 초기화
         self.HP = hp                            # 현재 체력
         self.MAX_HP = max_hp                    # 최대 체력
         self.DEF = defense                      # 물리 방어력
@@ -23,27 +24,28 @@ class BaseObject:
     def draw(self):
         self.image.draw(self.x, self.y)
 
-    def hit_by_str(self, dmg):
-        hit = dmg - self.DEF  # 물리 방어력에 따른 들어오는 최종 데미지 연산식
-        self.HP = self.HP - hit
+    def death(self):
         if self.HP <= 0:
-            del self.image
-            self.x = -1000
-            self.y = -1000
+            self.image = load_image("Resource_Image\\Test_img.png")
+            return True
+        else:
+            return False
+
+    def hit_by_str(self, dmg):
+        hit = max(dmg - self.DEF, 1)  # 물리 방어력에 따른 들어오는 최종 데미지 연산식
+        self.HP = self.HP - hit
+        self.death()
 
     def hit_by_mag(self, dmg):
-        hit = dmg - self.MR  # 마법 저향력에 따른 들어오는 최종 데미지 연산식
+        hit = max(dmg - self.MR, 1)  # 마법 저향력에 따른 들어오는 최종 데미지 연산식
         self.HP = self.HP - hit
-        if self.HP <= 0:
-            del self.image
-            self.x = -1000
-            self.y = -1000
+        self.death()
 
     def hp_heal(self, heal):
         self.HP = min(self.HP + heal, self.MAX_HP)        # 힐량 효과만큼 회복
 
     def get_bb(self):
-        return self.x - 50, self.y - 50, self.x + 50, self.y + 50
+        return self.x - self.width / 2, self.y - self.height / 2, self.x + self.width / 2, self.y + self.height / 2
 
     def draw_bb(self):
         draw_rectangle(*self.get_bb())

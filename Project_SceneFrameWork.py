@@ -67,5 +67,7 @@ def quit():
     running = False
 
 
+
+
 if __name__ == '__main__':
     print("This is Wrong Playing.\n")
