@@ -194,17 +194,17 @@ class Player(BaseUnit):
 
     def handle_events(self, event):
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_LEFT):
-            if self.dir == 8 and self.state is WALK:
+            if (self.dir == 8 or self.dir == 9) and self.state is WALK:
                 self.dir = 7
-            elif self.dir == 2 and self.state is WALK:
+            elif (self.dir == 2 or self.dir == 3) and self.state is WALK:
                 self.dir = 1
             else:
                 self.dir = 4
             self.state = WALK
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_RIGHT):
-            if self.dir == 8 and self.state is WALK:
+            if (self.dir == 8 or self.dir == 7) and self.state is WALK:
                 self.dir = 9
-            elif self.dir == 2 and self.state is WALK:
+            elif (self.dir == 2 or self.dir == 1) and self.state is WALK:
                 self.dir = 3
             else:
                 self.dir = 6
@@ -259,8 +259,34 @@ class Player(BaseUnit):
                 self.dir = 4
             elif self.dir == 3:
                 self.dir = 6
-        if (event.type, self.state) == (SDL_KEYUP, WALK):
-            self.state = STAND
+        if (event.type, event.key) == (SDL_KEYUP, SDLK_LEFT):
+            if self.dir == 7:
+                self.dir = 8
+            elif self.dir == 1:
+                self.dir = 2
+            elif self.dir == 4:
+                self.state = STAND
+        elif (event.type, event.key) == (SDL_KEYUP, SDLK_RIGHT):
+            if self.dir == 9:
+                self.dir = 8
+            elif self.dir == 3:
+                self.dir = 2
+            elif self.dir == 6:
+                self.state = STAND
+        elif (event.type, event.key) == (SDL_KEYUP, SDLK_UP):
+            if self.dir == 7:
+                self.dir = 4
+            elif self.dir == 9:
+                self.dir = 6
+            elif self.dir == 8:
+                self.state = STAND
+        elif (event.type, event.key) == (SDL_KEYUP, SDLK_DOWN):
+            if self.dir == 1:
+                self.dir = 4
+            elif self.dir == 3:
+                self.dir = 6
+            elif self.dir == 2:
+                self.state = STAND
 
     def get_exp(self, exp):
         self.Experience += exp
@@ -283,7 +309,7 @@ class Player(BaseUnit):
 
     # 충돌체크용 히트박스
     def get_bb(self):
-        return self.x - self.width / 2, self.y - self.height / 2, self.x + self.width / 2, self.y + self.height / 2
+        return self.x - self.width / 2, self.y - self.height / 4, self.x + self.width / 2, self.y + self.height / 4
 
     # 근접 평타공격 충돌체크 박스
     def get_melee_atk_hb(self):
