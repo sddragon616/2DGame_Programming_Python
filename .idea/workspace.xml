@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="50685533-4b67-49f3-a331-f658d1316402" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/2013180006JaeHwanKim_2DGameProgramming_2nd-Announcement.pptx" afterPath="$PROJECT_DIR$/2013180006JaeHwanKim_2DGameProgramming_2nd-Announcement.pptx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ObjectData001_BasePlayer.py" afterPath="$PROJECT_DIR$/ObjectData001_BasePlayer.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UnitData/Monster.txt" afterPath="$PROJECT_DIR$/UnitData/Monster.txt" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -31,11 +29,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ObjectData001_BasePlayer.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ObjectData001_BasePlayer.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ObjectData001_BasePlayer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="131">
-              <caret line="195" column="0" lean-forward="false" selection-start-line="195" selection-start-column="0" selection-end-line="195" selection-end-column="0" />
+            <state relative-caret-position="269">
+              <caret line="240" column="0" lean-forward="true" selection-start-line="240" selection-start-column="0" selection-end-line="240" selection-end-column="0" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
                 <element signature="e#542#1643#0" expanded="false" />
@@ -85,6 +83,16 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="Monster.txt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/UnitData/Monster.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="38">
+              <caret line="2" column="1" lean-forward="true" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="ObjectData002_SwordMan.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ObjectData002_SwordMan.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -101,7 +109,7 @@
         <entry file="file://$PROJECT_DIR$/ObjectData003_Monster.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="570">
-              <caret line="112" column="20" lean-forward="true" selection-start-line="112" selection-start-column="20" selection-end-line="112" selection-end-column="20" />
+              <caret line="112" column="20" lean-forward="false" selection-start-line="112" selection-start-column="20" selection-end-line="112" selection-end-column="20" />
               <folding>
                 <element signature="e#0#47#0" expanded="true" />
                 <element signature="e#642#1632#0" expanded="false" />
@@ -123,7 +131,7 @@
         <entry file="file://$PROJECT_DIR$/Scene002_TestField.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1121">
-              <caret line="63" column="23" lean-forward="true" selection-start-line="63" selection-start-column="23" selection-end-line="63" selection-end-column="23" />
+              <caret line="63" column="23" lean-forward="false" selection-start-line="63" selection-start-column="23" selection-end-line="63" selection-end-column="23" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -184,19 +192,19 @@
         <option value="$PROJECT_DIR$/ObjectData004_Item.py" />
         <option value="$PROJECT_DIR$/Scene001_Title.py" />
         <option value="$PROJECT_DIR$/ObjectData000_BaseObject_BaseUnit.py" />
-        <option value="$PROJECT_DIR$/UnitData/Monster.txt" />
         <option value="$PROJECT_DIR$/Scene002_TestField.py" />
         <option value="$PROJECT_DIR$/ObjectData003_Monster.py" />
         <option value="$PROJECT_DIR$/Scene003_Interface.py" />
         <option value="$PROJECT_DIR$/ObjectData001_BasePlayer.py" />
+        <option value="$PROJECT_DIR$/UnitData/Monster.txt" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="850" />
-    <option name="y" value="82" />
+    <option name="x" value="853" />
+    <option name="y" value="143" />
     <option name="width" value="1063" />
-    <option name="height" value="854" />
+    <option name="height" value="933" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -213,6 +221,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -245,12 +255,10 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Training_Data/Lab10 - Map Scrolling" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Training_Data/Lab12 - Tiling" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -538,13 +546,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UnitData/Monster.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="1" column="32" lean-forward="false" selection-start-line="1" selection-start-column="32" selection-end-line="1" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/pico2d/pico2d.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="202">
@@ -593,7 +594,7 @@
     <entry file="file://$PROJECT_DIR$/Scene002_TestField.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1121">
-          <caret line="63" column="23" lean-forward="true" selection-start-line="63" selection-start-column="23" selection-end-line="63" selection-end-column="23" />
+          <caret line="63" column="23" lean-forward="false" selection-start-line="63" selection-start-column="23" selection-end-line="63" selection-end-column="23" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>
@@ -603,7 +604,7 @@
     <entry file="file://$PROJECT_DIR$/ObjectData003_Monster.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="570">
-          <caret line="112" column="20" lean-forward="true" selection-start-line="112" selection-start-column="20" selection-end-line="112" selection-end-column="20" />
+          <caret line="112" column="20" lean-forward="false" selection-start-line="112" selection-start-column="20" selection-end-line="112" selection-end-column="20" />
           <folding>
             <element signature="e#0#47#0" expanded="true" />
             <element signature="e#642#1632#0" expanded="false" />
@@ -632,8 +633,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ObjectData001_BasePlayer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="131">
-          <caret line="195" column="0" lean-forward="false" selection-start-line="195" selection-start-column="0" selection-end-line="195" selection-end-column="0" />
+        <state relative-caret-position="269">
+          <caret line="240" column="0" lean-forward="true" selection-start-line="240" selection-start-column="0" selection-end-line="240" selection-end-column="0" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
             <element signature="e#542#1643#0" expanded="false" />
@@ -679,6 +680,14 @@
             <element signature="e#16993#17268#0" expanded="false" />
             <element signature="e#17341#17736#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UnitData/Monster.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="1" lean-forward="true" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
+          <folding />
         </state>
       </provider>
     </entry>
