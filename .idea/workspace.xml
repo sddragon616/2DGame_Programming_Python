@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="50685533-4b67-49f3-a331-f658d1316402" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UnitData/Monster.txt" afterPath="$PROJECT_DIR$/UnitData/Monster.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -16,8 +16,8 @@
       <file leaf-file-name="ObjectData000_BaseObject_BaseUnit.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ObjectData000_BaseObject_BaseUnit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="646">
-              <caret line="59" column="22" lean-forward="false" selection-start-line="59" selection-start-column="22" selection-end-line="59" selection-end-column="22" />
+            <state relative-caret-position="532">
+              <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
                 <element signature="e#790#981#0" expanded="false" />
@@ -32,8 +32,8 @@
       <file leaf-file-name="ObjectData001_BasePlayer.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ObjectData001_BasePlayer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="269">
-              <caret line="240" column="0" lean-forward="true" selection-start-line="240" selection-start-column="0" selection-end-line="240" selection-end-column="0" />
+            <state relative-caret-position="988">
+              <caret line="240" column="0" lean-forward="false" selection-start-line="240" selection-start-column="0" selection-end-line="240" selection-end-column="0" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
                 <element signature="e#542#1643#0" expanded="false" />
@@ -83,7 +83,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Monster.txt" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Monster.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/UnitData/Monster.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="38">
@@ -127,11 +127,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Scene002_TestField.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Scene002_TestField.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Scene002_TestField.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1121">
-              <caret line="63" column="23" lean-forward="false" selection-start-line="63" selection-start-column="23" selection-end-line="63" selection-end-column="23" />
+            <state relative-caret-position="744">
+              <caret line="74" column="0" lean-forward="true" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -197,6 +197,7 @@
         <option value="$PROJECT_DIR$/Scene003_Interface.py" />
         <option value="$PROJECT_DIR$/ObjectData001_BasePlayer.py" />
         <option value="$PROJECT_DIR$/UnitData/Monster.txt" />
+        <option value="D:/Tile_Editor/RPG2003_Dungeon_Tileset.json" />
       </list>
     </option>
   </component>
@@ -221,8 +222,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -255,6 +254,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -352,6 +353,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.114583336" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -389,20 +391,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/ObjectData000_BaseObject_BaseUnit.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="47" column="0" lean-forward="true" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-            <element signature="e#790#981#0" expanded="false" />
-            <element signature="e#1011#1042#0" expanded="false" />
-            <element signature="e#1256#2241#0" expanded="false" />
-            <element signature="e#4297#4726#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ObjectData002_SwordMan.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="152">
@@ -567,20 +555,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ObjectData000_BaseObject_BaseUnit.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="59" column="22" lean-forward="false" selection-start-line="59" selection-start-column="22" selection-end-line="59" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-            <element signature="e#790#981#0" expanded="false" />
-            <element signature="e#1011#1042#0" expanded="false" />
-            <element signature="e#1256#2241#0" expanded="false" />
-            <element signature="e#4297#4726#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Scene003_Interface.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="608">
@@ -591,36 +565,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Scene002_TestField.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1121">
-          <caret line="63" column="23" lean-forward="false" selection-start-line="63" selection-start-column="23" selection-end-line="63" selection-end-column="23" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ObjectData003_Monster.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="112" column="20" lean-forward="false" selection-start-line="112" selection-start-column="20" selection-end-line="112" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#47#0" expanded="true" />
-            <element signature="e#642#1632#0" expanded="false" />
-            <element signature="e#1682#4093#0" expanded="false" />
-            <element signature="e#4154#4655#0" expanded="false" />
-            <element signature="e#4699#4764#0" expanded="false" />
-            <element signature="e#4808#4873#0" expanded="false" />
-            <element signature="e#5117#5147#0" expanded="false" />
-            <element signature="e#5188#5277#0" expanded="false" />
-            <element signature="e#5318#5668#0" expanded="false" />
-            <element signature="e#6721#8085#0" expanded="false" />
-            <element signature="e#8257#8287#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://D:/Tile_Editor/RPG2003_Dungeon_Tileset.json" />
     <entry file="file://$PROJECT_DIR$/ObjectData002_SwordMan.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="532">
@@ -631,10 +576,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/UnitData/Monster.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="1" lean-forward="true" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ObjectData001_BasePlayer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="269">
-          <caret line="240" column="0" lean-forward="true" selection-start-line="240" selection-start-column="0" selection-end-line="240" selection-end-column="0" />
+        <state relative-caret-position="988">
+          <caret line="240" column="0" lean-forward="false" selection-start-line="240" selection-start-column="0" selection-end-line="240" selection-end-column="0" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
             <element signature="e#542#1643#0" expanded="false" />
@@ -683,11 +636,47 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UnitData/Monster.txt">
+    <entry file="file://$PROJECT_DIR$/ObjectData000_BaseObject_BaseUnit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="1" lean-forward="true" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
-          <folding />
+        <state relative-caret-position="532">
+          <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+            <element signature="e#790#981#0" expanded="false" />
+            <element signature="e#1011#1042#0" expanded="false" />
+            <element signature="e#1256#2241#0" expanded="false" />
+            <element signature="e#4297#4726#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ObjectData003_Monster.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="570">
+          <caret line="112" column="20" lean-forward="false" selection-start-line="112" selection-start-column="20" selection-end-line="112" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#47#0" expanded="true" />
+            <element signature="e#642#1632#0" expanded="false" />
+            <element signature="e#1682#4093#0" expanded="false" />
+            <element signature="e#4154#4655#0" expanded="false" />
+            <element signature="e#4699#4764#0" expanded="false" />
+            <element signature="e#4808#4873#0" expanded="false" />
+            <element signature="e#5117#5147#0" expanded="false" />
+            <element signature="e#5188#5277#0" expanded="false" />
+            <element signature="e#5318#5668#0" expanded="false" />
+            <element signature="e#6721#8085#0" expanded="false" />
+            <element signature="e#8257#8287#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scene002_TestField.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="744">
+          <caret line="74" column="0" lean-forward="true" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
