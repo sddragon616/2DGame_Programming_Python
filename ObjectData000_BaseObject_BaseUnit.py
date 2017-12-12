@@ -15,6 +15,8 @@ class BaseObject:
         self.DEF = defense                      # 물리 방어력
         self.MR = magic_resist                  # 마법 저향력
         self.MOVE_SPEED = move_speed            # 이동속도
+        self.background = None
+        self.hit_sound = None
 
     def show_stat(self):
         print('이름: {}'.format(self.name))
@@ -25,6 +27,9 @@ class BaseObject:
     def draw(self):
         self.image.draw(self.x, self.y)
 
+    def set_background(self, background):
+        self.background = background
+
     def death(self):
         if self.HP <= 0:
             self.image = load_image("Resource_Image\\Test_img.png")
@@ -32,27 +37,30 @@ class BaseObject:
         else:
             return False
 
-    def knock_back(self):
-        if self.dir is 2:
-            self.y = min(Project_SceneFrameWork.Window_H, self.y + self.height)
-        if self.dir is 8:
+    def hit_sound_play(self):
+        self.hit_sound.play()
+
+    def knock_back(self, direction):
+        if direction is 8:
+            self.y = min(self.background.h, self.y + self.height)
+        if direction is 2:
             self.y = max(0, self.y - self.height)
-        elif self.dir is 6:
+        elif direction is 4:
             self.x = max(0, self.x - self.width)
-        elif self.dir is 4:
-            self.x = min(Project_SceneFrameWork.Window_W, self.x + self.width)
-        elif self.dir is 9:
+        elif direction is 6:
+            self.x = min(self.background.w, self.x + self.width)
+        elif direction is 1:
             self.x = max(0, self.x - self.width)
             self.y = max(0, self.y - self.height)
-        elif self.dir is 7:
-            self.x = min(Project_SceneFrameWork.Window_W, self.x + self.width)
+        elif direction is 3:
+            self.x = min(self.background.w, self.x + self.width)
             self.y = max(0, self.y - self.height)
-        elif self.dir is 3:
+        elif direction is 7:
             self.x = max(0, self.x - self.width)
-            self.y = min(Project_SceneFrameWork.Window_H, self.y + self.height)
-        elif self.dir is 1:
-            self.x = min(Project_SceneFrameWork.Window_W, self.x + self.width)
-            self.y = min(Project_SceneFrameWork.Window_H, self.y + self.height)
+            self.y = min(self.background.h, self.y + self.height)
+        elif direction is 9:
+            self.x = min(self.background.w, self.x + self.width)
+            self.y = min(self.background.h, self.y + self.height)
 
     def hit_by_str(self, damage):
         hit_damage = max(damage - self.DEF, 1)  # 물리 방어력에 따른 들어오는 최종 데미지 연산식
@@ -118,10 +126,16 @@ class BaseUnit(BaseObject):
         self.STAMINA = min(self.STAMINA + heal, self.MAX_STAMINA)
 
     def get_hbs(self, point_x, point_y, hit_size):
-        return point_x - (hit_size / 2), point_y - (hit_size / 2), point_x + (hit_size / 2), point_y + (hit_size / 2)
+        return point_x - (hit_size / 2) - self.background.window_left, \
+               point_y - (hit_size / 2) - self.background.window_bottom, \
+               point_x + (hit_size / 2) - self.background.window_left, \
+               point_y + (hit_size / 2) - self.background.window_bottom
 
     def get_hbr(self, point_x, point_y, hit_size_x, hit_size_y):
-        return point_x - (hit_size_x / 2), point_y - (hit_size_y / 2), point_x + (hit_size_x / 2), point_y + (hit_size_y / 2)
+        return point_x - (hit_size_x / 2) - self.background.window_left, \
+               point_y - (hit_size_y / 2) - self.background.window_bottom, \
+               point_x + (hit_size_x / 2) - self.background.window_left, \
+               point_y + (hit_size_y / 2) - self.background.window_bottom
 
     def draw_hbs(self, point_x, point_y, hit_size):
         draw_rectangle(*self.get_hbs(point_x, point_y, hit_size))

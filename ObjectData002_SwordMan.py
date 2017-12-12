@@ -20,6 +20,9 @@ class SwordMan(Player):
         self.image = load_image("Resource_Image\\Player001_SwordMan.png")
         self.x = x
         self.y = y
+        if self.hit_sound is None:
+            self.hit_sound = load_wav('Resource_Sound\\Effect_Sound\\Damage2.wav')
+            self.hit_sound.set_volume(64)
 
     def show_stat(self):
         super(SwordMan, self).show_stat()

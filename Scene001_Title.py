@@ -9,25 +9,40 @@ UI_font = None
 
 Help = False
 
+Title_BGM = None
+
+
+class TitleBGM:
+    def __init__(self):
+        self.bgm = load_music('Resource_Sound\\BGM\\Field 02.mp3')
+        self.bgm.set_volume(64)
+        self.bgm.repeat_play()
+
+
 def enter():
     global image
     global Title_font
     global UI_font
+    global Title_BGM
     if image is None:
         image = load_image('Resource_Image\\TITLE_1024x806.png')
     if Title_font is None:
         Title_font = load_font('Resource_Font\\claws.ttf', 250)
     if UI_font is None:
         UI_font = load_font('Resource_Font\\Cornerstone.ttf', 50)
+    if Title_BGM is None:
+        Title_BGM = TitleBGM()
 
 
 def exit():
     global image
     global Title_font
     global UI_font
+    global Title_BGM
     del image
     del Title_font
     del UI_font
+    del Title_BGM
 
 
 def handle_events(frame_time):

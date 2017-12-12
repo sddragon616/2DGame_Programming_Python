@@ -3,30 +3,52 @@ import Project_SceneFrameWork
 import Scene003_Interface
 import ObjectData002_SwordMan
 import ObjectData003_Monster
+import MapData
+from random import *
 
 name = "TestField"
 image = None
 user = None
 flies = []
+TestBGM = None
+background = None
+
+
+class Testbgm:
+    def __init__(self):
+        self.bgm = load_music('Resource_Sound\\BGM\\Field 01.mp3')
+        self.bgm.set_volume(64)
+        self.bgm.repeat_play()
 
 
 def enter():
     global image
     global user
     global flies
-    user = ObjectData002_SwordMan.SwordMan(512, 384)
-    flies = [ObjectData003_Monster.Fly() for index in range(10)]
+    global TestBGM
+    global background
+    user = ObjectData002_SwordMan.SwordMan(2000, 32)
+    flies = [ObjectData003_Monster.Fly(randint(0, 4000), randint(0, 3200)) for index in range(100)]
+    background = MapData.BackGround_Tilemap()
+    background.set_center_object(user)
+    user.set_background(background)
+    for fly in flies:
+        fly.set_background(background)
     if image is None:
         image = load_image('Resource_Image\\TestField0_1024x768.png')
+    if TestBGM is None:
+        TestBGM = Testbgm()
 
 
 def exit():
     global image
     global user
     global flies
+    global TestBGM
     del user
     del image
     del flies
+    del TestBGM
 
 
 def handle_events(frame_time):
@@ -51,7 +73,8 @@ def draw(frame_time):
 
 
 def draw_scene(frame_time):
-    image.draw(Project_SceneFrameWork.Window_W / 2, Project_SceneFrameWork.Window_H / 2)
+    background.draw()
+    # image.draw(Project_SceneFrameWork.Window_W / 2, Project_SceneFrameWork.Window_H / 2)
     user.draw()
     if user.box_draw:
         user.draw_bb()
@@ -63,12 +86,15 @@ def draw_scene(frame_time):
 
 def update(frame_time):
     user.update(frame_time)
+
+    background.update(frame_time)
     for fly in flies:
         fly.update(frame_time, user)
+
         if collide(user, fly):
-            user.hit_by_str(fly.STR)
+            user.hit_by_str(fly.STR, fly.dir)
         if user.melee_atk_collide(fly):
-            fly.hit_by_str(user.STR)
+            fly.hit_by_str(user.STR, user.dir)
         if fly.exp_pay:             # 몬스터가 쓰러져서 경험치를 지급했는가?
             flies.remove(fly)
 
