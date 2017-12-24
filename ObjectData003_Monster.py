@@ -112,9 +112,11 @@ class Monster(BaseUnit):
             self.hit_sound_play()
         self.knock_back(direction)
 
-    def hit_by_mag(self, damage):
+    def hit_by_mag(self, damage, direction):
         super(Monster, self).hit_by_mag(damage)
-        self.knock_back()
+        if self.hit_sound is not None:
+            self.hit_sound_play()
+        self.knock_back(direction)
 
     def get_experience(self, user):
         user.get_exp(self.get_exp)

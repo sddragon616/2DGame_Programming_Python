@@ -329,9 +329,9 @@ class Player(BaseUnit):
             self.hit_sound_play()
         self.knock_back(direction)
 
-    def hit_by_mag(self, damage):
+    def hit_by_mag(self, damage, direction):
         super(Player, self).hit_by_mag(damage)
-        self.knock_back()
+        self.knock_back(direction)
 
     # 충돌체크용 히트박스
     def get_bb(self):
