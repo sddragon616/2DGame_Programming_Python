@@ -45,7 +45,7 @@ def enter():
     for Zone in Cannot_Move_Zone:
         Zone.set_background(background)
 
-    flies = [ObjectData003_Monster.Fly(randint(0, 4000), randint(0, 2400)) for index in range(100)]
+    flies = [ObjectData003_Monster.Fly(randint(0, 4000), randint(100, 2400)) for index in range(100)]
     for fly in flies:
         fly.set_background(background)
     if BGM is None:

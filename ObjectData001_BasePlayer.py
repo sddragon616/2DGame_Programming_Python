@@ -139,15 +139,13 @@ class Player(BaseUnit):
                 self.attack_motion = 0
                 self.state = STAND
                 self.total_frames_atk = 0.0
+
+        # 구석에 몰렸을 때 무적을 1초 걸어서 탈출 가능하게 해줌
         if self.invincibility is True:
-            print(self.invincible_time)
             self.invincible_time += frame_time
             if self.invincible_time > 1.0:
                 self.invincibility = False
                 self.invincible_time = 0
-
-
-
 
     def draw(self):
         # 현재 캐릭터의 바라보는 방향에 따라 이동, 걷기 이미지 출력

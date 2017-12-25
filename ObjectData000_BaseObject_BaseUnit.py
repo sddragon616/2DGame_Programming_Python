@@ -89,7 +89,6 @@ class BaseObject:
                         self.x = min(self.background.w, self.x - self.width)
                         self.y = min(self.background.h, self.y - self.height)
 
-
     def hit_by_str(self, damage):
         if self.invincibility is False:
             hit_damage = max(damage - self.DEF, 1)  # 물리 방어력에 따른 들어오는 최종 데미지 연산식

@@ -1,0 +1,21 @@
+Wed Dec 13 04:55:16 2017 +0900 20171213 updates
+Mon Dec 11 07:46:00 2017 +0900 20171211 commit
+Wed Dec 6 22:21:16 2017 +0900 20171206 update
+Sun Dec 3 04:08:49 2017 +0900 20171203 updates - move bug fix
+Mon Nov 27 08:53:35 2017 +0900 20171127 updates - font status menu
+Sun Nov 26 19:32:44 2017 +0900 20171126 file update
+Sun Nov 26 19:29:59 2017 +0900 20171126 updates - level, death, monster... etc
+Wed Nov 22 01:21:06 2017 +0900 20171122 Update
+Tue Nov 21 22:45:57 2017 +0900 20171121 update
+Thu Nov 16 18:35:09 2017 +0900 20171116 update
+Wed Nov 15 17:31:30 2017 +0900 20171115 updates
+Thu Nov 9 12:25:23 2017 +0900 20171109 update
+Wed Nov 8 02:14:36 2017 +0900 20171108 update - Create a Directory, Make a TXT
+Thu Nov 2 01:36:36 2017 +0900 20171102 source update
+Mon Oct 30 09:01:37 2017 +0900 20171030 AM9:00 Update- Move available
+Mon Oct 30 02:11:31 2017 +0900 20171030 Code Update - FrameWork, Object Class
+Thu Oct 26 01:40:38 2017 +0900 Merge branch 'master' of https://github.com/sddragon616/2DGame_Programming_Python
+Thu Oct 26 01:36:03 2017 +0900 20171026 Resource Update
+Wed Oct 25 01:17:40 2017 +0900 20171019-1stAnouncement PPT Upload 20171025-Resource Update
+Thu Oct 19 02:35:00 2017 +0900 20171019-1stAnouncement PPT Upload
+Mon Sep 18 15:34:32 2017 +0900 Initial commit

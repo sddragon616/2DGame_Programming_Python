@@ -1,6 +1,7 @@
 from pico2d import *
 import Project_SceneFrameWork
 import Scene002_Interface
+import Scene004_GameOver
 import ObjectData002_SwordMan
 
 
@@ -55,6 +56,8 @@ def draw_scene(frame_time):
 
 def update(frame_time, monsters, others):
     global death_sound
+    if user.death():
+        Project_SceneFrameWork.scene_change(Scene004_GameOver)
     user.update(frame_time, others)
     for monster in monsters:
         monster.update(frame_time, user, others)
