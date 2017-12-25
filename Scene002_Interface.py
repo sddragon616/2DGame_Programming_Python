@@ -1,8 +1,6 @@
 from pico2d import *
 import Project_SceneFrameWork
-import ObjectData002_SwordMan
-import ObjectData003_Monster
-import Scene002_TestField
+import Scene003_BaseBattletScene
 
 name = "PauseState"
 image = None
@@ -32,42 +30,42 @@ def handle_events(frame_time):
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 Project_SceneFrameWork.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
-                Project_SceneFrameWork.scene_change(Scene002_TestField)
+                Project_SceneFrameWork.scene_change(Scene003_BaseBattletScene)
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_u):
                 Project_SceneFrameWork.scene_pop()
 
 
 def draw(frame_time):
     clear_canvas()
-    Scene002_TestField.draw_scene(frame_time)
+    Scene003_BaseBattletScene.draw_scene(frame_time)
     image.draw(Project_SceneFrameWork.Window_W / 2, Project_SceneFrameWork.Window_H / 2)
     status_font.draw(15, Project_SceneFrameWork.Window_H - 31,
-                     'Name : %s' % Scene002_TestField.user.name,  (255, 215, 0))
+                     'Name : %s' % Scene003_BaseBattletScene.user.name, (255, 215, 0))
     status_font.draw(15, Project_SceneFrameWork.Window_H - 70,
-                     'LEVEL : %d' % Scene002_TestField.user.LEVEL, (195, 215, 130))
+                     'LEVEL : %d' % Scene003_BaseBattletScene.user.LEVEL, (195, 215, 130))
     status_font.draw(15, Project_SceneFrameWork.Window_H - 110, 'HP : %d / %d' %
-                     (Scene002_TestField.user.HP, Scene002_TestField.user.MAX_HP), (255, 0, 0))
+                     (Scene003_BaseBattletScene.user.HP, Scene003_BaseBattletScene.user.MAX_HP), (255, 0, 0))
     status_font.draw(15, Project_SceneFrameWork.Window_H - 150, 'MP : %d / %d' %
-                     (Scene002_TestField.user.MP, Scene002_TestField.user.MAX_MP), (0, 0, 255))
+                     (Scene003_BaseBattletScene.user.MP, Scene003_BaseBattletScene.user.MAX_MP), (0, 0, 255))
     status_font.draw(15, Project_SceneFrameWork.Window_H - 190, 'SP : %d / %d' %
-                     (Scene002_TestField.user.STAMINA, Scene002_TestField.user.MAX_STAMINA), (255, 255, 0))
+                     (Scene003_BaseBattletScene.user.STAMINA, Scene003_BaseBattletScene.user.MAX_STAMINA), (255, 255, 0))
     status_font.draw(15, Project_SceneFrameWork.Window_H - 235,
-                     'STRENGTH : %d' % Scene002_TestField.user.STR, (128, 0, 0))
+                     'STRENGTH : %d' % Scene003_BaseBattletScene.user.STR, (128, 0, 0))
     status_font.draw(15, Project_SceneFrameWork.Window_H - 275,
-                     'INTELLIGENCE : %d' % Scene002_TestField.user.INT, (0, 0, 128))
+                     'INTELLIGENCE : %d' % Scene003_BaseBattletScene.user.INT, (0, 0, 128))
     status_font.draw(15, Project_SceneFrameWork.Window_H - 315,
-                     'DEFENCE : %d' % Scene002_TestField.user.DEF, (128, 35, 35))
+                     'DEFENCE : %d' % Scene003_BaseBattletScene.user.DEF, (128, 35, 35))
     status_font.draw(15, Project_SceneFrameWork.Window_H - 355,
-                     'MAGIC RESIST : %d' % Scene002_TestField.user.MR, (35, 35, 128))
+                     'MAGIC RESIST : %d' % Scene003_BaseBattletScene.user.MR, (35, 35, 128))
     status_font.draw(15, Project_SceneFrameWork.Window_H - 410,
-                     'Ability Point : %d' % Scene002_TestField.user.Ability_Point, (0, 255, 255))
+                     'Ability Point : %d' % Scene003_BaseBattletScene.user.Ability_Point, (0, 255, 255))
     status_font.draw(15, Project_SceneFrameWork.Window_H - 450,
-                     'Skill Point : %d' % Scene002_TestField.user.Skill_Point, (255, 0, 255))
+                     'Skill Point : %d' % Scene003_BaseBattletScene.user.Skill_Point, (255, 0, 255))
     status_font.draw(15, Project_SceneFrameWork.Window_H - 500,
-                     'EXPERIENCE : %d / %d' % (Scene002_TestField.user.Experience, Scene002_TestField.user.LEVEL * 10),
-                     (35, 255, 35))
+                     'EXPERIENCE : %d / %d' % (Scene003_BaseBattletScene.user.Experience,
+                                               Scene003_BaseBattletScene.user.Max_Experience), (35, 255, 35))
     status_font.draw(527, Project_SceneFrameWork.Window_H - 600,
-                     'Number of HP Potion : %d' % Scene002_TestField.user.HpPotion.number, (35, 255, 155))
+                     'Number of HP Potion : %d' % Scene003_BaseBattletScene.user.HpPotion.number, (35, 255, 155))
     update_canvas()
 
 

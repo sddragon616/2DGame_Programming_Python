@@ -53,6 +53,7 @@ class TileMap:
             new_ground_data.append(self.ground_data[row * self.width: row * self.width + self.width])
         self.ground_data = new_ground_data
 
+
     def clip_draw_to_origin(self, left, bottom, width, height, dx, dy):
         tile_left = left // self.tilewidth
         tile_bottom = bottom // self.tileheight
@@ -65,14 +66,12 @@ class TileMap:
         for x in range(tile_left, min(tile_left + tile_width, self.width)):
             for y in range(tile_bottom, min(tile_bottom + tile_height, self.height)):
                 self.tile_set.tile_images[self.data[y][x] - self.firstgid]. \
-                    draw_to_origin((x - tile_left) * self.tilewidth - left_origin,
-                                   (y - tile_bottom) * self.tileheight - bottom_origin)
-
-        for x in range(tile_left, min(tile_left + tile_width, self.width)):
-            for y in range(tile_bottom, min(tile_bottom + tile_height, self.height)):
+                    clip_draw_to_origin(0, 0, self.tilewidth, self.tileheight,
+                                        (x - tile_left) * self.tilewidth - left_origin,
+                                        (y - tile_bottom) * self.tileheight - bottom_origin)
                 self.tile_set.tile_images[self.ground_data[y][x] - self.firstgid]. \
                     draw_to_origin((x - tile_left) * self.tilewidth - left_origin,
-                                   (y - tile_bottom) * self.tileheight - bottom_origin)
+                                    (y - tile_bottom) * self.tileheight - bottom_origin)
 
 
 def load_tile_map(name):

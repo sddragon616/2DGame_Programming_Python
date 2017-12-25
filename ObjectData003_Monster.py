@@ -38,7 +38,7 @@ class Monster(BaseUnit):
         self.state = STAND
         self.exp_pay = False            # 이 몬스터가 경험치를 지급했는가 여부
         self.contact = False            # 이 몬스터가 유저를 인식했는가 여부
-        self.box_draw = False
+        self.box_draw_Trigger = False
 
     def update(self, frame_time, user):
         if self.death() is True:            # 대상이 사망했는가>
@@ -162,7 +162,6 @@ class Fly(Monster):
         if self.dir == 5:
             self.dir = 2
         self.x, self.y = x, y
-
         if self.hit_sound is None:
             self.hit_sound = load_wav('Resource_Sound\\Effect_Sound\\Damage1.wav')
             self.hit_sound.set_volume(64)

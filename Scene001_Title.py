@@ -1,21 +1,20 @@
 from pico2d import *
 import Project_SceneFrameWork
-import Scene002_TestField
+import Scene011_Stage01
+import Scene002_Hint_Interface
 
 name = "Title_Scene"
 image = None
 Title_font = None
 UI_font = None
-
 Help = False
-
 Title_BGM = None
 
 
 class TitleBGM:
     def __init__(self):
-        self.bgm = load_music('Resource_Sound\\BGM\\Field 02.mp3')
-        self.bgm.set_volume(64)
+        self.bgm = load_music('Resource_Sound\\BGM\\Title.mp3')
+        self.bgm.set_volume(128)
         self.bgm.repeat_play()
 
 
@@ -55,12 +54,9 @@ def handle_events(frame_time):
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 Project_SceneFrameWork.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
-                Project_SceneFrameWork.scene_change(Scene002_TestField)
+                Project_SceneFrameWork.scene_push(Scene011_Stage01)
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_h):
-                if Help is True:
-                    Help = False
-                else:
-                    Help = True
+                Project_SceneFrameWork.scene_push(Scene002_Hint_Interface)
 
 
 def draw(frame_time):

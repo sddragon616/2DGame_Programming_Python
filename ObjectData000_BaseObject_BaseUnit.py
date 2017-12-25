@@ -17,6 +17,7 @@ class BaseObject:
         self.MOVE_SPEED = move_speed            # 이동속도
         self.background = None
         self.hit_sound = None
+        self.death_sound = None
 
     def show_stat(self):
         print('이름: {}'.format(self.name))
