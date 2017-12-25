@@ -9,6 +9,7 @@ Title_font = None
 UI_font = None
 Help = False
 Title_BGM = None
+Loading_Trigger = False
 
 
 class TitleBGM:
@@ -45,6 +46,7 @@ def exit():
 
 
 def handle_events(frame_time):
+    global Loading_Trigger
     global Help
     events = get_events()
     for event in events:
@@ -54,20 +56,23 @@ def handle_events(frame_time):
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 Project_SceneFrameWork.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
+                Loading_Trigger = True
+                draw(frame_time)
                 Project_SceneFrameWork.scene_push(Scene011_Stage01)
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_h):
                 Project_SceneFrameWork.scene_push(Scene002_Hint_Interface)
 
 
 def draw(frame_time):
+    global Loading_Triggerz
     clear_canvas()
     image.draw(Project_SceneFrameWork.Window_W/2, Project_SceneFrameWork.Window_H/2)
     Title_font.draw(50, Project_SceneFrameWork.Window_H - 100, "Lord of", (255, 215, 0))
     Title_font.draw(50, Project_SceneFrameWork.Window_H - 300, '          Dungeon', (255, 215, 0))
-    UI_font.draw(150, Project_SceneFrameWork.Window_H - 500,
-                 'Press Space -> Game Start', (120, 230, 120))
-    UI_font.draw(150, Project_SceneFrameWork.Window_H - 550,
-                 'Press H -> Hot Key Help', (220, 130, 120))
+    UI_font.draw(150, Project_SceneFrameWork.Window_H - 500, 'Press Space -> Game Start', (120, 230, 120))
+    UI_font.draw(150, Project_SceneFrameWork.Window_H - 550, 'Press H -> Hot Key Help', (220, 130, 120))
+    if Loading_Trigger:
+        UI_font.draw(150, Project_SceneFrameWork.Window_H - 650, 'NOW LOADING.....', (255, 0, 0))
     update_canvas()
 
 

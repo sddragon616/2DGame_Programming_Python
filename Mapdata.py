@@ -31,6 +31,13 @@ def load_tile_set(file_name):
 
 
 class TileMap:
+    def __init__(self):
+        self.tile_set = None
+        self.firstgid = None
+        self.data = None
+        self.img = None
+        self.canvas_width = get_canvas_width()
+        self.canvas_height = get_canvas_height()
 
     def load(self, name):
         f = open(name)
@@ -41,18 +48,11 @@ class TileMap:
         self.tile_set = load_tile_set(self.tilesets[0]['source'])
         self.firstgid = self.tilesets[0]['firstgid']
         self.data = self.layers[0]['data']
-        self.ground_data = self.layers[2]['data']
 
         new_data = []
         for row in reversed(range(self.height)):    # 2차원 배열 형태로 행의 순서를 바꿔서 저장한다.
             new_data.append(self.data[row * self.width: row * self.width + self.width])
         self.data = new_data
-
-        new_ground_data = []
-        for row in reversed(range(self.height)):  # 2차원 배열 형태로 행의 순서를 바꿔서 저장한다.
-            new_ground_data.append(self.ground_data[row * self.width: row * self.width + self.width])
-        self.ground_data = new_ground_data
-
 
     def clip_draw_to_origin(self, left, bottom, width, height, dx, dy):
         tile_left = left // self.tilewidth
@@ -66,12 +66,9 @@ class TileMap:
         for x in range(tile_left, min(tile_left + tile_width, self.width)):
             for y in range(tile_bottom, min(tile_bottom + tile_height, self.height)):
                 self.tile_set.tile_images[self.data[y][x] - self.firstgid]. \
-                    clip_draw_to_origin(0, 0, self.tilewidth, self.tileheight,
-                                        (x - tile_left) * self.tilewidth - left_origin,
-                                        (y - tile_bottom) * self.tileheight - bottom_origin)
-                self.tile_set.tile_images[self.ground_data[y][x] - self.firstgid]. \
                     draw_to_origin((x - tile_left) * self.tilewidth - left_origin,
-                                    (y - tile_bottom) * self.tileheight - bottom_origin)
+                                   (y - tile_bottom) * self.tileheight - bottom_origin,
+                                   self.tilewidth, self.tileheight)
 
 
 def load_tile_map(name):
@@ -82,8 +79,8 @@ def load_tile_map(name):
 
 
 class BackGround_Tilemap:
-    def __init__(self):
-        self.tile_map = load_tile_map('Map\\Mapdata\\Forest_Shining.json')
+    def __init__(self, filename, object_img):
+        self.tile_map = load_tile_map(filename)
         self.canvas_width = get_canvas_width()
         self.canvas_height = get_canvas_height()
         self.w = self.tile_map.width * self.tile_map.tilewidth
@@ -93,6 +90,7 @@ class BackGround_Tilemap:
         self.max_window_bottom = 0
         self.window_left = 0
         self.window_bottom = 0
+        self.obj_img = load_image(object_img)
 
     def set_center_object(self, user):
         self.center_object = user
@@ -102,9 +100,9 @@ class BackGround_Tilemap:
     def draw(self):
         self.tile_map.clip_draw_to_origin(self.window_left, self.window_bottom, self.canvas_width, self.canvas_height,
                                           0, 0)
+        self.obj_img.clip_draw_to_origin(self.window_left, self.window_bottom,
+                                         self.canvas_width, self.canvas_height, 0, 0)
 
     def update(self, frame_time):
         self.window_left = clamp(0, int(self.center_object.x) - self.canvas_width//2, self.max_window_left)
         self.window_bottom = clamp(0, int(self.center_object.y) - self.canvas_height//2, self.max_window_bottom)
-
-

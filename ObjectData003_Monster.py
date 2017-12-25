@@ -42,8 +42,9 @@ class Monster(BaseUnit):
         if self.death_sound is None:
             self.death_sound = load_wav('Resource_Sound\\Effect_Sound\\Destroy.wav')
             self.death_sound.set_volume(64)
+        self.distance = 0
 
-    def update(self, frame_time, user):
+    def update(self, frame_time, user, others):
         if self.death() is True:            # 대상이 사망했는가>
             if self.exp_pay is False:
                 self.get_experience(user)
@@ -63,31 +64,54 @@ class Monster(BaseUnit):
             if self.contact:            # 플레이어를 인식한 경우
                 self.state = WALK
                 self.auto_intelligence(frame_time, user)
-            distance = self.RUN_SPEED_PPS * frame_time
+            self.distance = self.RUN_SPEED_PPS * frame_time
             self.total_frames_run += self.FRAMES_PER_ACTION_run * self.ACTION_PER_TIME_run * frame_time
             self.frame = int(self.total_frames_run) % 3
             # 바라보는 방향에 따라, 현재 걷기 상태라면 이동한다.
             if self.state is WALK:
                 if self.dir is 2:
-                    self.y = max(0, self.y - distance)
+                    self.y = max(0, self.y - self.distance)
                 elif self.dir is 8:
-                    self.y = min(self.background.h, self.y + distance)
+                    self.y = min(self.background.h, self.y + self.distance)
                 elif self.dir is 4:
-                    self.x = max(0, self.x - distance)
+                    self.x = max(0, self.x - self.distance)
                 elif self.dir is 6:
-                    self.x = min(self.background.w, self.x + distance)
+                    self.x = min(self.background.w, self.x + self.distance)
                 elif self.dir is 1:
-                    self.x = max(0, self.x - distance)
-                    self.y = max(0, self.y - distance)
+                    self.x = max(0, self.x - self.distance)
+                    self.y = max(0, self.y - self.distance)
                 elif self.dir is 3:
-                    self.x = min(self.background.w, self.x + distance)
-                    self.y = max(0, self.y - distance)
+                    self.x = min(self.background.w, self.x + self.distance)
+                    self.y = max(0, self.y - self.distance)
                 elif self.dir is 7:
-                    self.x = max(0, self.x - distance)
-                    self.y = min(self.background.h, self.y + distance)
+                    self.x = max(0, self.x - self.distance)
+                    self.y = min(self.background.h, self.y + self.distance)
                 elif self.dir is 9:
-                    self.x = min(self.background.w, self.x + distance)
-                    self.y = min(self.background.h, self.y + distance)
+                    self.x = min(self.background.w, self.x + self.distance)
+                    self.y = min(self.background.h, self.y + self.distance)
+            if others is not []:
+                for other in others:
+                    if collide(self, other):
+                        if self.dir is 2:
+                            self.y = max(0, self.y + self.distance)
+                        elif self.dir is 8:
+                            self.y = min(self.background.h, self.y - self.distance)
+                        elif self.dir is 4:
+                            self.x = max(0, self.x + self.distance)
+                        elif self.dir is 6:
+                            self.x = min(self.background.w, self.x - self.distance)
+                        elif self.dir is 1:
+                            self.x = max(0, self.x + self.distance)
+                            self.y = max(0, self.y + self.distance)
+                        elif self.dir is 3:
+                            self.x = min(self.background.w, self.x - self.distance)
+                            self.y = max(0, self.y + self.distance)
+                        elif self.dir is 7:
+                            self.x = max(0, self.x + self.distance)
+                            self.y = min(self.background.h, self.y - self.distance)
+                        elif self.dir is 9:
+                            self.x = min(self.background.w, self.x - self.distance)
+                            self.y = min(self.background.h, self.y - self.distance)
 
     def auto_intelligence(self, frame_time, user):
         if user.x < self.x:
@@ -109,17 +133,17 @@ class Monster(BaseUnit):
         elif user.y < self.y:
             self.dir = 2
 
-    def hit_by_str(self, damage, direction):
+    def hit_by_str(self, damage, direction, others):
         super(Monster, self).hit_by_str(damage)
         if self.hit_sound is not None:
             self.hit_sound_play()
-        self.knock_back(direction)
+        self.knock_back(direction, others)
 
-    def hit_by_mag(self, damage, direction):
+    def hit_by_mag(self, damage, direction, others):
         super(Monster, self).hit_by_mag(damage)
         if self.hit_sound is not None:
             self.hit_sound_play()
-        self.knock_back(direction)
+        self.knock_back(direction, others)
 
     def get_experience(self, user):
         user.get_exp(self.get_exp)
@@ -129,6 +153,7 @@ class Monster(BaseUnit):
 
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
+        draw_rectangle(*self.get_contact_box())
 
     def get_contact_box(self):
         return self.x - self.sight, self.y - self.sight, self.x + self.sight, self.y + self.sight
@@ -203,6 +228,21 @@ class Fly(Monster):
                        self.get_bb()[1] - self.background.window_bottom,
                        self.get_bb()[2] - self.background.window_left,
                        self.get_bb()[3] - self.background.window_bottom)
+        draw_rectangle(self.get_contact_box()[0] - self.background.window_left,
+                       self.get_contact_box()[1] - self.background.window_bottom,
+                       self.get_contact_box()[2] - self.background.window_left,
+                       self.get_contact_box()[3] - self.background.window_bottom)
 
 
-
+def collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+    if left_a > right_b:
+        return False
+    if right_a < left_b:
+        return False
+    if top_a < bottom_b:
+        return False
+    if bottom_a > top_b:
+        return False
+    return True

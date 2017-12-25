@@ -20,7 +20,8 @@ class SwordMan(Player):
         self.image = load_image("Resource_Image\\Player001_SwordMan.png")
         self.x = x
         self.y = y
-
+        self.HpPotion.number += 2
+        self.StaminaPotion.number += 1
         if self.attack_sound is None:
             self.attack_sound = load_wav('Resource_Sound\\Effect_Sound\\Slash12.wav')
             self.attack_sound.set_volume(64)
@@ -34,6 +35,7 @@ class SwordMan(Player):
 
     def handle_events(self, event):
         super(SwordMan, self).handle_events(event)
+        print(self.x, self.y)
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_d):
             pass
 

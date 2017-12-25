@@ -29,10 +29,14 @@ class Player(BaseUnit):
         self.Ability_Point = 0
         self.Skill_Point = 0
 
-        self.HpPotion = HpPotion(3)    # HP 포션 3개 소지
+        self.HpPotion = HpPotion(3)  # HP 포션 3개 소지
+        self.MpPotion = MpPotion(1)  # MP 포션 1개 소지
+        self.StaminaPotion = StaminaPotion(1)  # SP 포션 2개 소지
         self.dir = 2            # 캐릭터가 바라보고 있는 방향을 나타내는 변수. 숫자 키패드의 위치로 판단
 
         self.state = STAND      # 캐릭터의 현재 모션 상태를 나타내고 있는 변수
+
+        self.distance = 0       # 캐릭터의 이동 거리
 
         # 모션 출력용 프레임 조절 변수 (직접적인 스프라이트 위치와 무관)
         self.walk_motion = 0
@@ -54,6 +58,9 @@ class Player(BaseUnit):
             self.Level_up_sound = load_wav('Resource_Sound\\Effect_Sound\\LevelUp.wav')
             self.Level_up_sound.set_volume(64)
 
+        # 타이머 전용
+        self.invincible_time = 0
+
     def show_stat(self):
         print('Lv. {}'.format(self.LEVEL))
         super(Player, self).show_stat()
@@ -61,13 +68,13 @@ class Player(BaseUnit):
         print('SP : {}'.format(self.Skill_Point))
         print('Exp : {}'.format(self.Experience), '/ {}'.format(self.Max_Experience))
 
-    def update(self, frame_time):
+    def update(self, frame_time, others):
         self.Max_Experience = (self.LEVEL * 5) + 5
         self.death()
         self.life_time += frame_time
         # 걷거나 서 있을 때
         if self.state == WALK:
-            distance = self.RUN_SPEED_PPS * frame_time
+            self.distance = self.RUN_SPEED_PPS * frame_time
             self.total_frames_run += self.FRAMES_PER_ACTION_run * self.ACTION_PER_TIME_run * frame_time
             self.walk_motion = int(self.total_frames_run) % 4
             if self.walk_motion is 3:
@@ -75,25 +82,48 @@ class Player(BaseUnit):
             else:
                 self.frame = self.walk_motion
             if self.dir is 2:
-                self.y = max(0, self.y - distance)
+                self.y = max(0, self.y - self.distance)
             elif self.dir is 8:
-                self.y = min(self.background.h, self.y + distance)
+                self.y = min(self.background.h, self.y + self.distance)
             elif self.dir is 4:
-                self.x = max(0, self.x - distance)
+                self.x = max(0, self.x - self.distance)
             elif self.dir is 6:
-                self.x = min(self.background.w, self.x + distance)
+                self.x = min(self.background.w, self.x + self.distance)
             elif self.dir is 1:
-                self.x = max(0, self.x - distance)
-                self.y = max(0, self.y - distance)
+                self.x = max(0, self.x - self.distance)
+                self.y = max(0, self.y - self.distance)
             elif self.dir is 3:
-                self.x = min(self.background.w, self.x + distance)
-                self.y = max(0, self.y - distance)
+                self.x = min(self.background.w, self.x + self.distance)
+                self.y = max(0, self.y - self.distance)
             elif self.dir is 7:
-                self.x = max(0, self.x - distance)
-                self.y = min(self.background.h, self.y + distance)
+                self.x = max(0, self.x - self.distance)
+                self.y = min(self.background.h, self.y + self.distance)
             elif self.dir is 9:
-                self.x = min(self.background.w, self.x + distance)
-                self.y = min(self.background.h, self.y + distance)
+                self.x = min(self.background.w, self.x + self.distance)
+                self.y = min(self.background.h, self.y + self.distance)
+            if others is not []:
+                for other in others:
+                    if collide(self, other):
+                        if self.dir is 2:
+                            self.y = max(0, self.y + self.distance)
+                        elif self.dir is 8:
+                            self.y = min(self.background.h, self.y - self.distance)
+                        elif self.dir is 4:
+                            self.x = max(0, self.x + self.distance)
+                        elif self.dir is 6:
+                            self.x = min(self.background.w, self.x - self.distance)
+                        elif self.dir is 1:
+                            self.x = max(0, self.x + self.distance)
+                            self.y = max(0, self.y + self.distance)
+                        elif self.dir is 3:
+                            self.x = min(self.background.w, self.x - self.distance)
+                            self.y = max(0, self.y + self.distance)
+                        elif self.dir is 7:
+                            self.x = max(0, self.x + self.distance)
+                            self.y = min(self.background.h, self.y - self.distance)
+                        elif self.dir is 9:
+                            self.x = min(self.background.w, self.x - self.distance)
+                            self.y = min(self.background.h, self.y - self.distance)
         # 근접 공격 중일 때
         elif self.state is MELEE_ATTACK:
             # 공격범위 변수
@@ -109,6 +139,15 @@ class Player(BaseUnit):
                 self.attack_motion = 0
                 self.state = STAND
                 self.total_frames_atk = 0.0
+        if self.invincibility is True:
+            print(self.invincible_time)
+            self.invincible_time += frame_time
+            if self.invincible_time > 1.0:
+                self.invincibility = False
+                self.invincible_time = 0
+
+
+
 
     def draw(self):
         # 현재 캐릭터의 바라보는 방향에 따라 이동, 걷기 이미지 출력
@@ -314,15 +353,15 @@ class Player(BaseUnit):
             self.Ability_Point += 5
             self.Skill_Point += 3
 
-    def hit_by_str(self, damage, direction):
+    def hit_by_str(self, damage, direction, others):
         super(Player, self).hit_by_str(damage)
         if self.hit_sound is not None:
             self.hit_sound_play()
-        self.knock_back(direction)
+        self.knock_back(direction, others)
 
-    def hit_by_mag(self, damage, direction):
+    def hit_by_mag(self, damage, direction, others):
         super(Player, self).hit_by_mag(damage)
-        self.knock_back(direction)
+        self.knock_back(direction, others)
 
     # 충돌체크용 히트박스
     def get_bb(self):
@@ -391,3 +430,17 @@ class Player(BaseUnit):
             return False
         if self.state is MELEE_ATTACK:
             return True
+
+
+def collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+    if left_a > right_b:
+        return False
+    if right_a < left_b:
+        return False
+    if top_a < bottom_b:
+        return False
+    if bottom_a > top_b:
+        return False
+    return True

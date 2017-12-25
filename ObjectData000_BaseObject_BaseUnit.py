@@ -19,6 +19,8 @@ class BaseObject:
         self.hit_sound = None
         self.death_sound = None
 
+        self.invincibility = False
+
     def show_stat(self):
         print('이름: {}'.format(self.name))
         print('체력: {}'.format(self.HP), ' / {}'.format(self.MAX_HP))
@@ -41,7 +43,7 @@ class BaseObject:
     def hit_sound_play(self):
         self.hit_sound.play()
 
-    def knock_back(self, direction):
+    def knock_back(self, direction, others):
         if direction is 8:
             self.y = min(self.background.h, self.y + self.height)
         if direction is 2:
@@ -62,15 +64,43 @@ class BaseObject:
         elif direction is 9:
             self.x = min(self.background.w, self.x + self.width)
             self.y = min(self.background.h, self.y + self.height)
+        if others is not []:
+            for other in others:
+                if collide(self, other):
+                    self.invincibility = True
+                    if direction is 8:
+                        self.y = min(self.background.h, self.y - self.height)
+                    if direction is 2:
+                        self.y = max(0, self.y + self.height)
+                    elif direction is 4:
+                        self.x = max(0, self.x + self.width)
+                    elif direction is 6:
+                        self.x = min(self.background.w, self.x - self.width)
+                    elif direction is 1:
+                        self.x = max(0, self.x + self.width)
+                        self.y = max(0, self.y + self.height)
+                    elif direction is 3:
+                        self.x = min(self.background.w, self.x - self.width)
+                        self.y = max(0, self.y + self.height)
+                    elif direction is 7:
+                        self.x = max(0, self.x + self.width)
+                        self.y = min(self.background.h, self.y - self.height)
+                    elif direction is 9:
+                        self.x = min(self.background.w, self.x - self.width)
+                        self.y = min(self.background.h, self.y - self.height)
+
 
     def hit_by_str(self, damage):
-        hit_damage = max(damage - self.DEF, 1)  # 물리 방어력에 따른 들어오는 최종 데미지 연산식
-        self.HP = self.HP - hit_damage
+        if self.invincibility is False:
+            hit_damage = max(damage - self.DEF, 1)  # 물리 방어력에 따른 들어오는 최종 데미지 연산식
+            self.HP = self.HP - hit_damage
         print('대상의 남은 HP %d ' % self.HP)
 
     def hit_by_mag(self, dmg):
-        hit = max(dmg - self.MR, 1)  # 마법 저향력에 따른 들어오는 최종 데미지 연산식
-        self.HP = self.HP - hit
+        if self.invincibility is False:
+            hit_damage = max(dmg - self.MR, 1)  # 마법 저향력에 따른 들어오는 최종 데미지 연산식
+            self.HP = self.HP - hit_damage
+        print('대상의 남은 HP %d ' % self.HP)
 
     def hp_heal(self, heal):
         self.HP = min(self.HP + heal, self.MAX_HP)        # 힐량 효과만큼 회복
@@ -143,6 +173,40 @@ class BaseUnit(BaseObject):
 
     def draw_hbr(self, point_x, point_y, hit_size_x, hit_size_y):
         draw_rectangle(*self.get_hbr(point_x, point_y, hit_size_x, hit_size_y))
+
+
+class BaseZone:
+    def __init__(self, zone_data):
+        self.width, self.height = zone_data['width'], zone_data['height']
+        self.x, self.y = zone_data['x'] + self.width / 2, 2400 - (zone_data['y'] + self.height / 2)
+
+        self.background = None
+
+    def set_background(self, background):
+        self.background = background
+
+    def get_bb(self):
+        return self.x - self.width / 2, self.y - self.height / 2, self.x + self.width / 2, self.y + self.height / 2
+
+    def draw_bb(self):
+        draw_rectangle(self.get_bb()[0] - self.background.window_left,
+                       self.get_bb()[1] - self.background.window_bottom,
+                       self.get_bb()[2] - self.background.window_left,
+                       self.get_bb()[3] - self.background.window_bottom)
+
+
+def collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+    if left_a > right_b:
+        return False
+    if right_a < left_b:
+        return False
+    if top_a < bottom_b:
+        return False
+    if bottom_a > top_b:
+        return False
+    return True
 
 
 if __name__ == '__main__':

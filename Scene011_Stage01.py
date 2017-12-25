@@ -2,6 +2,7 @@ from pico2d import *
 from random import *
 import Project_SceneFrameWork
 import Scene003_BaseBattletScene
+import ObjectData000_BaseObject_BaseUnit
 import ObjectData003_Monster
 import Mapdata
 
@@ -10,6 +11,10 @@ name = "TestField"
 flies = []
 BGM = None
 background = None
+Cannot_Move_Zone = []
+collide_zone = []
+size_width = 0
+size_height = 0
 
 
 class Stage1_Bgm:
@@ -23,11 +28,24 @@ def enter():
     global flies
     global BGM
     global background
+    global Cannot_Move_Zone
+    global size_width
+    global size_height
+    size_width = get_canvas_width()
+    size_height = get_canvas_height()
     Scene003_BaseBattletScene.enter()
-    background = Mapdata.BackGround_Tilemap()
+    background = Mapdata.BackGround_Tilemap('Map\\Mapdata\\Forest_Shining.json',
+                                            'Map\\Mapdata\\Forest_Shining_Ground.png')
+    Cannot_Move_Zone = [ObjectData000_BaseObject_BaseUnit.BaseZone(
+        Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[2]['objects'][i]) for i in range(222)]
+
     background.set_center_object(Scene003_BaseBattletScene.user)
     Scene003_BaseBattletScene.user.set_background(background)
-    flies = [ObjectData003_Monster.Fly(randint(0, 4000), randint(0, 3200)) for index in range(100)]
+
+    for Zone in Cannot_Move_Zone:
+        Zone.set_background(background)
+
+    flies = [ObjectData003_Monster.Fly(randint(0, 4000), randint(0, 2400)) for index in range(100)]
     for fly in flies:
         fly.set_background(background)
     if BGM is None:
@@ -52,17 +70,32 @@ def draw(frame_time):
 
 
 def draw_scene(frame_time):
+    global size_width
+    global size_height
     background.draw()
     Scene003_BaseBattletScene.draw_scene(frame_time)
     for fly in flies:
-        fly.draw()
+        if abs(Scene003_BaseBattletScene.user.x - fly.x) < size_width and \
+                        abs(Scene003_BaseBattletScene.user.y - fly.y) < size_height:
+            fly.draw()
         if Scene003_BaseBattletScene.user.box_draw_Trigger:
             fly.draw_bb()
+    for Zone in collide_zone:
+        if Scene003_BaseBattletScene.user.box_draw_Trigger:
+            Zone.draw_bb()
 
 
 def update(frame_time):
+    global collide_zone
+    global size_width
+    global size_height
     background.update(frame_time)
-    Scene003_BaseBattletScene.update(frame_time, flies)
+    collide_zone = []
+    for Zone in Cannot_Move_Zone:
+        if abs(Scene003_BaseBattletScene.user.x - Zone.x) < size_width and \
+                        abs(Scene003_BaseBattletScene.user.y - Zone.y) < size_height:
+            collide_zone.append(Zone)
+    Scene003_BaseBattletScene.update(frame_time, flies, collide_zone)
 
 
 def pause(): pass

@@ -2,8 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="50685533-4b67-49f3-a331-f658d1316402" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Map/Mapdata/Forest_Shining.json" afterPath="$PROJECT_DIR$/Map/Mapdata/Forest_Shining.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Mapdata.py" afterPath="$PROJECT_DIR$/Mapdata.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ObjectData000_BaseObject_BaseUnit.py" afterPath="$PROJECT_DIR$/ObjectData000_BaseObject_BaseUnit.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ObjectData001_BasePlayer.py" afterPath="$PROJECT_DIR$/ObjectData001_BasePlayer.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ObjectData002_SwordMan.py" afterPath="$PROJECT_DIR$/ObjectData002_SwordMan.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ObjectData003_Monster.py" afterPath="$PROJECT_DIR$/ObjectData003_Monster.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ObjectData004_Item.py" afterPath="$PROJECT_DIR$/ObjectData004_Item.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scene001_Title.py" afterPath="$PROJECT_DIR$/Scene001_Title.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scene003_BaseBattletScene.py" afterPath="$PROJECT_DIR$/Scene003_BaseBattletScene.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scene011_Stage01.py" afterPath="$PROJECT_DIR$/Scene011_Stage01.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UnitData/Item.txt" afterPath="$PROJECT_DIR$/UnitData/Item.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UnitData/Monster.txt" afterPath="$PROJECT_DIR$/UnitData/Monster.txt" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,16 +28,27 @@
       <file leaf-file-name="ObjectData000_BaseObject_BaseUnit.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ObjectData000_BaseObject_BaseUnit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="35" column="67" lean-forward="true" selection-start-line="35" selection-start-column="67" selection-end-line="35" selection-end-column="67" />
+            <state relative-caret-position="-99">
+              <caret line="69" column="45" lean-forward="false" selection-start-line="69" selection-start-column="45" selection-end-line="69" selection-end-column="45" />
               <folding>
-                <element signature="e#883#1074#0" expanded="false" />
-                <element signature="e#2454#2602#0" expanded="false" />
-                <element signature="e#2643#2732#0" expanded="false" />
-                <element signature="e#4466#4895#0" expanded="false" />
-                <element signature="e#4934#4976#0" expanded="false" />
-                <element signature="e#5015#5072#0" expanded="false" />
+                <element signature="e#919#1110#0" expanded="false" />
+                <element signature="e#3806#4002#0" expanded="false" />
+                <element signature="e#4043#4235#0" expanded="false" />
+                <element signature="e#4573#7553#0" expanded="false" />
+                <element signature="e#5969#6398#0" expanded="false" />
+                <element signature="e#6437#6479#0" expanded="false" />
+                <element signature="e#6518#6575#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Monster.txt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/UnitData/Monster.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="38">
+              <caret line="2" column="1" lean-forward="true" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -34,47 +56,49 @@
       <file leaf-file-name="ObjectData001_BasePlayer.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ObjectData001_BasePlayer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="31">
-              <caret line="309" column="50" lean-forward="true" selection-start-line="309" selection-start-column="50" selection-end-line="309" selection-end-column="50" />
+            <state relative-caret-position="228">
+              <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
-                <element signature="e#2447#3759#0" expanded="false" />
-                <element signature="e#3825#4515#0" expanded="false" />
-                <element signature="e#4545#13108#0" expanded="false" />
-                <element signature="e#6833#7498#0" expanded="false" />
-                <element signature="e#7547#8210#0" expanded="false" />
-                <element signature="e#8259#9039#0" expanded="false" />
-                <element signature="e#9088#9882#0" expanded="false" />
-                <element signature="e#9954#10707#0" expanded="false" />
-                <element signature="e#10756#11506#0" expanded="false" />
-                <element signature="e#11555#12302#0" expanded="false" />
-                <element signature="e#12351#13108#0" expanded="false" />
-                <element signature="e#13226#13518#0" expanded="false" />
-                <element signature="e#13602#13894#0" expanded="false" />
-                <element signature="e#13975#14229#0" expanded="false" />
-                <element signature="e#14312#14566#0" expanded="false" />
-                <element signature="e#14792#14926#0" expanded="false" />
-                <element signature="e#15371#15545#0" expanded="false" />
-                <element signature="e#15623#15797#0" expanded="false" />
-                <element signature="e#15872#16046#0" expanded="false" />
-                <element signature="e#16123#16297#0" expanded="false" />
-                <element signature="e#16335#16381#0" expanded="false" />
-                <element signature="e#16901#16974#0" expanded="false" />
-                <element signature="e#17023#17130#0" expanded="false" />
-                <element signature="e#17163#17442#0" expanded="false" />
-                <element signature="e#17506#20043#0" expanded="false" />
-                <element signature="e#17536#17812#0" expanded="false" />
-                <element signature="e#17853#18125#0" expanded="false" />
-                <element signature="e#18166#18440#0" expanded="false" />
-                <element signature="e#18173#18440#0" expanded="false" />
-                <element signature="e#18481#18757#0" expanded="false" />
-                <element signature="e#18488#18757#0" expanded="false" />
-                <element signature="e#18798#19074#0" expanded="false" />
-                <element signature="e#19115#19393#0" expanded="false" />
-                <element signature="e#19434#19714#0" expanded="false" />
-                <element signature="e#19755#20037#0" expanded="false" />
-                <element signature="e#19762#20037#0" expanded="false" />
-                <element signature="e#20110#20505#0" expanded="false" />
+                <element signature="e#2183#2445#0" expanded="false" />
+                <element signature="e#2662#5416#0" expanded="false" />
+                <element signature="e#5482#6172#0" expanded="false" />
+                <element signature="e#6458#15021#0" expanded="false" />
+                <element signature="e#8746#9411#0" expanded="false" />
+                <element signature="e#9460#10123#0" expanded="false" />
+                <element signature="e#10172#10952#0" expanded="false" />
+                <element signature="e#11001#11795#0" expanded="false" />
+                <element signature="e#11867#12620#0" expanded="false" />
+                <element signature="e#12669#13419#0" expanded="false" />
+                <element signature="e#13468#14215#0" expanded="false" />
+                <element signature="e#14264#15021#0" expanded="false" />
+                <element signature="e#15067#18210#0" expanded="false" />
+                <element signature="e#15139#15431#0" expanded="false" />
+                <element signature="e#15515#15807#0" expanded="false" />
+                <element signature="e#15888#16142#0" expanded="false" />
+                <element signature="e#16225#16479#0" expanded="false" />
+                <element signature="e#16705#16839#0" expanded="false" />
+                <element signature="e#17284#17458#0" expanded="false" />
+                <element signature="e#17536#17710#0" expanded="false" />
+                <element signature="e#17785#17959#0" expanded="false" />
+                <element signature="e#18036#18210#0" expanded="false" />
+                <element signature="e#18248#18294#0" expanded="false" />
+                <element signature="e#18328#18558#0" expanded="false" />
+                <element signature="e#18968#19075#0" expanded="false" />
+                <element signature="e#19108#19387#0" expanded="false" />
+                <element signature="e#19451#21988#0" expanded="false" />
+                <element signature="e#19481#19757#0" expanded="false" />
+                <element signature="e#19798#20070#0" expanded="false" />
+                <element signature="e#20111#20385#0" expanded="false" />
+                <element signature="e#20118#20385#0" expanded="false" />
+                <element signature="e#20426#20702#0" expanded="false" />
+                <element signature="e#20433#20702#0" expanded="false" />
+                <element signature="e#20743#21019#0" expanded="false" />
+                <element signature="e#21060#21338#0" expanded="false" />
+                <element signature="e#21379#21659#0" expanded="false" />
+                <element signature="e#21700#21982#0" expanded="false" />
+                <element signature="e#21707#21982#0" expanded="false" />
+                <element signature="e#22055#22450#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -83,10 +107,44 @@
       <file leaf-file-name="ObjectData004_Item.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ObjectData004_Item.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
-              <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+            <state relative-caret-position="718">
+              <caret line="47" column="38" lean-forward="true" selection-start-line="47" selection-start-column="38" selection-end-line="47" selection-end-column="38" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ObjectData002_SwordMan.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ObjectData002_SwordMan.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="252">
+              <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ObjectData003_Monster.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ObjectData003_Monster.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1634">
+              <caret line="110" column="83" lean-forward="true" selection-start-line="110" selection-start-column="83" selection-end-line="110" selection-end-column="83" />
               <folding>
-                <element signature="e#0#11#0" expanded="true" />
+                <element signature="e#651#1841#0" expanded="false" />
+                <element signature="e#6722#6748#0" expanded="false" />
+                <element signature="e#7169#7519#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Scene011_Stage01.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Scene011_Stage01.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="547">
+              <caret line="52" column="0" lean-forward="true" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#20#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -95,8 +153,8 @@
       <file leaf-file-name="Scene002_Interface.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Scene002_Interface.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
-              <caret line="5" column="12" lean-forward="true" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
+            <state relative-caret-position="266">
+              <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -104,79 +162,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ObjectData003_Monster.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ObjectData003_Monster.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="233">
-              <caret line="41" column="8" lean-forward="false" selection-start-line="41" selection-start-column="8" selection-end-line="43" selection-end-column="43" />
-              <folding>
-                <element signature="e#1865#4192#0" expanded="false" />
-                <element signature="e#4253#4764#0" expanded="false" />
-                <element signature="e#4819#4966#0" expanded="false" />
-                <element signature="e#5021#5168#0" expanded="false" />
-                <element signature="e#5214#5240#0" expanded="false" />
-                <element signature="e#5272#5379#0" expanded="false" />
-                <element signature="e#5412#5442#0" expanded="false" />
-                <element signature="e#5483#5572#0" expanded="false" />
-                <element signature="e#5613#5963#0" expanded="false" />
-                <element signature="e#7185#9144#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Scene003_BaseBattletScene.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Scene003_BaseBattletScene.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Scene003_BaseBattletScene.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
-              <caret line="16" column="34" lean-forward="false" selection-start-line="16" selection-start-column="34" selection-end-line="16" selection-end-column="34" />
+            <state relative-caret-position="209">
+              <caret line="56" column="22" lean-forward="false" selection-start-line="56" selection-start-column="22" selection-end-line="56" selection-end-column="22" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Scene001_Title.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Scene001_Title.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="271">
-              <caret line="44" column="0" lean-forward="true" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#20#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Scene000_Logo.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Scene000_Logo.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="668">
-              <caret line="44" column="0" lean-forward="true" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Scene011_Stage01.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Scene011_Stage01.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="214">
-              <caret line="75" column="49" lean-forward="true" selection-start-line="75" selection-start-column="49" selection-end-line="75" selection-end-column="49" />
-              <folding>
-                <element signature="e#0#20#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Mapdata.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Mapdata.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -193,6 +186,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>str</find>
+      <find>&quot;id&quot;</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -219,7 +213,6 @@
         <option value="$PROJECT_DIR$/Scene003_Interface.py" />
         <option value="D:/Tile_Editor/RPG2003_Dungeon_Tileset.json" />
         <option value="$PROJECT_DIR$/Map/TileSet/Forest.json" />
-        <option value="$PROJECT_DIR$/UnitData/Monster.txt" />
         <option value="$PROJECT_DIR$/MapData.py" />
         <option value="$PROJECT_DIR$/Scene002_TestField.py" />
         <option value="$PROJECT_DIR$/Project_Main.py" />
@@ -228,19 +221,21 @@
         <option value="$PROJECT_DIR$/Scene011_Stage-01.py" />
         <option value="$PROJECT_DIR$/Scene002_BaseBattletScene.py" />
         <option value="$PROJECT_DIR$/Scene005_GameOver.py" />
-        <option value="$PROJECT_DIR$/Map/Mapdata/Forest_Shining.json" />
-        <option value="$PROJECT_DIR$/ObjectData002_SwordMan.py" />
-        <option value="$PROJECT_DIR$/ObjectData004_Item.py" />
         <option value="$PROJECT_DIR$/Stage01_Mapdata.py" />
-        <option value="$PROJECT_DIR$/UnitData/Item.txt" />
-        <option value="$PROJECT_DIR$/ObjectData001_BasePlayer.py" />
-        <option value="$PROJECT_DIR$/ObjectData000_BaseObject_BaseUnit.py" />
-        <option value="$PROJECT_DIR$/Scene002_Interface.py" />
-        <option value="$PROJECT_DIR$/Scene011_Stage01.py" />
         <option value="$PROJECT_DIR$/Scene002_Hint_Interface.py" />
+        <option value="$PROJECT_DIR$/Mapdata.py" />
         <option value="$PROJECT_DIR$/Scene001_Title.py" />
-        <option value="$PROJECT_DIR$/ObjectData003_Monster.py" />
+        <option value="$PROJECT_DIR$/Map/Mapdata/Forest_Shining.json" />
+        <option value="$PROJECT_DIR$/UnitData/Monster.txt" />
         <option value="$PROJECT_DIR$/Scene003_BaseBattletScene.py" />
+        <option value="$PROJECT_DIR$/ObjectData003_Monster.py" />
+        <option value="$PROJECT_DIR$/Scene011_Stage01.py" />
+        <option value="$PROJECT_DIR$/Scene002_Interface.py" />
+        <option value="$PROJECT_DIR$/ObjectData000_BaseObject_BaseUnit.py" />
+        <option value="$PROJECT_DIR$/UnitData/Item.txt" />
+        <option value="$PROJECT_DIR$/ObjectData004_Item.py" />
+        <option value="$PROJECT_DIR$/ObjectData002_SwordMan.py" />
+        <option value="$PROJECT_DIR$/ObjectData001_BasePlayer.py" />
       </list>
     </option>
   </component>
@@ -299,23 +294,6 @@
               <item name="2DGame_Programming_Python" type="462c0819:PsiDirectoryNode" />
               <item name="Resource_Image" type="462c0819:PsiDirectoryNode" />
               <item name="User_Interface" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="2DGame_Programming_Python" type="b2602c69:ProjectViewProjectNode" />
-              <item name="2DGame_Programming_Python" type="462c0819:PsiDirectoryNode" />
-              <item name="Resource_Sound" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="2DGame_Programming_Python" type="b2602c69:ProjectViewProjectNode" />
-              <item name="2DGame_Programming_Python" type="462c0819:PsiDirectoryNode" />
-              <item name="Resource_Sound" type="462c0819:PsiDirectoryNode" />
-              <item name="BGM" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="2DGame_Programming_Python" type="b2602c69:ProjectViewProjectNode" />
-              <item name="2DGame_Programming_Python" type="462c0819:PsiDirectoryNode" />
-              <item name="Resource_Sound" type="462c0819:PsiDirectoryNode" />
-              <item name="Effect_Sound" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="2DGame_Programming_Python" type="b2602c69:ProjectViewProjectNode" />
@@ -425,8 +403,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.114583336" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12604167" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32910052" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -471,7 +450,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="44" />
+      <option name="time" value="47" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -482,8 +461,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/GoldDragon_Logo-by_solstice_arctic_luna-d6yrudl.png" />
-    <entry file="file://$PROJECT_DIR$/TITLE.png" />
     <entry file="file://$PROJECT_DIR$/Scene000-Logo.py" />
     <entry file="file://$PROJECT_DIR$/ObjectData000_BaseCharacter.py" />
     <entry file="file://$PROJECT_DIR$/ObjectData001_BaseCharacter.py" />
@@ -534,13 +511,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UnitData/Monster.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="1" column="199" lean-forward="false" selection-start-line="1" selection-start-column="199" selection-end-line="1" selection-end-column="199" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Project_Main.spec">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -575,14 +545,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Project_SceneFrameWork.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="20" column="25" lean-forward="true" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Scene005_GameOver.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="38">
@@ -599,14 +561,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ObjectData002_SwordMan.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="9" column="18" lean-forward="true" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Map/TileSet/Forest_Shining.tmx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -615,31 +569,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Map/TileSet/Forest.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Map/TileSet/Forest.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="209">
           <caret line="11" column="1" lean-forward="true" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Map/Mapdata/Forest_Shining.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-51">
-          <caret line="23" column="46161" lean-forward="false" selection-start-line="23" selection-start-column="46161" selection-end-line="23" selection-end-column="46161" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UnitData/Item.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="1" column="35" lean-forward="false" selection-start-line="1" selection-start-column="35" selection-end-line="1" selection-end-column="35" />
           <folding />
         </state>
       </provider>
@@ -652,45 +585,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/pico2d/pico2d.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-527">
-          <caret line="237" column="31" lean-forward="true" selection-start-line="237" selection-start-column="31" selection-end-line="237" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Scene002_Hint_Interface.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="456">
           <caret line="24" column="36" lean-forward="true" selection-start-line="24" selection-start-column="36" selection-end-line="24" selection-end-column="36" />
           <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ObjectData000_BaseObject_BaseUnit.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="35" column="67" lean-forward="true" selection-start-line="35" selection-start-column="67" selection-end-line="35" selection-end-column="67" />
-          <folding>
-            <element signature="e#883#1074#0" expanded="false" />
-            <element signature="e#2454#2602#0" expanded="false" />
-            <element signature="e#2643#2732#0" expanded="false" />
-            <element signature="e#4466#4895#0" expanded="false" />
-            <element signature="e#4934#4976#0" expanded="false" />
-            <element signature="e#5015#5072#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ObjectData004_Item.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#0#20#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -703,28 +603,69 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Scene011_Stage01.py">
+    <entry file="file://$PROJECT_DIR$/Map/TileSet/Forest_Shining_Ground.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Project_SceneFrameWork.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="75" column="49" lean-forward="true" selection-start-line="75" selection-start-column="49" selection-end-line="75" selection-end-column="49" />
+        <state relative-caret-position="202">
+          <caret line="53" column="0" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Map/Mapdata/Forest_Shining_Ground.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Map/TileSet/Forest.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scene001_Title.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1083">
+          <caret line="66" column="27" lean-forward="false" selection-start-line="66" selection-start-column="27" selection-end-line="66" selection-end-column="27" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Mapdata.py">
+    <entry file="file://$PROJECT_DIR$/Map/Mapdata/Forest_Shining.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+        <state relative-caret-position="329">
+          <caret line="2484" column="22" lean-forward="false" selection-start-line="2484" selection-start-column="22" selection-end-line="2484" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Scene001_Title.py">
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/pico2d/pico2d.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="44" column="0" lean-forward="true" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+        <state relative-caret-position="-817">
+          <caret line="226" column="4" lean-forward="false" selection-start-line="226" selection-start-column="4" selection-end-line="226" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Mapdata.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="931">
+          <caret line="49" column="42" lean-forward="true" selection-start-line="49" selection-start-column="42" selection-end-line="49" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scene003_BaseBattletScene.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="56" column="22" lean-forward="false" selection-start-line="56" selection-start-column="22" selection-end-line="56" selection-end-column="22" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>
@@ -733,87 +674,130 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Scene002_Interface.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="5" column="12" lean-forward="true" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
+        <state relative-caret-position="266">
+          <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ObjectData001_BasePlayer.py">
+    <entry file="file://$PROJECT_DIR$/UnitData/Item.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="31">
-          <caret line="309" column="50" lean-forward="true" selection-start-line="309" selection-start-column="50" selection-end-line="309" selection-end-column="50" />
+        <state relative-caret-position="38">
+          <caret line="2" column="34" lean-forward="true" selection-start-line="2" selection-start-column="34" selection-end-line="2" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scene011_Stage01.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="547">
+          <caret line="52" column="0" lean-forward="true" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
-            <element signature="e#2447#3759#0" expanded="false" />
-            <element signature="e#3825#4515#0" expanded="false" />
-            <element signature="e#4545#13108#0" expanded="false" />
-            <element signature="e#6833#7498#0" expanded="false" />
-            <element signature="e#7547#8210#0" expanded="false" />
-            <element signature="e#8259#9039#0" expanded="false" />
-            <element signature="e#9088#9882#0" expanded="false" />
-            <element signature="e#9954#10707#0" expanded="false" />
-            <element signature="e#10756#11506#0" expanded="false" />
-            <element signature="e#11555#12302#0" expanded="false" />
-            <element signature="e#12351#13108#0" expanded="false" />
-            <element signature="e#13226#13518#0" expanded="false" />
-            <element signature="e#13602#13894#0" expanded="false" />
-            <element signature="e#13975#14229#0" expanded="false" />
-            <element signature="e#14312#14566#0" expanded="false" />
-            <element signature="e#14792#14926#0" expanded="false" />
-            <element signature="e#15371#15545#0" expanded="false" />
-            <element signature="e#15623#15797#0" expanded="false" />
-            <element signature="e#15872#16046#0" expanded="false" />
-            <element signature="e#16123#16297#0" expanded="false" />
-            <element signature="e#16335#16381#0" expanded="false" />
-            <element signature="e#16901#16974#0" expanded="false" />
-            <element signature="e#17023#17130#0" expanded="false" />
-            <element signature="e#17163#17442#0" expanded="false" />
-            <element signature="e#17506#20043#0" expanded="false" />
-            <element signature="e#17536#17812#0" expanded="false" />
-            <element signature="e#17853#18125#0" expanded="false" />
-            <element signature="e#18166#18440#0" expanded="false" />
-            <element signature="e#18173#18440#0" expanded="false" />
-            <element signature="e#18481#18757#0" expanded="false" />
-            <element signature="e#18488#18757#0" expanded="false" />
-            <element signature="e#18798#19074#0" expanded="false" />
-            <element signature="e#19115#19393#0" expanded="false" />
-            <element signature="e#19434#19714#0" expanded="false" />
-            <element signature="e#19755#20037#0" expanded="false" />
-            <element signature="e#19762#20037#0" expanded="false" />
-            <element signature="e#20110#20505#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ObjectData003_Monster.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="41" column="8" lean-forward="false" selection-start-line="41" selection-start-column="8" selection-end-line="43" selection-end-column="43" />
+        <state relative-caret-position="1634">
+          <caret line="110" column="83" lean-forward="true" selection-start-line="110" selection-start-column="83" selection-end-line="110" selection-end-column="83" />
           <folding>
-            <element signature="e#1865#4192#0" expanded="false" />
-            <element signature="e#4253#4764#0" expanded="false" />
-            <element signature="e#4819#4966#0" expanded="false" />
-            <element signature="e#5021#5168#0" expanded="false" />
-            <element signature="e#5214#5240#0" expanded="false" />
-            <element signature="e#5272#5379#0" expanded="false" />
-            <element signature="e#5412#5442#0" expanded="false" />
-            <element signature="e#5483#5572#0" expanded="false" />
-            <element signature="e#5613#5963#0" expanded="false" />
-            <element signature="e#7185#9144#0" expanded="false" />
+            <element signature="e#651#1841#0" expanded="false" />
+            <element signature="e#6722#6748#0" expanded="false" />
+            <element signature="e#7169#7519#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Scene003_BaseBattletScene.py">
+    <entry file="file://$PROJECT_DIR$/ObjectData002_SwordMan.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="16" column="34" lean-forward="false" selection-start-line="16" selection-start-column="34" selection-end-line="16" selection-end-column="34" />
+        <state relative-caret-position="252">
+          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ObjectData004_Item.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="718">
+          <caret line="47" column="38" lean-forward="true" selection-start-line="47" selection-start-column="38" selection-end-line="47" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ObjectData001_BasePlayer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
+            <element signature="e#2183#2445#0" expanded="false" />
+            <element signature="e#2662#5416#0" expanded="false" />
+            <element signature="e#5482#6172#0" expanded="false" />
+            <element signature="e#6458#15021#0" expanded="false" />
+            <element signature="e#8746#9411#0" expanded="false" />
+            <element signature="e#9460#10123#0" expanded="false" />
+            <element signature="e#10172#10952#0" expanded="false" />
+            <element signature="e#11001#11795#0" expanded="false" />
+            <element signature="e#11867#12620#0" expanded="false" />
+            <element signature="e#12669#13419#0" expanded="false" />
+            <element signature="e#13468#14215#0" expanded="false" />
+            <element signature="e#14264#15021#0" expanded="false" />
+            <element signature="e#15067#18210#0" expanded="false" />
+            <element signature="e#15139#15431#0" expanded="false" />
+            <element signature="e#15515#15807#0" expanded="false" />
+            <element signature="e#15888#16142#0" expanded="false" />
+            <element signature="e#16225#16479#0" expanded="false" />
+            <element signature="e#16705#16839#0" expanded="false" />
+            <element signature="e#17284#17458#0" expanded="false" />
+            <element signature="e#17536#17710#0" expanded="false" />
+            <element signature="e#17785#17959#0" expanded="false" />
+            <element signature="e#18036#18210#0" expanded="false" />
+            <element signature="e#18248#18294#0" expanded="false" />
+            <element signature="e#18328#18558#0" expanded="false" />
+            <element signature="e#18968#19075#0" expanded="false" />
+            <element signature="e#19108#19387#0" expanded="false" />
+            <element signature="e#19451#21988#0" expanded="false" />
+            <element signature="e#19481#19757#0" expanded="false" />
+            <element signature="e#19798#20070#0" expanded="false" />
+            <element signature="e#20111#20385#0" expanded="false" />
+            <element signature="e#20118#20385#0" expanded="false" />
+            <element signature="e#20426#20702#0" expanded="false" />
+            <element signature="e#20433#20702#0" expanded="false" />
+            <element signature="e#20743#21019#0" expanded="false" />
+            <element signature="e#21060#21338#0" expanded="false" />
+            <element signature="e#21379#21659#0" expanded="false" />
+            <element signature="e#21700#21982#0" expanded="false" />
+            <element signature="e#21707#21982#0" expanded="false" />
+            <element signature="e#22055#22450#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ObjectData000_BaseObject_BaseUnit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-99">
+          <caret line="69" column="45" lean-forward="false" selection-start-line="69" selection-start-column="45" selection-end-line="69" selection-end-column="45" />
+          <folding>
+            <element signature="e#919#1110#0" expanded="false" />
+            <element signature="e#3806#4002#0" expanded="false" />
+            <element signature="e#4043#4235#0" expanded="false" />
+            <element signature="e#4573#7553#0" expanded="false" />
+            <element signature="e#5969#6398#0" expanded="false" />
+            <element signature="e#6437#6479#0" expanded="false" />
+            <element signature="e#6518#6575#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UnitData/Monster.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="1" lean-forward="true" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
+          <folding />
         </state>
       </provider>
     </entry>

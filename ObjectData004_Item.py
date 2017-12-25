@@ -34,3 +34,28 @@ class HpPotion(Item):
         if super(HpPotion, self).use():
             user.hp_heal(self.healing)
 
+
+class MpPotion(Item):
+    def __init__(self, numbers):
+        super(MpPotion, self).__init__(numbers)
+        self.healing = Item_Data['MP_Potion']['Healing']
+        if self.use_sound is None:
+            self.use_sound = load_wav('Resource_Sound\\Effect_Sound\\Drinking.wav')
+            self.use_sound.set_volume(64)
+
+    def use(self, user):
+        if super(MpPotion, self).use():
+            user.hp_heal(self.healing)
+
+
+class StaminaPotion(Item):
+    def __init__(self, numbers):
+        super(StaminaPotion, self).__init__(numbers)
+        self.healing = Item_Data['SP_Potion']['Healing']
+        if self.use_sound is None:
+            self.use_sound = load_wav('Resource_Sound\\Effect_Sound\\Drinking.wav')
+            self.use_sound.set_volume(64)
+
+    def use(self, user):
+        if super(StaminaPotion, self).use():
+            user.hp_heal(self.healing)
