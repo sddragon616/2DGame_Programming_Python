@@ -6,16 +6,22 @@ import ObjectData002_SwordMan
 
 name = "TestField"
 user = None
-
+death_sound = None
 
 def enter():
     global user
+    global death_sound
     user = ObjectData002_SwordMan.SwordMan(2000, 32)
+    if death_sound is None:
+        death_sound = load_wav('Resource_Sound\\Effect_Sound\\Destroy.wav')
+        death_sound.set_volume(128)
 
 
 def exit():
     global user
+    global death_sound
     del user
+    del death_sound
 
 
 def handle_events(frame_time):
@@ -46,6 +52,7 @@ def draw_scene(frame_time):
 
 
 def update(frame_time, monsters):
+    global death_sound
     user.update(frame_time)
     for monster in monsters:
         monster.update(frame_time, user)
@@ -54,7 +61,10 @@ def update(frame_time, monsters):
         if user.melee_atk_collide(monster):
             monster.hit_by_str(user.STR, user.dir)
         if monster.exp_pay:  # 몬스터가 쓰러져서 경험치를 지급했는가?
-            monster.death()
+            if monster.death():
+                death_sound.play()
+                monsters.remove(monster)
+
 
 
 def pause(): pass
