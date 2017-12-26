@@ -409,7 +409,7 @@ class Slasher(Monster):
                                       Monster_Data['Slasher']['MOVE_SPEED'], Monster_Data['Slasher']['ATK_SPEED'],
                                       Monster_Data['Slasher']['Sight'], Monster_Data['Slasher']['Experience'],
                                       Monster_Data['Slasher']['AI_Type'])
-        self.width = self.height = 64
+        self.width = self.height = 32
         self.image = load_image('Resource_Image\\Monster005_Slasher.png')
         self.dir = randint(1, 9)
         if self.dir == 5:
@@ -422,31 +422,39 @@ class Slasher(Monster):
     def draw(self):
         if self.dir is 2:
             self.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
         elif self.dir is 8:
             self.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
         elif self.dir is 4:
             self.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
         elif self.dir is 6:
             self.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
         elif self.dir is 1:
             self.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
         elif self.dir is 3:
             self.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
         elif self.dir is 7:
             self.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
         elif self.dir is 9:
             self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
 
     def get_bb(self):
-        return self.x - self.width / 2, self.y - self.height / 2, self.x + self.width / 2, self.y + self.height / 2
+        return self.x - self.width, self.y - self.height, self.x + self.width, self.y + self.height
 
 
 def collide(a, b):

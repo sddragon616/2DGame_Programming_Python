@@ -2,6 +2,6 @@
 	"Fly" : {"HP":15, "MAX_HP":15, "MP":2, "MAX_MP":2, "Stamina":5, "MAX_Stamina":5, "STR":10, "DEF":1, "MAG":1, "MR":1, "MOVE_SPEED":10.0, "ATK_SPEED":3.5, "Sight": 100, "Experience": 1, "AI_Type":1 },
 	"Crab" :  {"HP":40, "MAX_HP":40, "MP":35, "MAX_MP":35, "Stamina":15, "MAX_Stamina":15, "STR":25, "DEF":5, "MAG":35, "MR":35, "MOVE_SPEED":15.0, "ATK_SPEED":2.5, "Sight": 150, "Experience": 3, "AI_Type":1 },
 	"Skull Golem" :  {"HP":90, "MAX_HP":90, "MP":65, "MAX_MP":65, "Stamina":75, "MAX_Stamina":75, "STR":45, "DEF":75, "MAG":15, "MR":5, "MOVE_SPEED":5.0, "ATK_SPEED":2.5, "Sight": 150, "Experience": 5, "AI_Type":0 },
-	"Spear" :  {"HP":75, "MAX_HP":75, "MP":50, "MAX_MP":50, "Stamina":65, "MAX_Stamina":65, "STR":75, "DEF":25, "MAG":1, "MR":25, "MOVE_SPEED":20.0, "ATK_SPEED":2.5, "Sight": 250, "Experience": 10, "AI_Type":1 },
-	"Slasher" : {"HP":500, "MAX_HP":500, "MP":175, "MAX_MP":175, "Stamina":325, "MAX_Stamina":325, "STR":100, "DEF":50, "MAG":75, "MR":50, "MOVE_SPEED":15.0, "ATK_SPEED":2.5, "Sight": 1250, "Experience": 2147483647, "AI_Type":2 }
+	"Spear" :  {"HP":75, "MAX_HP":75, "MP":50, "MAX_MP":50, "Stamina":65, "MAX_Stamina":65, "STR":50, "DEF":25, "MAG":1, "MR":25, "MOVE_SPEED":20.0, "ATK_SPEED":2.5, "Sight": 250, "Experience": 15, "AI_Type":2 },
+	"Slasher" : {"HP":500, "MAX_HP":500, "MP":175, "MAX_MP":175, "Stamina":325, "MAX_Stamina":325, "STR":100, "DEF":50, "MAG":75, "MR":50, "MOVE_SPEED":15.0, "ATK_SPEED":2.5, "Sight": 250, "Experience": 2147483647, "AI_Type":1 }
 }

@@ -1,5 +1,5 @@
 {
-	"SwordMan" : {"HP":10055555, "MAX_HP":100, "MP":25, "MAX_MP":25, "Stamina":50, "MAX_Stamina":50, "STR":75555, "DEF":5555, "MAG":2, "MR":5, "MOVE_SPEED":20.0, "ATK_SPEED":3}
+	"SwordMan" : {"HP":100, "MAX_HP":100, "MP":25, "MAX_MP":25, "Stamina":50, "MAX_Stamina":50, "STR":7, "DEF":5, "MAG":2, "MR":5, "MOVE_SPEED":22.2, "ATK_SPEED":3}
 }
 
 
