@@ -6,7 +6,8 @@ import os
 
 name = "GameOver"
 image = None
-BGM = None
+overBGM = None
+
 
 class GameOverBGM:
     def __init__(self):
@@ -17,19 +18,18 @@ class GameOverBGM:
 
 def enter():
     global image
-    global BGM
-    open_canvas(Project_SceneFrameWork.Window_W, Project_SceneFrameWork.Window_H)
+    global overBGM
     hide_lattice()
     image = load_image('Resource_Image\\GameOver.png')
-    if BGM is None:
-        BGM = GameOverBGM()
+    if overBGM is None:
+        overBGM = GameOverBGM()
 
 
 def exit():
     global image
-    global BGM
+    global overBGM
     del image
-    del BGM
+    del overBGM
 
 
 def update(frame_time):

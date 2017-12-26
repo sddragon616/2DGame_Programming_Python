@@ -4,6 +4,7 @@ import Project_SceneFrameWork
 import Scene003_BaseBattletScene
 import ObjectData000_BaseObject_BaseUnit
 import ObjectData003_Monster
+import Scene012_Stage02
 import Mapdata
 
 
@@ -11,6 +12,12 @@ name = "Stage_01"
 flies = []
 BGM = None
 background = None
+KeyZone = None
+KeyEvent = None
+KeyItem = None
+KeyTrigger = False
+StageMoveZone = None
+JumpZone = None
 Cannot_Move_Zone = []
 collide_zone = []
 size_width = 0
@@ -31,13 +38,29 @@ def enter():
     global Cannot_Move_Zone
     global size_width
     global size_height
+    global KeyZone
+    global StageMoveZone
+    global JumpZone
+    global KeyEvent
+    global KeyItem
+    KeyEvent = load_wav('Resource_Sound\\Effect_Sound\\Drinking.wav')
+    KeyEvent.set_volume(64)
     size_width = get_canvas_width()
     size_height = get_canvas_height()
     Scene003_BaseBattletScene.enter()
+    KeyZone = ObjectData000_BaseObject_BaseUnit.KeyZone(3450, 2400-350, 32, 32)
+    StageMoveZone = ObjectData000_BaseObject_BaseUnit.KeyZone(10, 2400-1920, 20, 150)
+    JumpZone = ObjectData000_BaseObject_BaseUnit.KeyZone(925, 1550, 200, 100)
+    if KeyItem is None:
+        KeyItem = load_image('Resource_Image\\stone_shoes.png')
     background = Mapdata.BackGround_Tilemap('Map\\Mapdata\\Forest_Shining.json',
                                             'Map\\Mapdata\\Forest_Shining_Ground.png')
     Cannot_Move_Zone = [ObjectData000_BaseObject_BaseUnit.BaseZone(
-        Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[2]['objects'][i]) for i in range(222)]
+        Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[2]['objects'][i], 2400) for i in range(222)]
+
+    KeyZone.set_background(background)
+    StageMoveZone.set_background(background)
+    JumpZone.set_background(background)
 
     background.set_center_object(Scene003_BaseBattletScene.user)
     Scene003_BaseBattletScene.user.set_background(background)
@@ -72,8 +95,17 @@ def draw(frame_time):
 def draw_scene(frame_time):
     global size_width
     global size_height
+    global KeyZone
+    global StageMoveZone
+    global JumpZone
+    global KeyItem
+    global KeyTrigger
     background.draw()
     Scene003_BaseBattletScene.draw_scene(frame_time)
+    if Scene003_BaseBattletScene.user.box_draw_Trigger:
+        KeyZone.draw_bb()
+        StageMoveZone.draw_bb()
+        JumpZone.draw_bb()
     for fly in flies:
         if abs(Scene003_BaseBattletScene.user.x - fly.x) < size_width and \
                         abs(Scene003_BaseBattletScene.user.y - fly.y) < size_height:
@@ -83,19 +115,40 @@ def draw_scene(frame_time):
     for Zone in collide_zone:
         if Scene003_BaseBattletScene.user.box_draw_Trigger:
             Zone.draw_bb()
+    if KeyTrigger is False:
+        if KeyItem is None:
+            KeyItem = load_image('Resource_Image\\stone_shoes.png')
+        KeyItem.draw(KeyZone.x - background.window_left, KeyZone.y - background.window_bottom)
 
 
 def update(frame_time):
     global collide_zone
     global size_width
     global size_height
+    global KeyZone
+    global KeyTrigger
+    global JumpZone
+    global StageMoveZone
+    global KeyEvent
     background.update(frame_time)
+    if collide(Scene003_BaseBattletScene.user, KeyZone):
+        if KeyTrigger is False:
+            KeyEvent.play()
+            KeyTrigger = True
+    if collide(Scene003_BaseBattletScene.user, JumpZone):
+        if KeyTrigger is True:
+            Scene003_BaseBattletScene.user.y -= 350
+            Scene003_BaseBattletScene.user.dir = 2
+
     collide_zone = []
     for Zone in Cannot_Move_Zone:
         if abs(Scene003_BaseBattletScene.user.x - Zone.x) < size_width and \
                         abs(Scene003_BaseBattletScene.user.y - Zone.y) < size_height:
             collide_zone.append(Zone)
     Scene003_BaseBattletScene.update(frame_time, flies, collide_zone)
+
+    if collide(Scene003_BaseBattletScene.user, StageMoveZone):
+        Project_SceneFrameWork.scene_change(Scene012_Stage02)
 
 
 def pause(): pass

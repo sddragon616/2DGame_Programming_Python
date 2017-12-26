@@ -81,11 +81,10 @@ class SwordMan(Player):
                         self.air_splitter_size = self.air_splitter_level * 2 + 32
                     self.old_dir = self.dir
         if self.air_splitter_flag is True:
-            timer = self.air_splitter_level / 5.0 + 2.5
-            self.air_splitter_frame_time += 1.0 / self.air_splitter_level * \
-                                            self.FRAMES_PER_ACTION_atk * self.ACTION_PER_TIME_atk * \
-                                            frame_time
-            if self.air_splitter_frame_time > (self.air_splitter_frame + 1) * timer / 4.0:
+            air_splitter_time_limit = self.air_splitter_level / 5.0 + 2.5
+            self.air_splitter_frame_time += ((1.0 / self.air_splitter_level) * \
+                                            self.FRAMES_PER_ACTION_atk * self.ACTION_PER_TIME_atk * frame_time)
+            if self.air_splitter_frame_time > (self.air_splitter_frame + 1) * air_splitter_time_limit / 4.0:
                 self.air_splitter_frame += 1
             if self.old_dir is 2:
                 self.air_splitter_rad = 3 * math.pi / 2.0
@@ -115,7 +114,7 @@ class SwordMan(Player):
                 self.air_splitter_rad = 1 * math.pi / 4.0
                 self.air_splitter_x += (self.distance * 8)
                 self.air_splitter_y += (self.distance * 8)
-            if self.air_splitter_frame_time > timer:
+            if self.air_splitter_frame_time > air_splitter_time_limit:
                 self.air_splitter_x, self.air_splitter_y = -100, -100
                 self.air_splitter_frame_time = 0
                 self.air_splitter_frame = 0

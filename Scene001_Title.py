@@ -1,6 +1,7 @@
 from pico2d import *
 import Project_SceneFrameWork
 import Scene011_Stage01
+import Scene012_Stage02
 import Scene002_Hint_Interface
 
 name = "Title_Scene"
@@ -58,7 +59,8 @@ def handle_events(frame_time):
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
                 Loading_Trigger = True
                 draw(frame_time)
-                Project_SceneFrameWork.scene_push(Scene011_Stage01)
+                # Project_SceneFrameWork.scene_push(Scene011_Stage01)
+                Project_SceneFrameWork.scene_push(Scene012_Stage02)
                 Loading_Trigger = False
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_h):
                 Project_SceneFrameWork.scene_push(Scene002_Hint_Interface)

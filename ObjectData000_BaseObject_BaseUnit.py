@@ -108,7 +108,10 @@ class BaseObject:
         return self.x - self.width / 2, self.y - self.height / 2, self.x + self.width / 2, self.y + self.height / 2
 
     def draw_bb(self):
-        draw_rectangle(*self.get_bb())
+        draw_rectangle(self.get_bb()[0] - self.background.window_left,
+                       self.get_bb()[1] - self.background.window_bottom,
+                       self.get_bb()[2] - self.background.window_left,
+                       self.get_bb()[3] - self.background.window_bottom)
 
 
 class BaseUnit(BaseObject):
@@ -175,9 +178,9 @@ class BaseUnit(BaseObject):
 
 
 class BaseZone:
-    def __init__(self, zone_data):
+    def __init__(self, zone_data, base_height):
         self.width, self.height = zone_data['width'], zone_data['height']
-        self.x, self.y = zone_data['x'] + self.width / 2, 2400 - (zone_data['y'] + self.height / 2)
+        self.x, self.y = zone_data['x'] + self.width / 2, base_height - (zone_data['y'] + self.height / 2)
 
         self.background = None
 
@@ -192,6 +195,28 @@ class BaseZone:
                        self.get_bb()[1] - self.background.window_bottom,
                        self.get_bb()[2] - self.background.window_left,
                        self.get_bb()[3] - self.background.window_bottom)
+
+
+class KeyZone:
+    def __init__(self, x, y, w, h):
+        self.x, self.y = x, y
+        self.width = w
+        self.height = h
+        self.background = None
+
+    def set_background(self, background):
+        self.background = background
+
+    def get_bb(self):
+        return self.x - self.width / 2, self.y - self.height / 2, self.x + self.width / 2, self.y + self.height / 2
+
+    def draw_bb(self):
+        draw_rectangle(self.get_bb()[0] - self.background.window_left,
+                       self.get_bb()[1] - self.background.window_bottom,
+                       self.get_bb()[2] - self.background.window_left,
+                       self.get_bb()[3] - self.background.window_bottom)
+
+
 
 
 def collide(a, b):
