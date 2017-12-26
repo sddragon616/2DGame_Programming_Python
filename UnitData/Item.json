@@ -1,5 +1,5 @@
 {
 	"HP_Potion" : {"Healing": 25 },
-	"MP_Potion" : {"Healing": 5 },
+	"MP_Potion" : {"Healing": 15 },
 	"SP_Potion" : {"Healing": 15 }
 }

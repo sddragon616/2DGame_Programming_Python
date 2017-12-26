@@ -66,7 +66,8 @@ def update(frame_time, monsters, others):
         if user.melee_atk_collide(monster):
             monster.hit_by_str(user.STR, user.dir, others)
         if user.class_num == 2:
-            pass
+            if user.air_splitter_collide(monster):
+                monster.hit_by_mag(2 * user.INT * user.air_splitter_level, 0, [])
         if monster.exp_pay:  # 몬스터가 쓰러져서 경험치를 지급했는가?
             if monster.death():
                 death_sound.play()

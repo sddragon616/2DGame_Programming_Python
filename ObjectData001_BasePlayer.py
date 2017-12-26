@@ -70,9 +70,12 @@ class Player(BaseUnit):
         print('Exp : {}'.format(self.Experience), '/ {}'.format(self.Max_Experience))
 
     def update(self, frame_time, others):
-        self.Max_Experience = (self.LEVEL * 5) + 5
-        self.death()
+        self.Max_Experience = (self.LEVEL * 8) + 2
         self.life_time += frame_time
+        if self.life_time % 2 > 1.999:
+            self.hp_heal(3)
+            self.mp_heal(1)
+            self.sp_heal(3)
         # 걷거나 서 있을 때
         if self.state == WALK:
             self.distance = self.RUN_SPEED_PPS * frame_time

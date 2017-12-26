@@ -50,7 +50,7 @@ def handle_events(frame_time):
             Project_SceneFrameWork.quit()
         else:
             if event.type == SDL_KEYDOWN or event.type == SDL_MOUSEBUTTONDOWN:
-                Project_SceneFrameWork.scene_change(Scene001_Title)
+                Project_SceneFrameWork.quit()
 
 
 def pause(): pass

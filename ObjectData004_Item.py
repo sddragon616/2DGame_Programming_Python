@@ -2,7 +2,7 @@ import json
 from pico2d import *
 
 
-Item_data_file = open('UnitData\\Item.txt', 'r')
+Item_data_file = open('UnitData\\Item.json', 'r')
 Item_Data = json.load(Item_data_file)
 Item_data_file.close()
 
@@ -50,7 +50,7 @@ class MpPotion(Item):
 
     def use(self, user):
         if super(MpPotion, self).use():
-            user.hp_heal(self.healing)
+            user.mp_heal(self.healing)
 
 
 class StaminaPotion(Item):
@@ -65,4 +65,4 @@ class StaminaPotion(Item):
 
     def use(self, user):
         if super(StaminaPotion, self).use():
-            user.hp_heal(self.healing)
+            user.sp_heal(self.healing)

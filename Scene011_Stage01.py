@@ -7,7 +7,7 @@ import ObjectData003_Monster
 import Mapdata
 
 
-name = "TestField"
+name = "Stage_01"
 flies = []
 BGM = None
 background = None

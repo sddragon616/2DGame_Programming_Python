@@ -3,7 +3,7 @@ from random import *
 import Project_SceneFrameWork
 
 
-Monster_data_file = open('UnitData\\Monster.txt', 'r')
+Monster_data_file = open('UnitData\\Monster.json', 'r')
 Monster_Data = json.load(Monster_data_file)
 Monster_data_file.close()
 
@@ -152,8 +152,14 @@ class Monster(BaseUnit):
         return self.x - self.width / 4, self.y - self.height / 4, self.x + self.width / 4, self.y + self.height / 4
 
     def draw_bb(self):
-        draw_rectangle(*self.get_bb())
-        draw_rectangle(*self.get_contact_box())
+        draw_rectangle(self.get_bb()[0] - self.background.window_left,
+                       self.get_bb()[1] - self.background.window_bottom,
+                       self.get_bb()[2] - self.background.window_left,
+                       self.get_bb()[3] - self.background.window_bottom)
+        draw_rectangle(self.get_contact_box()[0] - self.background.window_left,
+                       self.get_contact_box()[1] - self.background.window_bottom,
+                       self.get_contact_box()[2] - self.background.window_left,
+                       self.get_contact_box()[3] - self.background.window_bottom)
 
     def get_contact_box(self):
         return self.x - self.sight, self.y - self.sight, self.x + self.sight, self.y + self.sight
@@ -223,15 +229,216 @@ class Fly(Monster):
     def get_bb(self):
         return self.x - self.width / 4, self.y - self.height / 4, self.x + self.width / 4, self.y + self.height / 4
 
-    def draw_bb(self):
-        draw_rectangle(self.get_bb()[0] - self.background.window_left,
-                       self.get_bb()[1] - self.background.window_bottom,
-                       self.get_bb()[2] - self.background.window_left,
-                       self.get_bb()[3] - self.background.window_bottom)
-        draw_rectangle(self.get_contact_box()[0] - self.background.window_left,
-                       self.get_contact_box()[1] - self.background.window_bottom,
-                       self.get_contact_box()[2] - self.background.window_left,
-                       self.get_contact_box()[3] - self.background.window_bottom)
+
+class Crab(Monster):
+    global Monster_Data
+
+    def __init__(self, x, y):
+        super(Crab, self).__init__(Monster_Data['Crab']['HP'], Monster_Data['Crab']['MAX_HP'],
+                                   Monster_Data['Crab']['MP'], Monster_Data['Crab']['MAX_MP'],
+                                   Monster_Data['Crab']['Stamina'], Monster_Data['Crab']['MAX_Stamina'],
+                                   Monster_Data['Crab']['STR'], Monster_Data['Crab']['DEF'],
+                                   Monster_Data['Crab']['MAG'], Monster_Data['Crab']['MR'],
+                                   Monster_Data['Crab']['MOVE_SPEED'], Monster_Data['Crab']['ATK_SPEED'],
+                                   Monster_Data['Crab']['Sight'], Monster_Data['Crab']['Experience'],
+                                   Monster_Data['Crab']['AI_Type'])
+        self.width = self.height = 32
+        self.image = load_image('Resource_Image\\Monster002_crab.png')
+        self.dir = randint(1, 9)
+        if self.dir == 5:
+            self.dir = 2
+        self.x, self.y = x, y
+        if self.hit_sound is None:
+            self.hit_sound = load_wav('Resource_Sound\\Effect_Sound\\Slash12.wav')
+            self.hit_sound.set_volume(64)
+
+    def draw(self):
+        if self.dir is 2:
+            self.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 8:
+            self.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 4:
+            self.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 6:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 1:
+            self.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 3:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 7:
+            self.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 9:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+
+    def get_bb(self):
+        return self.x - self.width / 3, self.y - self.height / 3, self.x + self.width / 3, self.y + self.height / 3
+
+
+class Skull_Golem(Monster):
+    global Monster_Data
+
+    def __init__(self, x, y):
+        super(Skull_Golem, self).__init__(Monster_Data['Skull Golem']['HP'], Monster_Data['Skull Golem']['MAX_HP'],
+                                          Monster_Data['Skull Golem']['MP'], Monster_Data['Skull Golem']['MAX_MP'],
+                                          Monster_Data['Skull Golem']['Stamina'],
+                                          Monster_Data['Skull Golem']['MAX_Stamina'],
+                                          Monster_Data['Skull Golem']['STR'], Monster_Data['Skull Golem']['DEF'],
+                                          Monster_Data['Skull Golem']['MAG'], Monster_Data['Skull Golem']['MR'],
+                                          Monster_Data['Skull Golem']['MOVE_SPEED'],
+                                          Monster_Data['Skull Golem']['ATK_SPEED'],
+                                          Monster_Data['Skull Golem']['Sight'],
+                                          Monster_Data['Skull Golem']['Experience'],
+                                          Monster_Data['Skull Golem']['AI_Type'])
+        self.width = self.height = 64
+        self.image = load_image('Resource_Image\\Monster004_Spear.png')
+        self.dir = randint(1, 9)
+        if self.dir == 5:
+            self.dir = 2
+        self.x, self.y = x, y
+        if self.hit_sound is None:
+            self.hit_sound = load_wav('Resource_Sound\\Effect_Sound\\Slash11.wav')
+            self.hit_sound.set_volume(64)
+
+    def draw(self):
+        if self.dir is 2:
+            self.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 8:
+            self.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 4:
+            self.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 6:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 1:
+            self.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 3:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 7:
+            self.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 9:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+
+    def get_bb(self):
+        return self.x - self.width / 2, self.y - self.height / 2, self.x + self.width / 2, self.y + self.height / 2
+
+
+class Spear(Monster):
+    global Monster_Data
+
+    def __init__(self, x, y):
+        super(Spear, self).__init__(Monster_Data['Spear']['HP'], Monster_Data['Spear']['MAX_HP'],
+                                    Monster_Data['Spear']['MP'], Monster_Data['Spear']['MAX_MP'],
+                                    Monster_Data['Spear']['Stamina'], Monster_Data['Spear']['MAX_Stamina'],
+                                    Monster_Data['Spear']['STR'], Monster_Data['Spear']['DEF'],
+                                    Monster_Data['Spear']['MAG'], Monster_Data['Spear']['MR'],
+                                    Monster_Data['Spear']['MOVE_SPEED'], Monster_Data['Spear']['ATK_SPEED'],
+                                    Monster_Data['Spear']['Sight'], Monster_Data['Spear']['Experience'],
+                                    Monster_Data['Spear']['AI_Type'])
+        self.width = self.height = 64
+        self.image = load_image('Resource_Image\\Monster004_Spear.png')
+        self.dir = randint(1, 9)
+        if self.dir == 5:
+            self.dir = 2
+        self.x, self.y = x, y
+        if self.hit_sound is None:
+            self.hit_sound = load_wav('Resource_Sound\\Effect_Sound\\Slash11.wav')
+            self.hit_sound.set_volume(64)
+
+    def draw(self):
+        if self.dir is 2:
+            self.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 8:
+            self.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 4:
+            self.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 6:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 1:
+            self.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 3:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 7:
+            self.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 9:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+
+    def get_bb(self):
+        return self.x - self.width / 2, self.y - self.height / 2, self.x + self.width / 2, self.y + self.height / 2
+
+
+class Slasher(Monster):
+    global Monster_Data
+
+    def __init__(self, x, y):
+        super(Slasher, self).__init__(Monster_Data['Slasher']['HP'], Monster_Data['Slasher']['MAX_HP'],
+                                      Monster_Data['Slasher']['MP'], Monster_Data['Slasher']['MAX_MP'],
+                                      Monster_Data['Slasher']['Stamina'], Monster_Data['Slasher']['MAX_Stamina'],
+                                      Monster_Data['Slasher']['STR'], Monster_Data['Slasher']['DEF'],
+                                      Monster_Data['Slasher']['MAG'], Monster_Data['Slasher']['MR'],
+                                      Monster_Data['Slasher']['MOVE_SPEED'], Monster_Data['Slasher']['ATK_SPEED'],
+                                      Monster_Data['Slasher']['Sight'], Monster_Data['Slasher']['Experience'],
+                                      Monster_Data['Slasher']['AI_Type'])
+        self.width = self.height = 64
+        self.image = load_image('Resource_Image\\Monster005_Slasher.png')
+        self.dir = randint(1, 9)
+        if self.dir == 5:
+            self.dir = 2
+        self.x, self.y = x, y
+        if self.hit_sound is None:
+            self.hit_sound = load_wav('Resource_Sound\\Effect_Sound\\Slash10.wav')
+            self.hit_sound.set_volume(128)
+
+    def draw(self):
+        if self.dir is 2:
+            self.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 8:
+            self.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 4:
+            self.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 6:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 1:
+            self.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 3:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 7:
+            self.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 9:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+
+    def get_bb(self):
+        return self.x - self.width / 2, self.y - self.height / 2, self.x + self.width / 2, self.y + self.height / 2
 
 
 def collide(a, b):

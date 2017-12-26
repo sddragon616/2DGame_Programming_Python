@@ -3,7 +3,7 @@ import math
 import json
 
 
-SwordMan_data_file = open('UnitData\\SwordMan.txt', 'r')
+SwordMan_data_file = open('UnitData\\SwordMan.json', 'r')
 SwordMan_Data = json.load(SwordMan_data_file)
 SwordMan_data_file.close()
 
@@ -78,43 +78,45 @@ class SwordMan(Player):
                         self.STAMINA -= self.air_splitter_sp
                         self.air_splitter_flag = True
                         self.air_splitter_x, self.air_splitter_y = self.x, self.y
+                        self.air_splitter_size = self.air_splitter_level * 2 + 32
                     self.old_dir = self.dir
         if self.air_splitter_flag is True:
+            timer = self.air_splitter_level / 5.0 + 2.5
             self.air_splitter_frame_time += 1.0 / self.air_splitter_level * \
                                             self.FRAMES_PER_ACTION_atk * self.ACTION_PER_TIME_atk * \
                                             frame_time
-            if self.air_splitter_frame_time > (self.air_splitter_level / 5.0 + 1) / 4.0:
+            if self.air_splitter_frame_time > (self.air_splitter_frame + 1) * timer / 4.0:
                 self.air_splitter_frame += 1
             if self.old_dir is 2:
-                self.air_splitter_rad = math.pi / 2.0
-                self.air_splitter_y -= self.distance * 2
-            elif self.old_dir is 8:
                 self.air_splitter_rad = 3 * math.pi / 2.0
-                self.air_splitter_y += self.distance * 2
+                self.air_splitter_y -= (self.distance * 8)
+            elif self.old_dir is 8:
+                self.air_splitter_rad = math.pi / 2.0
+                self.air_splitter_y += (self.distance * 8)
             elif self.old_dir is 4:
                 self.air_splitter_rad = math.pi
-                self.air_splitter_x -= self.distance * 2
+                self.air_splitter_x -= (self.distance * 8)
             elif self.old_dir is 6:
                 self.air_splitter_rad = 0.0
-                self.air_splitter_x += self.distance * 2
+                self.air_splitter_x += (self.distance * 8)
             elif self.old_dir is 1:
-                self.air_splitter_rad = 3 * math.pi / 4.0
-                self.air_splitter_x -= self.distance * 2
-                self.air_splitter_y -= self.distance * 2
-            elif self.old_dir is 3:
-                self.air_splitter_rad = math.pi / 4.0
-                self.air_splitter_x += self.distance * 2
-                self.air_splitter_y -= self.distance * 2
-            elif self.old_dir is 7:
                 self.air_splitter_rad = 5 * math.pi / 4.0
-                self.air_splitter_x -= self.distance * 2
-                self.air_splitter_y += self.distance * 2
-            elif self.old_dir is 9:
+                self.air_splitter_x -= (self.distance * 8)
+                self.air_splitter_y -= (self.distance * 8)
+            elif self.old_dir is 3:
                 self.air_splitter_rad = 7 * math.pi / 4.0
-                self.air_splitter_x += self.distance * 2
-                self.air_splitter_y += self.distance * 2
-            if self.air_splitter_frame_time > self.air_splitter_level / 5.0 + 1:
-                self.air_splitter_x, self.air_splitter_y = 0, 0
+                self.air_splitter_x += (self.distance * 8)
+                self.air_splitter_y -= (self.distance * 8)
+            elif self.old_dir is 7:
+                self.air_splitter_rad = 3 * math.pi / 4.0
+                self.air_splitter_x -= (self.distance * 8)
+                self.air_splitter_y += (self.distance * 8)
+            elif self.old_dir is 9:
+                self.air_splitter_rad = 1 * math.pi / 4.0
+                self.air_splitter_x += (self.distance * 8)
+                self.air_splitter_y += (self.distance * 8)
+            if self.air_splitter_frame_time > timer:
+                self.air_splitter_x, self.air_splitter_y = -100, -100
                 self.air_splitter_frame_time = 0
                 self.air_splitter_frame = 0
                 self.air_splitter_flag = False
@@ -209,6 +211,8 @@ class SwordMan(Player):
                                          self.y - self.background.window_bottom)
         if self.air_splitter_flag is True:
             self.draw_air_splitter_effects()
+            if self.box_draw_Trigger is True:
+                self.draw_air_splitter_hb()
 
     def handle_events(self, event):
         super(SwordMan, self).handle_events(event)
@@ -219,14 +223,21 @@ class SwordMan(Player):
                 self.state = SKILL_ATTACK_2
 
     def draw_air_splitter_effects(self):
-        self.skill_image.clip_composite_draw(self.air_splitter_frame * self.width, 13, 32, 32,
-                                             self.air_splitter_rad, 'i',
+        self.skill_image.clip_composite_draw((self.air_splitter_frame + 2) * self.width, 14 * self.width, 32, 32,
+                                             self.air_splitter_rad, 'v',
                                              self.air_splitter_x - self.background.window_left,
-                                             self.air_splitter_y - self.background.window_bottom)
+                                             self.air_splitter_y - self.background.window_bottom,
+                                             self.air_splitter_size, self.air_splitter_size)
 
     def air_splitter_hb(self):
         return self.air_splitter_x - self.air_splitter_size / 2, self.air_splitter_y - self.air_splitter_size / 2, \
                self.air_splitter_x + self.air_splitter_size / 2, self.air_splitter_y + self.air_splitter_size / 2
+
+    def draw_air_splitter_hb(self):
+        draw_rectangle(self.air_splitter_hb()[0] - self.background.window_left,
+                       self.air_splitter_hb()[1] - self.background.window_bottom,
+                       self.air_splitter_hb()[2] - self.background.window_left,
+                       self.air_splitter_hb()[3] - self.background.window_bottom)
 
     def air_splitter_collide(self, enemy):
         left_a, bottom_a, right_a, top_a = self.air_splitter_hb()
@@ -239,6 +250,8 @@ class SwordMan(Player):
             return False
         if bottom_a > top_b:
             return False
+        if self.air_splitter_flag is True:
+            return True
 
     def melee_atk_collide(self, enemy):
         left_a, bottom_a, right_a, top_a = self.get_melee_atk_hb()
