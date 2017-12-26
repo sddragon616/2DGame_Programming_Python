@@ -9,6 +9,7 @@ Item_data_file.close()
 
 class Item:
     def __init__(self, numbers):
+        self.image = None
         self.number = numbers
         self.use_sound = None
 
@@ -26,6 +27,8 @@ class HpPotion(Item):
     def __init__(self, numbers):
         super(HpPotion, self).__init__(numbers)
         self.healing = Item_Data['HP_Potion']['Healing']
+        if self.image is None:
+            self.image = load_image('Resource_Image\\Item001_HP_Potion.png')
         if self.use_sound is None:
             self.use_sound = load_wav('Resource_Sound\\Effect_Sound\\Drinking.wav')
             self.use_sound.set_volume(64)
@@ -39,6 +42,8 @@ class MpPotion(Item):
     def __init__(self, numbers):
         super(MpPotion, self).__init__(numbers)
         self.healing = Item_Data['MP_Potion']['Healing']
+        if self.image is None:
+            self.image = load_image('Resource_Image\\Item002_MP_Potion.png')
         if self.use_sound is None:
             self.use_sound = load_wav('Resource_Sound\\Effect_Sound\\Drinking.wav')
             self.use_sound.set_volume(64)
@@ -52,6 +57,8 @@ class StaminaPotion(Item):
     def __init__(self, numbers):
         super(StaminaPotion, self).__init__(numbers)
         self.healing = Item_Data['SP_Potion']['Healing']
+        if self.image is None:
+            self.image = load_image('Resource_Image\\Item003_Stamina_Potion.png')
         if self.use_sound is None:
             self.use_sound = load_wav('Resource_Sound\\Effect_Sound\\Drinking.wav')
             self.use_sound.set_volume(64)

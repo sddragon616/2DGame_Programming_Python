@@ -20,6 +20,7 @@ class Player(BaseUnit):
                  strength, defense, magic, magic_resist, move_speed, atk_speed):
         super(Player, self).__init__(hp, max_hp, mp, max_mp, stamina, max_stamina,
                                      strength, defense, magic, magic_resist, move_speed, atk_speed)
+        self.class_num = 1
         self.image = load_image("Resource_Image\\Player001_SwordMan.png")
         self.width = 32  # 스프라이트 x축 길이
         self.height = 64  # 스프라이트 y축 길이
@@ -309,6 +310,10 @@ class Player(BaseUnit):
             print('HP Potion : {}'.format(self.HpPotion.number))
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_h):  # h 키 - HP 포션 단축키
             self.HpPotion.use(self)
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_j):  # j 키 - MP 포션 단축키
+            self.MpPotion.use(self)
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_k):  # k 키 - 스태미나 포션 단축키
+            self.StaminaPotion.use(self)
 
         if (event.type, event.key) == (SDL_KEYUP, SDLK_LEFT):
             if self.dir == 7:
