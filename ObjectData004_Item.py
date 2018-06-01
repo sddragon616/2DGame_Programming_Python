@@ -13,7 +13,7 @@ class Item:
         self.number = numbers
         self.use_sound = None
 
-    def use(self):
+    def use(self):  # Item 클래스의 부모 사용 함수. 이 함수가 False를 return하면 아이템을 사용할 수 없다.
         if self.number > 0:
             if self.use_sound is not None:
                 self.use_sound.play()

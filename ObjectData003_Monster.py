@@ -112,6 +112,12 @@ class Monster(BaseUnit):
                         elif self.dir is 9:
                             self.x = min(self.background.w, self.x - self.distance)
                             self.y = min(self.background.h, self.y - self.distance)
+        # 플레이어에게 공격받아 구석에 몰렸을 때 무적을 0.5초간 걸어서 탈출 가능하게 해줌
+        if self.invincibility is True:
+            self.invincible_time += frame_time
+            if self.invincible_time > 0.5:
+                self.invincibility = False
+                self.invincible_time = 0
 
     def auto_intelligence(self, frame_time, user):
         if user.x < self.x:

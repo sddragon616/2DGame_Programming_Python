@@ -100,8 +100,9 @@ def update(frame_time):
             collide_zone.append(Zone)
     Scene003_BaseBattletScene.update(frame_time, Bosses, collide_zone)
 
-    if Bosses == []:
-        Project_SceneFrameWork.scene_change(Scene005_GameClear)
+    if Bosses is []:
+        Project_SceneFrameWork.scene_push(Scene005_GameClear)
+        Scene003_BaseBattletScene.user.state = 0
 
 
 def pause(): pass

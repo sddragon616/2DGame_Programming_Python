@@ -20,6 +20,8 @@ class BaseObject:
         self.death_sound = None
 
         self.invincibility = False
+        # 타이머 전용
+        self.invincible_time = 0
 
     def show_stat(self):
         print('이름: {}'.format(self.name))
@@ -45,46 +47,46 @@ class BaseObject:
 
     def knock_back(self, direction, others):
         if direction is 8:
-            self.y = min(self.background.h, self.y + self.height)
+            self.y = min(self.background.h, self.y + self.height/2)
         if direction is 2:
-            self.y = max(0, self.y - self.height)
+            self.y = max(0, self.y - self.height/2)
         elif direction is 4:
-            self.x = max(0, self.x - self.width)
+            self.x = max(0, self.x - self.width/2)
         elif direction is 6:
-            self.x = min(self.background.w, self.x + self.width)
+            self.x = min(self.background.w, self.x + self.width/2)
         elif direction is 1:
-            self.x = max(0, self.x - self.width)
-            self.y = max(0, self.y - self.height)
+            self.x = max(0, self.x - self.width/2)
+            self.y = max(0, self.y - self.height/2)
         elif direction is 3:
-            self.x = min(self.background.w, self.x + self.width)
-            self.y = max(0, self.y - self.height)
+            self.x = min(self.background.w, self.x + self.width/2)
+            self.y = max(0, self.y - self.height/2)
         elif direction is 7:
-            self.x = max(0, self.x - self.width)
-            self.y = min(self.background.h, self.y + self.height)
+            self.x = max(0, self.x - self.width/2)
+            self.y = min(self.background.h, self.y + self.height/2)
         elif direction is 9:
-            self.x = min(self.background.w, self.x + self.width)
-            self.y = min(self.background.h, self.y + self.height)
+            self.x = min(self.background.w, self.x + self.width/2)
+            self.y = min(self.background.h, self.y + self.height/2)
         if others is not []:
             for other in others:
                 if collide(self, other):
-                    self.invincibility = True
+                    self.invincibility = True     # 넉백 후 벽에 충돌 시 무적 여부
                     if direction is 8:
-                        self.y = min(self.background.h, self.y - self.height)
+                        self.y = min(self.background.h, self.y - self.height/2)
                     if direction is 2:
-                        self.y = max(0, self.y + self.height)
+                        self.y = max(0, self.y + self.height/2)
                     elif direction is 4:
-                        self.x = max(0, self.x + self.width)
+                        self.x = max(0, self.x + self.width/2)
                     elif direction is 6:
-                        self.x = min(self.background.w, self.x - self.width)
+                        self.x = min(self.background.w, self.x - self.width/2)
                     elif direction is 1:
-                        self.x = max(0, self.x + self.width)
-                        self.y = max(0, self.y + self.height)
+                        self.x = max(0, self.x + self.width/2)
+                        self.y = max(0, self.y + self.height/2)
                     elif direction is 3:
-                        self.x = min(self.background.w, self.x - self.width)
-                        self.y = max(0, self.y + self.height)
+                        self.x = min(self.background.w, self.x - self.width/2)
+                        self.y = max(0, self.y + self.height/2)
                     elif direction is 7:
-                        self.x = max(0, self.x + self.width)
-                        self.y = min(self.background.h, self.y - self.height)
+                        self.x = max(0, self.x + self.width/2)
+                        self.y = min(self.background.h, self.y - self.height/2)
                     elif direction is 9:
                         self.x = min(self.background.w, self.x - self.width)
                         self.y = min(self.background.h, self.y - self.height)
@@ -215,8 +217,6 @@ class KeyZone:
                        self.get_bb()[1] - self.background.window_bottom,
                        self.get_bb()[2] - self.background.window_left,
                        self.get_bb()[3] - self.background.window_bottom)
-
-
 
 
 def collide(a, b):

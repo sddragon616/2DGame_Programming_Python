@@ -118,7 +118,8 @@ def update(frame_time):
     Scene003_BaseBattletScene.update(frame_time, monsters, collide_zone)
 
     if collide(Scene003_BaseBattletScene.user, StageMoveZone):
-        Project_SceneFrameWork.scene_change(Scene014_Boss_Stage)
+        Project_SceneFrameWork.scene_push(Scene014_Boss_Stage)
+        Scene003_BaseBattletScene.user.state = 0
 
 
 def pause(): pass

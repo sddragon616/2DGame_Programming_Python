@@ -3,7 +3,7 @@ import math
 import json
 
 
-SwordMan_data_file = open('UnitData\\SwordMan.json', 'r')
+SwordMan_data_file = open('UnitData\\Player.json', 'r')
 SwordMan_Data = json.load(SwordMan_data_file)
 SwordMan_data_file.close()
 
@@ -81,7 +81,7 @@ class SwordMan(Player):
                         self.air_splitter_size = self.air_splitter_level * 2 + 32
                     self.old_dir = self.dir
         if self.air_splitter_flag is True:
-            air_splitter_time_limit = self.air_splitter_level / 5.0 + 2.5
+            air_splitter_time_limit = 2.5
             self.air_splitter_frame_time += ((1.0 / self.air_splitter_level) * \
                                             self.FRAMES_PER_ACTION_atk * self.ACTION_PER_TIME_atk * frame_time)
             if self.air_splitter_frame_time > (self.air_splitter_frame + 1) * air_splitter_time_limit / 4.0:

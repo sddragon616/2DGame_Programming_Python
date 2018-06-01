@@ -85,7 +85,8 @@ def update(frame_time): pass
 def pause(): pass
 
 
-def resume(): pass
+def resume():
+    enter()
 
 
 if __name__ == '__main__':

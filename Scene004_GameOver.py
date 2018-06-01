@@ -1,5 +1,5 @@
 import Project_SceneFrameWork
-import Scene001_Title
+import Scene003_BaseBattletScene
 from pico2d import *
 import os
 
@@ -28,6 +28,7 @@ def enter():
 def exit():
     global image
     global overBGM
+    Scene003_BaseBattletScene.user = None
     del image
     del overBGM
 
@@ -50,7 +51,7 @@ def handle_events(frame_time):
             Project_SceneFrameWork.quit()
         else:
             if event.type == SDL_KEYDOWN or event.type == SDL_MOUSEBUTTONDOWN:
-                Project_SceneFrameWork.quit()
+                Project_SceneFrameWork.scene_pop()
 
 
 def pause(): pass

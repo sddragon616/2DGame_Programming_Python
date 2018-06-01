@@ -13,8 +13,9 @@ death_sound = None
 def enter():
     global user
     global death_sound
-    user = ObjectData002_SwordMan.SwordMan(2000, 32)
-    user.dir = 8
+    if user is None:
+        user = ObjectData002_SwordMan.SwordMan(2000, 32)
+        user.dir = 8
     if death_sound is None:
         death_sound = load_wav('Resource_Sound\\Effect_Sound\\Destroy.wav')
         death_sound.set_volume(128)
@@ -40,6 +41,8 @@ def handle_events(frame_time):
                 user.handle_events(event)
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_u):
                 Project_SceneFrameWork.scene_push(Scene002_Interface)
+                user.state = 0
+
 
 
 def draw(frame_time):
@@ -67,9 +70,9 @@ def update(frame_time, monsters, others):
             monster.hit_by_str(user.STR, user.dir, others)
         if user.class_num == 2:
             if user.air_splitter_collide(monster):
-                monster.hit_by_mag(2 * user.INT * user.air_splitter_level, 0, [])
-        if monster.exp_pay:  # 몬스터가 쓰러져서 경험치를 지급했는가?
-            if monster.death():
+                monster.hit_by_mag(0.1 * user.INT * user.air_splitter_level, 0, [])
+        if monster.death():
+            if monster.exp_pay is True:  # 몬스터가 쓰러져서 경험치를 지급했는가?
                 death_sound.play()
                 monsters.remove(monster)
 

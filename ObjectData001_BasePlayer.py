@@ -57,10 +57,7 @@ class Player(BaseUnit):
         self.Level_up_sound = None
         if self.Level_up_sound is None:
             self.Level_up_sound = load_wav('Resource_Sound\\Effect_Sound\\LevelUp.wav')
-            self.Level_up_sound.set_volume(64)
-
-        # 타이머 전용
-        self.invincible_time = 0
+            self.Level_up_sound.set_volume(128)
 
     def show_stat(self):
         print('Lv. {}'.format(self.LEVEL))
@@ -72,7 +69,8 @@ class Player(BaseUnit):
     def update(self, frame_time, others):
         self.Max_Experience = (self.LEVEL * 8) + 2
         self.life_time += frame_time
-        if self.life_time % 2 > 1.999:
+        # 자연치유
+        if self.life_time % 2 > 1.99:
             self.hp_heal(3)
             self.mp_heal(1)
             self.sp_heal(3)
@@ -144,7 +142,7 @@ class Player(BaseUnit):
                 self.state = STAND
                 self.total_frames_atk = 0.0
 
-        # 구석에 몰렸을 때 무적을 1초 걸어서 탈출 가능하게 해줌
+        # 구석에 몰렸을 때 무적을 1초간 걸어서 탈출 가능하게 해줌
         if self.invincibility is True:
             self.invincible_time += frame_time
             if self.invincible_time > 1.0:
@@ -356,8 +354,8 @@ class Player(BaseUnit):
             self.Level_up_sound.play()
             self.Experience -= self.Max_Experience
             self.LEVEL += 1
-            self.Ability_Point += 5
-            self.Skill_Point += 3
+            self.Ability_Point += 3
+            self.Skill_Point += 1
 
     def hit_by_str(self, damage, direction, others):
         super(Player, self).hit_by_str(damage)

@@ -49,14 +49,14 @@ def enter():
     size_height = get_canvas_height()
     Scene003_BaseBattletScene.enter()
     KeyZone = ObjectData000_BaseObject_BaseUnit.KeyZone(3450, 2400-350, 32, 32)
-    StageMoveZone = ObjectData000_BaseObject_BaseUnit.KeyZone(10, 2400-1920, 20, 150)
-    JumpZone = ObjectData000_BaseObject_BaseUnit.KeyZone(925, 1550, 200, 100)
+    StageMoveZone = ObjectData000_BaseObject_BaseUnit.KeyZone(10, 550, 20, 100)
+    JumpZone = ObjectData000_BaseObject_BaseUnit.KeyZone(925, 1550, 300, 100)
     if KeyItem is None:
         KeyItem = load_image('Resource_Image\\stone_shoes.png')
     background = Mapdata.BackGround_Tilemap('Map\\Mapdata\\Forest_Shining.json',
                                             'Map\\Mapdata\\Forest_Shining_Ground.png')
     Cannot_Move_Zone = [ObjectData000_BaseObject_BaseUnit.BaseZone(
-        Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[2]['objects'][i], 2400) for i in range(222)]
+        Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[2]['objects'][i], 2400) for i in range(199)]
 
     KeyZone.set_background(background)
     StageMoveZone.set_background(background)
@@ -76,10 +76,7 @@ def enter():
 
 
 def exit():
-    global flies
-    global BGM
-    del flies
-    del BGM
+    pass
 
 
 def handle_events(frame_time):
@@ -136,7 +133,7 @@ def update(frame_time):
             KeyEvent.play()
             KeyTrigger = True
     if collide(Scene003_BaseBattletScene.user, JumpZone):
-        if KeyTrigger is True:
+        if KeyTrigger is True and Scene003_BaseBattletScene.user.dir is 2:
             Scene003_BaseBattletScene.user.y -= 350
             Scene003_BaseBattletScene.user.dir = 2
 
@@ -148,7 +145,8 @@ def update(frame_time):
     Scene003_BaseBattletScene.update(frame_time, flies, collide_zone)
 
     if collide(Scene003_BaseBattletScene.user, StageMoveZone):
-        Project_SceneFrameWork.scene_change(Scene012_Stage02)
+        Project_SceneFrameWork.scene_push(Scene012_Stage02)
+        Scene003_BaseBattletScene.user.state = 0
 
 
 def pause(): pass
