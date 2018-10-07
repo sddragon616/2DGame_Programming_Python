@@ -8,7 +8,7 @@ class BaseObject:
     def __init__(self, hp, max_hp, defense, magic_resist, move_speed):
         self.name = self.__class__.__name__     # 현재 클래스의 이름
         self.image = load_image('Resource_Image\\Test_img.png')             # 객체의 이미지 초기화
-        self.width, self.height = 0, 0          # 객체의 가로 길이, 세로 길이 초기화
+        self.width, self.height = 1, 1          # 객체의 가로 길이, 세로 길이 초기화
         self.x, self.y = 2, 2                   # 객체의 좌표값 초기화
         self.HP = hp                            # 현재 체력
         self.MAX_HP = max_hp                    # 최대 체력
@@ -37,7 +37,6 @@ class BaseObject:
 
     def death(self):
         if self.HP <= 0:
-            self.image = load_image("Resource_Image\\Test_img.png")
             return True
         else:
             return False
@@ -45,49 +44,49 @@ class BaseObject:
     def hit_sound_play(self):
         self.hit_sound.play()
 
-    def knock_back(self, direction, others):
+    def knock_back(self, direction, walls):
         if direction is 8:
             self.y = min(self.background.h, self.y + self.height/2)
         if direction is 2:
             self.y = max(0, self.y - self.height/2)
-        elif direction is 4:
+        if direction is 4:
             self.x = max(0, self.x - self.width/2)
-        elif direction is 6:
+        if direction is 6:
             self.x = min(self.background.w, self.x + self.width/2)
-        elif direction is 1:
-            self.x = max(0, self.x - self.width/2)
-            self.y = max(0, self.y - self.height/2)
-        elif direction is 3:
+        if direction is 1:
+            self.x = max(0, self.x - self.width / 2)
+            self.y = max(0, self.y - self.height / 2)
+        if direction is 3:
             self.x = min(self.background.w, self.x + self.width/2)
             self.y = max(0, self.y - self.height/2)
-        elif direction is 7:
+        if direction is 7:
             self.x = max(0, self.x - self.width/2)
             self.y = min(self.background.h, self.y + self.height/2)
-        elif direction is 9:
+        if direction is 9:
             self.x = min(self.background.w, self.x + self.width/2)
             self.y = min(self.background.h, self.y + self.height/2)
-        if others is not []:
-            for other in others:
-                if collide(self, other):
+        if walls is not []:
+            for wall in walls:
+                if collide(self, wall):
                     self.invincibility = True     # 넉백 후 벽에 충돌 시 무적 여부
                     if direction is 8:
                         self.y = min(self.background.h, self.y - self.height/2)
                     if direction is 2:
                         self.y = max(0, self.y + self.height/2)
-                    elif direction is 4:
+                    if direction is 4:
                         self.x = max(0, self.x + self.width/2)
-                    elif direction is 6:
+                    if direction is 6:
                         self.x = min(self.background.w, self.x - self.width/2)
-                    elif direction is 1:
+                    if direction is 1:
                         self.x = max(0, self.x + self.width/2)
                         self.y = max(0, self.y + self.height/2)
-                    elif direction is 3:
+                    if direction is 3:
                         self.x = min(self.background.w, self.x - self.width/2)
                         self.y = max(0, self.y + self.height/2)
-                    elif direction is 7:
+                    if direction is 7:
                         self.x = max(0, self.x + self.width/2)
                         self.y = min(self.background.h, self.y - self.height/2)
-                    elif direction is 9:
+                    if direction is 9:
                         self.x = min(self.background.w, self.x - self.width)
                         self.y = min(self.background.h, self.y - self.height)
 
@@ -199,7 +198,7 @@ class BaseZone:
                        self.get_bb()[3] - self.background.window_bottom)
 
 
-class KeyZone:
+class NonDataBaseZone:
     def __init__(self, x, y, w, h):
         self.x, self.y = x, y
         self.width = w

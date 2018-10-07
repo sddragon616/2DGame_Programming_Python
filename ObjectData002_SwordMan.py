@@ -58,6 +58,8 @@ class SwordMan(Player):
 
     def update(self, frame_time, others):
         super(SwordMan, self).update(frame_time, others)
+
+        # 바람 쪼개기
         if self.state == SKILL_ATTACK_2:
             # 공격범위 변수
             self.melee_atk_point_LeftX = self.x - self.width / 2
@@ -82,8 +84,8 @@ class SwordMan(Player):
                     self.old_dir = self.dir
         if self.air_splitter_flag is True:
             air_splitter_time_limit = 2.5
-            self.air_splitter_frame_time += ((1.0 / self.air_splitter_level) * \
-                                            self.FRAMES_PER_ACTION_atk * self.ACTION_PER_TIME_atk * frame_time)
+            self.air_splitter_frame_time += ((1.0 / self.air_splitter_level) *
+                                             self.FRAMES_PER_ACTION_atk * self.ACTION_PER_TIME_atk * frame_time)
             if self.air_splitter_frame_time > (self.air_splitter_frame + 1) * air_splitter_time_limit / 4.0:
                 self.air_splitter_frame += 1
             if self.old_dir is 2:

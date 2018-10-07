@@ -26,7 +26,7 @@ class Player(BaseUnit):
         self.height = 64  # 스프라이트 y축 길이
         self.LEVEL = 1
         self.Experience = 0
-        self.Max_Experience = self.Experience
+        self.Max_Experience = (self.LEVEL * 8) + 2
         self.Ability_Point = 0
         self.Skill_Point = 0
 
@@ -59,6 +59,8 @@ class Player(BaseUnit):
             self.Level_up_sound = load_wav('Resource_Sound\\Effect_Sound\\LevelUp.wav')
             self.Level_up_sound.set_volume(128)
 
+        self.mana_regen_time = 0
+
     def show_stat(self):
         print('Lv. {}'.format(self.LEVEL))
         super(Player, self).show_stat()
@@ -67,13 +69,18 @@ class Player(BaseUnit):
         print('Exp : {}'.format(self.Experience), '/ {}'.format(self.Max_Experience))
 
     def update(self, frame_time, others):
-        self.Max_Experience = (self.LEVEL * 8) + 2
         self.life_time += frame_time
+        self.mana_regen_time += frame_time
         # 자연치유
-        if self.life_time % 2 > 1.99:
-            self.hp_heal(3)
+        if self.life_time >= 0.75:
+            self.hp_heal(1)
+            self.sp_heal(1)
+            self.life_time = 0
+
+        if self.mana_regen_time >= 2.25:
             self.mp_heal(1)
-            self.sp_heal(3)
+            self.mana_regen_time = 0
+
         # 걷거나 서 있을 때
         if self.state == WALK:
             self.distance = self.RUN_SPEED_PPS * frame_time
@@ -126,6 +133,7 @@ class Player(BaseUnit):
                         elif self.dir is 9:
                             self.x = min(self.background.w, self.x - self.distance)
                             self.y = min(self.background.h, self.y - self.distance)
+
         # 근접 공격 중일 때
         elif self.state is MELEE_ATTACK:
             # 공격범위 변수
@@ -135,17 +143,17 @@ class Player(BaseUnit):
             self.melee_atk_point_UpY = self.y + self.height / 4
             self.total_frames_atk += self.FRAMES_PER_ACTION_atk * self.ACTION_PER_TIME_atk * frame_time
             self.attack_motion = int(self.total_frames_atk) % 3
-            if self.attack_motion > 1:
+            if self.attack_motion >= 2:
                 if self.attack_sound is not None:
                     self.attack_sound.play()
                 self.attack_motion = 0
                 self.state = STAND
                 self.total_frames_atk = 0.0
 
-        # 구석에 몰렸을 때 무적을 1초간 걸어서 탈출 가능하게 해줌
+        # 구석에 몰렸을 때 무적을 0.25초간 걸어서 탈출 가능하게 해줌
         if self.invincibility is True:
             self.invincible_time += frame_time
-            if self.invincible_time > 1.0:
+            if self.invincible_time > 1:
                 self.invincibility = False
                 self.invincible_time = 0
 
@@ -347,15 +355,17 @@ class Player(BaseUnit):
 
     def get_exp(self, exp):
         self.Experience += exp
-        self.level_up()
+        if self.Experience >= self.Max_Experience:
+            self.level_up()
 
     def level_up(self):
-        if self.Experience >= self.Max_Experience:
+            load_image("Resource_Image\\Effects_000.png").clip_draw(96, 9, 32, 32, self.x, self.y + self.height * 2)
             self.Level_up_sound.play()
             self.Experience -= self.Max_Experience
             self.LEVEL += 1
             self.Ability_Point += 3
             self.Skill_Point += 1
+            self.Max_Experience = (self.LEVEL * 8) + 2
 
     def hit_by_str(self, damage, direction, others):
         super(Player, self).hit_by_str(damage)
@@ -432,7 +442,7 @@ class Player(BaseUnit):
             return False
         if bottom_a > top_b:
             return False
-        if self.state is MELEE_ATTACK:
+        if self.state is MELEE_ATTACK and self.attack_motion == 0:
             return True
 
 

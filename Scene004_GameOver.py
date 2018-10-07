@@ -1,4 +1,5 @@
 import Project_SceneFrameWork
+import Scene001_Title
 import Scene003_BaseBattletScene
 from pico2d import *
 import os
@@ -6,7 +7,7 @@ import os
 
 name = "GameOver"
 image = None
-overBGM = None
+GameOver_BGM = None
 
 
 class GameOverBGM:
@@ -18,19 +19,19 @@ class GameOverBGM:
 
 def enter():
     global image
-    global overBGM
+    global GameOver_BGM
     hide_lattice()
     image = load_image('Resource_Image\\GameOver.png')
-    if overBGM is None:
-        overBGM = GameOverBGM()
+    if GameOver_BGM is None:
+        GameOver_BGM = GameOverBGM()
 
 
 def exit():
     global image
-    global overBGM
+    global GameOver_BGM
     Scene003_BaseBattletScene.user = None
-    del image
-    del overBGM
+    image = None
+    GameOver_BGM = None
 
 
 def update(frame_time):
@@ -51,7 +52,7 @@ def handle_events(frame_time):
             Project_SceneFrameWork.quit()
         else:
             if event.type == SDL_KEYDOWN or event.type == SDL_MOUSEBUTTONDOWN:
-                Project_SceneFrameWork.scene_pop()
+                Project_SceneFrameWork.scene_restart()
 
 
 def pause(): pass

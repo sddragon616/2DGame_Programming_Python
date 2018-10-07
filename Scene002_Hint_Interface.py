@@ -13,7 +13,7 @@ def enter():
 
 def exit():
     global image
-    del image
+    image = None
 
 
 def handle_events(frame_time):

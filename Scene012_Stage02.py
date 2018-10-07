@@ -49,7 +49,7 @@ def enter():
     Cannot_Move_Zone = [ObjectData000_BaseObject_BaseUnit.BaseZone(
         Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[2]['objects'][i], 1600) for i in range(40)]
 
-    StageMoveZone = ObjectData000_BaseObject_BaseUnit.KeyZone(785, 1530, 90, 40)
+    StageMoveZone = ObjectData000_BaseObject_BaseUnit.NonDataBaseZone(785, 1530, 90, 40)
 
     background.set_center_object(Scene003_BaseBattletScene.user)
     Scene003_BaseBattletScene.user.set_background(background)
@@ -72,8 +72,8 @@ def enter():
 def exit():
     global monsters
     global BGM
-    del monsters
-    del BGM
+    monsters = []
+    BGM = None
 
 
 def handle_events(frame_time):

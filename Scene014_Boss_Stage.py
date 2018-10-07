@@ -57,7 +57,7 @@ def enter():
 
 def exit():
     global BGM
-    del BGM
+    BGM = None
 
 
 def handle_events(frame_time):

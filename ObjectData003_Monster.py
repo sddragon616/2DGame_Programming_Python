@@ -33,23 +33,25 @@ class Monster(BaseUnit):
         self.sight = sight              # 몬스터의 시야
         self.get_exp = experience       # 몬스터를 쓰러뜨리면 획득할 수 있는 경험치량
         self.AI_type = ai_type          # 해당 몬스터의 인공지능 형태
-        self.image = None
+
         self.dir = 2
         self.state = STAND
         self.exp_pay = False            # 이 몬스터가 경험치를 지급했는가 여부
         self.contact = False            # 이 몬스터가 유저를 인식했는가 여부
         self.box_draw_Trigger = False
-        if self.death_sound is None:
-            self.death_sound = load_wav('Resource_Sound\\Effect_Sound\\Destroy.wav')
-            self.death_sound.set_volume(64)
+
         self.distance = 0
+
+        self.image = None
+        self.MONSTER_HP_BAR = None
+        self.death_sound = None
 
     def update(self, frame_time, user, others):
         if self.death() is True:            # 대상이 사망했는가>
             if self.exp_pay is False:
                 self.get_experience(user)
                 self.exp_pay = True
-        else:                               # 대상이 사망하지 않았다면0
+        else:                               # 대상이 사망하지 않았다면
             if self.AI_type is PREEMPTIVE:
                 if self.recognize(user) and user.death() is False:      # 생존중인 플레이어가 시야 내에 접근하였을 때
                     self.contact = True     # 플레이어를 인식
@@ -63,7 +65,7 @@ class Monster(BaseUnit):
                 self.contact = False    # 플레이어 인식을 해제
             if self.contact:            # 플레이어를 인식한 경우
                 self.state = WALK
-                self.auto_intelligence(frame_time, user)
+                self.user_chase(frame_time, user)
             self.distance = self.RUN_SPEED_PPS * frame_time
             self.total_frames_run += self.FRAMES_PER_ACTION_run * self.ACTION_PER_TIME_run * frame_time
             self.frame = int(self.total_frames_run) % 3
@@ -89,54 +91,54 @@ class Monster(BaseUnit):
                 elif self.dir is 9:
                     self.x = min(self.background.w, self.x + self.distance)
                     self.y = min(self.background.h, self.y + self.distance)
-            if others is not []:
-                for other in others:
-                    if collide(self, other):
-                        if self.dir is 2:
-                            self.y = max(0, self.y + self.distance)
-                        elif self.dir is 8:
-                            self.y = min(self.background.h, self.y - self.distance)
-                        elif self.dir is 4:
-                            self.x = max(0, self.x + self.distance)
-                        elif self.dir is 6:
-                            self.x = min(self.background.w, self.x - self.distance)
-                        elif self.dir is 1:
-                            self.x = max(0, self.x + self.distance)
-                            self.y = max(0, self.y + self.distance)
-                        elif self.dir is 3:
-                            self.x = min(self.background.w, self.x - self.distance)
-                            self.y = max(0, self.y + self.distance)
-                        elif self.dir is 7:
-                            self.x = max(0, self.x + self.distance)
-                            self.y = min(self.background.h, self.y - self.distance)
-                        elif self.dir is 9:
-                            self.x = min(self.background.w, self.x - self.distance)
-                            self.y = min(self.background.h, self.y - self.distance)
-        # 플레이어에게 공격받아 구석에 몰렸을 때 무적을 0.5초간 걸어서 탈출 가능하게 해줌
+                if others is not []:
+                    for other in others:
+                        if collide(self, other):
+                            if self.dir is 2:
+                                self.y = max(0, self.y + self.distance)
+                            elif self.dir is 8:
+                                self.y = min(self.background.h, self.y - self.distance)
+                            elif self.dir is 4:
+                                self.x = max(0, self.x + self.distance)
+                            elif self.dir is 6:
+                                self.x = min(self.background.w, self.x - self.distance)
+                            elif self.dir is 1:
+                                self.x = max(0, self.x + self.distance)
+                                self.y = max(0, self.y + self.distance)
+                            elif self.dir is 3:
+                                self.x = min(self.background.w, self.x - self.distance)
+                                self.y = max(0, self.y + self.distance)
+                            elif self.dir is 7:
+                                self.x = max(0, self.x + self.distance)
+                                self.y = min(self.background.h, self.y - self.distance)
+                            elif self.dir is 9:
+                                self.x = min(self.background.w, self.x - self.distance)
+                                self.y = min(self.background.h, self.y - self.distance)
+        # 플레이어에게 공격받았을 때 무적을 0.25초간 걸어서 연속프레임 공격 방지
         if self.invincibility is True:
             self.invincible_time += frame_time
-            if self.invincible_time > 0.5:
+            if self.invincible_time > 0.25:
                 self.invincibility = False
                 self.invincible_time = 0
 
-    def auto_intelligence(self, frame_time, user):
-        if user.x < self.x:
-            if user.y < self.y:
+    def user_chase(self, frame_time, user):
+        if user.x < self.x - (self.width / 2):
+            if user.y < self.y - (self.height / 2):
                 self.dir = 1
-            elif user.y + 32 > self.y:
+            elif user.y > self.y + (self.height / 2):
                 self.dir = 7
             else:
                 self.dir = 4
-        elif user.x > self.x:
-            if user.y < self.y:
+        elif user.x > self.x + (self.width / 2):
+            if user.y < self.y - (self.height / 2):
                 self.dir = 3
-            elif user.y + 32 > self.y:
+            elif user.y > self.y + (self.height / 2):
                 self.dir = 9
             else:
                 self.dir = 6
-        elif user.y > self.y:
+        elif user.y > self.y + (self.height / 2):
             self.dir = 8
-        elif user.y < self.y:
+        elif user.y < self.y - (self.height / 2):
             self.dir = 2
 
     def hit_by_str(self, damage, direction, others):
@@ -183,11 +185,24 @@ class Monster(BaseUnit):
             return False
         return True
 
+    def draw_hp_bar(self):
+        # Border
+        self.MONSTER_HP_BAR.clip_draw(0, 6, 10, 6,
+                                      self.x - self.background.window_left,
+                                      self.y - self.background.window_bottom + int(self.height / 2) + 12,
+                                      int(self.width * 6 / 5), 12)
+        # HPs
+        self.MONSTER_HP_BAR.clip_draw(0, 0, 10, 6,
+                                      self.x - self.background.window_left -
+                                      int(self.width * ((self.MAX_HP-self.HP) / (self.MAX_HP * 2))),
+                                      self.y - self.background.window_bottom + int(self.height / 2) + 12,
+                                      int(self.width * 6 / 5)*(self.HP/self.MAX_HP), 12)
+
 
 class Fly(Monster):
     global Monster_Data
 
-    def __init__(self, x, y):
+    def __init__(self, map_coord_data, map_height):
         super(Fly, self).__init__(Monster_Data['Fly']['HP'], Monster_Data['Fly']['MAX_HP'],
                                   Monster_Data['Fly']['MP'], Monster_Data['Fly']['MAX_MP'],
                                   Monster_Data['Fly']['Stamina'], Monster_Data['Fly']['MAX_Stamina'],
@@ -197,14 +212,19 @@ class Fly(Monster):
                                   Monster_Data['Fly']['Sight'], Monster_Data['Fly']['Experience'],
                                   Monster_Data['Fly']['AI_Type'])
         self.width = self.height = 32
-        self.image = load_image('Resource_Image\\Monster001_fly.png')
+
         self.dir = randint(1, 9)
         if self.dir == 5:
             self.dir = 2
-        self.x, self.y = x, y
+
         if self.hit_sound is None:
             self.hit_sound = load_wav('Resource_Sound\\Effect_Sound\\Damage1.wav')
             self.hit_sound.set_volume(64)
+
+        self.x, self.y = map_coord_data['x'] + self.width / 2, map_height - (map_coord_data['y'] + self.height / 2)
+
+    def set_coordinates(self, x, y):
+        self.x, self.y = x, y
 
     def draw(self):
         if self.dir is 2:
@@ -231,6 +251,7 @@ class Fly(Monster):
         elif self.dir is 9:
             self.image.clip_draw((self.frame + 3) * self.width, self.height * 6 + 16, self.width, self.height,
                                  self.x - self.background.window_left, self.y - self.background.window_bottom)
+        self.draw_hp_bar()
 
     def get_bb(self):
         return self.x - self.width / 4, self.y - self.height / 4, self.x + self.width / 4, self.y + self.height / 4
@@ -239,7 +260,7 @@ class Fly(Monster):
 class Crab(Monster):
     global Monster_Data
 
-    def __init__(self, x, y):
+    def __init__(self, map_coord_data, map_height):
         super(Crab, self).__init__(Monster_Data['Crab']['HP'], Monster_Data['Crab']['MAX_HP'],
                                    Monster_Data['Crab']['MP'], Monster_Data['Crab']['MAX_MP'],
                                    Monster_Data['Crab']['Stamina'], Monster_Data['Crab']['MAX_Stamina'],
@@ -253,10 +274,14 @@ class Crab(Monster):
         self.dir = randint(1, 9)
         if self.dir == 5:
             self.dir = 2
-        self.x, self.y = x, y
+
         if self.hit_sound is None:
             self.hit_sound = load_wav('Resource_Sound\\Effect_Sound\\Slash12.wav')
             self.hit_sound.set_volume(64)
+        self.x, self.y = map_coord_data['x'] + self.width / 2, map_height - (map_coord_data['y'] + self.height / 2)
+
+    def set_coordinates(self, x, y):
+        self.x, self.y = x, y
 
     def draw(self):
         if self.dir is 2:
@@ -283,6 +308,7 @@ class Crab(Monster):
         elif self.dir is 9:
             self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
                                  self.x - self.background.window_left, self.y - self.background.window_bottom)
+        self.draw_hp_bar()
 
     def get_bb(self):
         return self.x - self.width / 3, self.y - self.height / 3, self.x + self.width / 3, self.y + self.height / 3
@@ -291,7 +317,7 @@ class Crab(Monster):
 class Skull_Golem(Monster):
     global Monster_Data
 
-    def __init__(self, x, y):
+    def __init__(self, map_coord_data, map_height):
         super(Skull_Golem, self).__init__(Monster_Data['Skull Golem']['HP'], Monster_Data['Skull Golem']['MAX_HP'],
                                           Monster_Data['Skull Golem']['MP'], Monster_Data['Skull Golem']['MAX_MP'],
                                           Monster_Data['Skull Golem']['Stamina'],
@@ -308,10 +334,15 @@ class Skull_Golem(Monster):
         self.dir = randint(1, 9)
         if self.dir == 5:
             self.dir = 2
-        self.x, self.y = x, y
+
         if self.hit_sound is None:
             self.hit_sound = load_wav('Resource_Sound\\Effect_Sound\\Slash11.wav')
             self.hit_sound.set_volume(64)
+
+        self.x, self.y = map_coord_data['x'] + self.width / 2, map_height - (map_coord_data['y'] + self.height / 2)
+
+    def set_coordinates(self, x, y):
+        self.x, self.y = x, y
 
     def draw(self):
         if self.dir is 2:
@@ -354,7 +385,7 @@ class Skull_Golem(Monster):
 class Spear(Monster):
     global Monster_Data
 
-    def __init__(self, x, y):
+    def __init__(self, map_coord_data, map_height):
         super(Spear, self).__init__(Monster_Data['Spear']['HP'], Monster_Data['Spear']['MAX_HP'],
                                     Monster_Data['Spear']['MP'], Monster_Data['Spear']['MAX_MP'],
                                     Monster_Data['Spear']['Stamina'], Monster_Data['Spear']['MAX_Stamina'],
@@ -368,36 +399,49 @@ class Spear(Monster):
         self.dir = randint(1, 9)
         if self.dir == 5:
             self.dir = 2
-        self.x, self.y = x, y
+
         if self.hit_sound is None:
             self.hit_sound = load_wav('Resource_Sound\\Effect_Sound\\Slash11.wav')
             self.hit_sound.set_volume(64)
+        self.x, self.y = map_coord_data['x'] + self.width / 2, map_height - (map_coord_data['y'] + self.height / 2)
+
+    def set_coordinates(self, x, y):
+        self.x, self.y = x, y
 
     def draw(self):
         if self.dir is 2:
             self.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
         elif self.dir is 8:
             self.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
         elif self.dir is 4:
             self.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
         elif self.dir is 6:
             self.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
         elif self.dir is 1:
             self.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
         elif self.dir is 3:
             self.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
         elif self.dir is 7:
             self.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
         elif self.dir is 9:
             self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
+        self.draw_hp_bar()
 
     def get_bb(self):
         return self.x - self.width / 2, self.y - self.height / 2, self.x + self.width / 2, self.y + self.height / 2
@@ -406,7 +450,7 @@ class Spear(Monster):
 class Slasher(Monster):
     global Monster_Data
 
-    def __init__(self, x, y):
+    def __init__(self, map_coord_data, map_height):
         super(Slasher, self).__init__(Monster_Data['Slasher']['HP'], Monster_Data['Slasher']['MAX_HP'],
                                       Monster_Data['Slasher']['MP'], Monster_Data['Slasher']['MAX_MP'],
                                       Monster_Data['Slasher']['Stamina'], Monster_Data['Slasher']['MAX_Stamina'],
@@ -420,10 +464,15 @@ class Slasher(Monster):
         self.dir = randint(1, 9)
         if self.dir == 5:
             self.dir = 2
-        self.x, self.y = x, y
+
         if self.hit_sound is None:
             self.hit_sound = load_wav('Resource_Sound\\Effect_Sound\\Slash10.wav')
             self.hit_sound.set_volume(128)
+
+        self.x, self.y = map_coord_data['x'] + self.width / 2, map_height - (map_coord_data['y'] + self.height / 2)
+
+    def set_coordinates(self, x, y):
+        self.x, self.y = x, y
 
     def draw(self):
         if self.dir is 2:
@@ -458,6 +507,7 @@ class Slasher(Monster):
             self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
                                  self.x - self.background.window_left, self.y - self.background.window_bottom,
                                  self.width * 2, self.height * 2)
+        self.draw_hp_bar()
 
     def get_bb(self):
         return self.x - self.width, self.y - self.height, self.x + self.width, self.y + self.height

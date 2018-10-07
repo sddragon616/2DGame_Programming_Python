@@ -54,10 +54,7 @@ def enter():
 
 
 def exit():
-    global flies
-    global BGM
-    del flies
-    del BGM
+    pass
 
 
 def handle_events(frame_time):

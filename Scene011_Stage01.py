@@ -48,15 +48,19 @@ def enter():
     size_width = get_canvas_width()
     size_height = get_canvas_height()
     Scene003_BaseBattletScene.enter()
-    KeyZone = ObjectData000_BaseObject_BaseUnit.KeyZone(3450, 2400-350, 32, 32)
-    StageMoveZone = ObjectData000_BaseObject_BaseUnit.KeyZone(10, 550, 20, 100)
-    JumpZone = ObjectData000_BaseObject_BaseUnit.KeyZone(925, 1550, 300, 100)
+    KeyZone = ObjectData000_BaseObject_BaseUnit.NonDataBaseZone(3450, 2400 - 350, 32, 32)
+    StageMoveZone = ObjectData000_BaseObject_BaseUnit.NonDataBaseZone(10, 550, 20, 100)
+    JumpZone = ObjectData000_BaseObject_BaseUnit.NonDataBaseZone(925, 1550, 300, 100)
     if KeyItem is None:
         KeyItem = load_image('Resource_Image\\stone_shoes.png')
     background = Mapdata.BackGround_Tilemap('Map\\Mapdata\\Forest_Shining.json',
                                             'Map\\Mapdata\\Forest_Shining_Ground.png')
     Cannot_Move_Zone = [ObjectData000_BaseObject_BaseUnit.BaseZone(
-        Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[2]['objects'][i], 2400) for i in range(199)]
+        Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[3]['objects'][i], 2400) for i in range(199)]
+    fly_image = load_image('Resource_Image\\Monster001_fly.png')
+    flies = [ObjectData003_Monster.Fly(
+        Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[2]['objects'][index], 2400)
+        for index in range(65)]
 
     KeyZone.set_background(background)
     StageMoveZone.set_background(background)
@@ -68,15 +72,35 @@ def enter():
     for Zone in Cannot_Move_Zone:
         Zone.set_background(background)
 
-    flies = [ObjectData003_Monster.Fly(randint(0, 4000), randint(100, 2400)) for index in range(100)]
     for fly in flies:
         fly.set_background(background)
+        fly.image = fly_image
+        fly.MONSTER_HP_BAR = Scene003_BaseBattletScene.ui_bar_image
+        fly.death_sound = Scene003_BaseBattletScene.death_sound
+
     if BGM is None:
         BGM = Stage1_Bgm()
 
 
 def exit():
-    pass
+    global flies
+    global BGM
+    global background
+    global Cannot_Move_Zone
+    global size_width
+    global size_height
+    global KeyEvent
+    global KeyItem
+    global KeyTrigger
+    flies = []
+    BGM = None
+    background = None
+    KeyEvent = None
+    KeyItem = None
+    KeyTrigger = False
+    Cannot_Move_Zone = []
+    size_width = 0
+    size_height = 0
 
 
 def handle_events(frame_time):
@@ -98,17 +122,18 @@ def draw_scene(frame_time):
     global KeyItem
     global KeyTrigger
     background.draw()
-    Scene003_BaseBattletScene.draw_scene(frame_time)
-    if Scene003_BaseBattletScene.user.box_draw_Trigger:
-        KeyZone.draw_bb()
-        StageMoveZone.draw_bb()
-        JumpZone.draw_bb()
     for fly in flies:
         if abs(Scene003_BaseBattletScene.user.x - fly.x) < size_width and \
                         abs(Scene003_BaseBattletScene.user.y - fly.y) < size_height:
             fly.draw()
         if Scene003_BaseBattletScene.user.box_draw_Trigger:
             fly.draw_bb()
+    Scene003_BaseBattletScene.draw_scene(frame_time)
+    if Scene003_BaseBattletScene.user.box_draw_Trigger:
+        KeyZone.draw_bb()
+        StageMoveZone.draw_bb()
+        JumpZone.draw_bb()
+
     for Zone in collide_zone:
         if Scene003_BaseBattletScene.user.box_draw_Trigger:
             Zone.draw_bb()

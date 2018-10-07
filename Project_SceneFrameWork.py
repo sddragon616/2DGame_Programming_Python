@@ -32,16 +32,29 @@ def scene_pop():
         stack[-1].resume()
 
 
+def scene_reset():
+    global stack
+    while len(stack) > 0:
+        stack[-1].exit()
+        stack.pop()
+
+
+def scene_restart():
+    global stack
+    while len(stack) > 1:
+        stack[-1].exit()
+        stack.pop()
+
+
 def get_frame_time():
     global current_time
-
     frame_time = get_time() - current_time
     current_time += frame_time
     return frame_time
 
 
 def run(start_scene):
-    global running, stack
+    global running, stack, current_time
     running = True
     stack = [start_scene]
     start_scene.enter()
@@ -52,9 +65,7 @@ def run(start_scene):
         stack[-1].handle_events(frame_time)
         stack[-1].update(frame_time)
         stack[-1].draw(frame_time)
-    while len(stack) > 0:
-        stack[-1].exit()
-        stack.pop()
+    scene_reset()
 
 
 def reset_time():
@@ -65,8 +76,6 @@ def reset_time():
 def quit():
     global running
     running = False
-
-
 
 
 if __name__ == '__main__':

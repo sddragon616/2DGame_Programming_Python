@@ -22,8 +22,8 @@ def enter():
 def exit():
     global image
     global status_font
-    del image
-    del status_font
+    image = None
+    status_font = None
 
 
 def handle_events(frame_time):

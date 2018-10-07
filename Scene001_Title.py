@@ -41,10 +41,10 @@ def exit():
     global Title_font
     global UI_font
     global Title_BGM
-    del image
-    del Title_font
-    del UI_font
-    del Title_BGM
+    image = None
+    Title_font = None
+    UI_font = None
+    Title_BGM = None
 
 
 def handle_events(frame_time):
@@ -55,14 +55,14 @@ def handle_events(frame_time):
         if event.type == SDL_QUIT:
             Project_SceneFrameWork.quit()
         else:
-            if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
-                Project_SceneFrameWork.quit()
-            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
+            #if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
+                #Project_SceneFrameWork.quit()
+            if (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
                 Loading_Trigger = True
                 draw(frame_time)
                 Project_SceneFrameWork.scene_push(Scene011_Stage01)
                 Loading_Trigger = False
-            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_h):
+            if (event.type, event.key) == (SDL_KEYDOWN, SDLK_h):
                 Project_SceneFrameWork.scene_push(Scene002_Hint_Interface)
 
 
@@ -70,8 +70,8 @@ def draw(frame_time):
     global Loading_Trigger
     clear_canvas()
     image.draw(Project_SceneFrameWork.Window_W/2, Project_SceneFrameWork.Window_H/2)
-    Title_font.draw(50, Project_SceneFrameWork.Window_H - 100, "Lord of", (255, 215, 0))
-    Title_font.draw(50, Project_SceneFrameWork.Window_H - 300, '          Dungeon', (255, 215, 0))
+    Title_font.draw(50, Project_SceneFrameWork.Window_H - 100, "   Dungeon", (255, 215, 0))
+    Title_font.draw(50, Project_SceneFrameWork.Window_H - 300, '             Slayer', (255, 215, 0))
     UI_font.draw(150, Project_SceneFrameWork.Window_H - 500, 'Press Space -> Game Start', (120, 230, 120))
     UI_font.draw(150, Project_SceneFrameWork.Window_H - 550, 'Press H -> Hot Key Help', (220, 130, 120))
     if Loading_Trigger:

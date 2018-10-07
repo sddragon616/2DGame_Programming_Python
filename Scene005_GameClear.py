@@ -28,8 +28,8 @@ def enter():
 def exit():
     global image
     global BGM
-    del image
-    del BGM
+    image = None
+    BGM = None
 
 
 def update(frame_time):
@@ -50,7 +50,8 @@ def handle_events(frame_time):
             Project_SceneFrameWork.quit()
         else:
             if event.type == SDL_KEYDOWN or event.type == SDL_MOUSEBUTTONDOWN:
-                Project_SceneFrameWork.scene_pop()
+                Project_SceneFrameWork.scene_reset()
+                Project_SceneFrameWork.scene_push(Scene001_Title)
 
 
 def pause(): pass

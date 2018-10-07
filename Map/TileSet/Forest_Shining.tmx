@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="125" height="75" tilewidth="32" tileheight="32" nextobjectid="605">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="125" height="75" tilewidth="32" tileheight="32" nextobjectid="671">
  <tileset firstgid="1" source="Forest.json"/>
  <layer name="Base" width="125" height="75">
   <data encoding="csv">
@@ -159,7 +159,74 @@
 260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,198,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,196,260,260,357,358,359,360,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260,260
 </data>
  </layer>
- <objectgroup name="DontMove">
+ <objectgroup name="Fly">
+  <object id="605" x="1880" y="2116" width="26" height="26"/>
+  <object id="606" x="2170" y="2058" width="24" height="34"/>
+  <object id="607" x="1932" y="1936" width="24" height="22"/>
+  <object id="608" x="2220" y="1824" width="26" height="24"/>
+  <object id="609" x="1758" y="1686" width="22" height="22"/>
+  <object id="610" x="1922" y="1578" width="26" height="28"/>
+  <object id="611" x="2314" y="1536" width="26" height="24"/>
+  <object id="612" x="2108" y="1264" width="30" height="28"/>
+  <object id="613" x="1834" y="1198" width="30" height="30"/>
+  <object id="614" x="2662" y="1178" width="30" height="26"/>
+  <object id="615" x="2422" y="1046" width="28" height="26"/>
+  <object id="616" x="2430" y="1364" width="28" height="32"/>
+  <object id="617" x="1728" y="1412" width="30" height="30"/>
+  <object id="618" x="1882" y="874" width="30" height="26"/>
+  <object id="619" x="1588" y="992" width="30" height="32"/>
+  <object id="620" x="2736" y="780" width="30" height="30"/>
+  <object id="621" x="2988" y="1188" width="28" height="24"/>
+  <object id="622" x="1782" y="694" width="26" height="26"/>
+  <object id="623" x="1396" y="1008" width="24" height="24"/>
+  <object id="624" x="1546" y="594" width="22" height="22"/>
+  <object id="625" x="1060" y="564" width="24" height="22"/>
+  <object id="626" x="1168" y="396" width="28" height="26"/>
+  <object id="627" x="1306" y="654" width="22" height="22"/>
+  <object id="628" x="1004" y="762" width="24" height="24"/>
+  <object id="629" x="882" y="374" width="22" height="24"/>
+  <object id="630" x="718" y="468" width="22" height="24"/>
+  <object id="631" x="818" y="660" width="26" height="22"/>
+  <object id="632" x="790" y="1222" width="22" height="22"/>
+  <object id="633" x="1024" y="1384" width="22" height="22"/>
+  <object id="634" x="582" y="1374" width="26" height="26"/>
+  <object id="635" x="832" y="1412" width="20" height="20"/>
+  <object id="636" x="696" y="1526" width="20" height="20"/>
+  <object id="637" x="480" y="1560" width="24" height="26"/>
+  <object id="638" x="576" y="1706" width="22" height="26"/>
+  <object id="639" x="320" y="1660" width="26" height="26"/>
+  <object id="640" x="480" y="1756" width="22" height="20"/>
+  <object id="641" x="304" y="1770" width="18" height="22"/>
+  <object id="642" x="232" y="1834" width="22" height="28"/>
+  <object id="643" x="22" y="1812" width="24" height="24"/>
+  <object id="644" x="146" y="1908" width="20" height="20"/>
+  <object id="646" x="248" y="1716" width="22" height="24"/>
+  <object id="647" x="1062" y="1210" width="18" height="18"/>
+  <object id="648" x="1534" y="782" width="24" height="22"/>
+  <object id="649" x="2062" y="1066" width="26" height="22"/>
+  <object id="650" x="2384" y="2240" width="20" height="20"/>
+  <object id="651" x="2866" y="956" width="22" height="20"/>
+  <object id="652" x="2980" y="672" width="22" height="20"/>
+  <object id="653" x="3166" y="968" width="20" height="20"/>
+  <object id="654" x="3448" y="1096" width="26" height="22"/>
+  <object id="655" x="3612" y="1168" width="22" height="26"/>
+  <object id="656" x="3822" y="1022" width="22" height="24"/>
+  <object id="657" x="3568" y="890" width="24" height="20"/>
+  <object id="658" x="3200" y="564" width="24" height="20"/>
+  <object id="659" x="3538" y="634" width="20" height="20"/>
+  <object id="660" x="3386" y="174" width="20" height="20"/>
+  <object id="661" x="3654" y="200" width="26" height="26"/>
+  <object id="662" x="3768" y="362" width="24" height="22"/>
+  <object id="663" x="3798" y="560" width="22" height="18"/>
+  <object id="664" x="3756" y="752" width="26" height="24"/>
+  <object id="665" x="3272" y="340" width="28" height="24"/>
+  <object id="666" x="3534" y="312" width="24" height="22"/>
+  <object id="667" x="3308" y="796" width="26" height="22"/>
+  <object id="668" x="3826" y="1214" width="22" height="22"/>
+  <object id="669" x="2550" y="854" width="20" height="20"/>
+  <object id="670" x="2834" y="1292" width="20" height="20"/>
+ </objectgroup>
+ <objectgroup name="DontMove" visible="0">
   <object id="328" x="2409.09" y="672.727" width="75.7576" height="27.2727"/>
   <object id="329" x="2051.52" y="490.909" width="51.5152" height="48.4848"/>
   <object id="331" x="2690.91" y="1457.58" width="48.4848" height="45.4545"/>
