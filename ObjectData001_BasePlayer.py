@@ -28,7 +28,7 @@ class Player(BaseUnit):
         self.Experience = 0
         self.Max_Experience = (self.LEVEL * 8) + 2
         self.Ability_Point = 0
-        self.Skill_Point = 0
+        self.Skill_Point = 1
 
         self.HpPotion = HpPotion(3)  # HP 포션 3개 소지
         self.MpPotion = MpPotion(1)  # MP 포션 1개 소지
@@ -36,7 +36,7 @@ class Player(BaseUnit):
         self.dir = 2            # 캐릭터가 바라보고 있는 방향을 나타내는 변수. 숫자 키패드의 위치로 판단
 
         self.state = STAND      # 캐릭터의 현재 모션 상태를 나타내고 있는 변수
-
+        self.old_state = 0      # 캐릭터의 과거 모션 상태를 저장하는 변수
         self.distance = 0       # 캐릭터의 이동 거리
 
         # 모션 출력용 프레임 조절 변수 (직접적인 스프라이트 위치와 무관)
@@ -50,6 +50,10 @@ class Player(BaseUnit):
         self.melee_atk_point_UpY = self.y + self.height / 4
         self.attack_size = 40   # 공격범위 1.25m
 
+        self.life_regenerate_time = 0.0
+        self.mana_regenerate_time = 0.0
+        self.stamina_regenerate_time = 0.0
+
         # 디버깅용 바운딩박스 출력
         self.box_draw_Trigger = False
 
@@ -59,8 +63,6 @@ class Player(BaseUnit):
             self.Level_up_sound = load_wav('Resource_Sound\\Effect_Sound\\LevelUp.wav')
             self.Level_up_sound.set_volume(128)
 
-        self.mana_regen_time = 0
-
     def show_stat(self):
         print('Lv. {}'.format(self.LEVEL))
         super(Player, self).show_stat()
@@ -69,17 +71,22 @@ class Player(BaseUnit):
         print('Exp : {}'.format(self.Experience), '/ {}'.format(self.Max_Experience))
 
     def update(self, frame_time, others):
-        self.life_time += frame_time
-        self.mana_regen_time += frame_time
-        # 자연치유
-        if self.life_time >= 0.75:
-            self.hp_heal(1)
-            self.sp_heal(1)
-            self.life_time = 0
+        self.life_regenerate_time += frame_time
+        self.mana_regenerate_time += frame_time
+        self.stamina_regenerate_time += frame_time
 
-        if self.mana_regen_time >= 2.25:
+        # 자연치유
+        if self.life_regenerate_time >= 1.5:
+            self.hp_heal(1)
+            self.life_regenerate_time = 0
+
+        if self.mana_regenerate_time >= 2.5:
             self.mp_heal(1)
-            self.mana_regen_time = 0
+            self.mana_regenerate_time = 0
+
+        if self.stamina_regenerate_time >= 2.0:
+            self.sp_heal(1)
+            self.stamina_regenerate_time = 0
 
         # 걷거나 서 있을 때
         if self.state == WALK:
@@ -147,13 +154,14 @@ class Player(BaseUnit):
                 if self.attack_sound is not None:
                     self.attack_sound.play()
                 self.attack_motion = 0
-                self.state = STAND
+                if self.old_state < 2:
+                    self.state = self.old_state
                 self.total_frames_atk = 0.0
 
-        # 구석에 몰렸을 때 무적을 0.25초간 걸어서 탈출 가능하게 해줌
+        # 피격 시 무적을 0.25초간 걸어서 탈출 가능하게 해줌
         if self.invincibility is True:
             self.invincible_time += frame_time
-            if self.invincible_time > 1:
+            if self.invincible_time > 0.25:
                 self.invincibility = False
                 self.invincible_time = 0
 
@@ -274,7 +282,8 @@ class Player(BaseUnit):
                                          self.y - self.background.window_bottom)
 
     def handle_events(self, event):
-        if (event.type, event.key) == (SDL_KEYDOWN, SDLK_LEFT):
+        if self.state == STAND or self.state == WALK or self.state == MELEE_ATTACK:
+            if (event.type, event.key) == (SDL_KEYDOWN, SDLK_LEFT):
                 if (self.dir == 8 or self.dir == 9) and self.state is WALK:
                     self.dir = 7
                 elif (self.dir == 2 or self.dir == 3) and self.state is WALK:
@@ -282,7 +291,7 @@ class Player(BaseUnit):
                 else:
                     self.dir = 4
                 self.state = WALK
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_RIGHT):
+            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_RIGHT):
                 if (self.dir == 8 or self.dir == 7) and self.state is WALK:
                     self.dir = 9
                 elif (self.dir == 2 or self.dir == 1) and self.state is WALK:
@@ -290,7 +299,7 @@ class Player(BaseUnit):
                 else:
                     self.dir = 6
                 self.state = WALK
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_UP):
+            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_UP):
                 if self.dir == 4 and self.state is WALK:
                     self.dir = 7
                 elif self.dir == 6 and self.state is WALK:
@@ -298,7 +307,7 @@ class Player(BaseUnit):
                 else:
                     self.dir = 8
                 self.state = WALK
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_DOWN):
+            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_DOWN):
                 if self.dir == 4 and self.state is WALK:
                     self.dir = 1
                 elif self.dir == 6 and self.state is WALK:
@@ -306,52 +315,62 @@ class Player(BaseUnit):
                 else:
                     self.dir = 2
                 self.state = WALK
-        if (event.type, event.key) == (SDL_KEYDOWN, SDLK_z):      # z 키 - 일반 근접 공격
-            self.state = MELEE_ATTACK
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_o):      # o 키 - 히트박스, 바운딩박스 그리기
-            if self.box_draw_Trigger:
-                self.box_draw_Trigger = False
-            else:
-                self.box_draw_Trigger = True
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_u):  # u 키 - Player
-            self.show_stat()
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_i):  # i 키 - 아이템 창
-            print('HP Potion : {}'.format(self.HpPotion.number))
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_h):  # h 키 - HP 포션 단축키
-            self.HpPotion.use(self)
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_j):  # j 키 - MP 포션 단축키
-            self.MpPotion.use(self)
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_k):  # k 키 - 스태미나 포션 단축키
-            self.StaminaPotion.use(self)
+            if (event.type, event.key) == (SDL_KEYDOWN, SDLK_z):      # z 키 - 일반 근접 공격
+                if self.state < 2:
+                    self.old_state = self.state
+                self.state = MELEE_ATTACK
+            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_o):      # o 키 - 히트박스, 바운딩박스 그리기
+                if self.box_draw_Trigger:
+                    self.box_draw_Trigger = False
+                else:
+                    self.box_draw_Trigger = True
+            # elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_u):  # u 키 - Player
+            #    self.show_stat()
+            # elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_i):  # i 키 - 아이템 창
+            #    print('HP Potion : {}'.format(self.HpPotion.number))
 
-        if (event.type, event.key) == (SDL_KEYUP, SDLK_LEFT):
-            if self.dir == 7:
-                self.dir = 8
-            elif self.dir == 1:
-                self.dir = 2
-            elif self.dir == 4:
-                self.state = STAND
-        elif (event.type, event.key) == (SDL_KEYUP, SDLK_RIGHT):
-            if self.dir == 9:
-                self.dir = 8
-            elif self.dir == 3:
-                self.dir = 2
-            elif self.dir == 6:
-                self.state = STAND
-        elif (event.type, event.key) == (SDL_KEYUP, SDLK_UP):
-            if self.dir == 7:
-                self.dir = 4
-            elif self.dir == 9:
-                self.dir = 6
-            elif self.dir == 8:
-                self.state = STAND
-        elif (event.type, event.key) == (SDL_KEYUP, SDLK_DOWN):
-            if self.dir == 1:
-                self.dir = 4
-            elif self.dir == 3:
-                self.dir = 6
-            elif self.dir == 2:
-                self.state = STAND
+            if (event.type, event.key) == (SDL_KEYUP, SDLK_LEFT):
+                if self.dir == 7:
+                    self.dir = 8
+                elif self.dir == 1:
+                    self.dir = 2
+                elif self.dir == 4:
+                    if self.state is WALK:
+                        self.state = STAND
+            elif (event.type, event.key) == (SDL_KEYUP, SDLK_RIGHT):
+                if self.dir == 9:
+                    self.dir = 8
+                elif self.dir == 3:
+                    self.dir = 2
+                elif self.dir == 6:
+                    if self.state is WALK:
+                        self.state = STAND
+            elif (event.type, event.key) == (SDL_KEYUP, SDLK_UP):
+                if self.dir == 7:
+                    self.dir = 4
+                elif self.dir == 9:
+                    self.dir = 6
+                elif self.dir == 8:
+                    self.state = STAND
+            elif (event.type, event.key) == (SDL_KEYUP, SDLK_DOWN):
+                if self.dir == 1:
+                    self.dir = 4
+                elif self.dir == 3:
+                    self.dir = 6
+                elif self.dir == 2:
+                    if self.state is WALK:
+                        self.state = STAND
+
+            if self.state > 2 and event.type == SDL_KEYUP:
+                if self.old_state is WALK:
+                    self.old_state = STAND
+
+        if (event.type, event.key) == (SDL_KEYDOWN, SDLK_h):  # h 키 - HP 포션 단축키
+            self.HpPotion.use(self)
+        if (event.type, event.key) == (SDL_KEYDOWN, SDLK_j):  # j 키 - MP 포션 단축키
+            self.MpPotion.use(self)
+        if (event.type, event.key) == (SDL_KEYDOWN, SDLK_k):  # k 키 - 스태미나 포션 단축키
+            self.StaminaPotion.use(self)
 
     def get_exp(self, exp):
         self.Experience += exp
@@ -359,7 +378,6 @@ class Player(BaseUnit):
             self.level_up()
 
     def level_up(self):
-            load_image("Resource_Image\\Effects_000.png").clip_draw(96, 9, 32, 32, self.x, self.y + self.height * 2)
             self.Level_up_sound.play()
             self.Experience -= self.Max_Experience
             self.LEVEL += 1

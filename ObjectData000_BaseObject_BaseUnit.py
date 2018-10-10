@@ -68,27 +68,28 @@ class BaseObject:
         if walls is not []:
             for wall in walls:
                 if collide(self, wall):
-                    self.invincibility = True     # 넉백 후 벽에 충돌 시 무적 여부
+                    # 넉백 후 벽에 충돌 시 무적 시간을 길게 준다
+                    self.invincible_time = -0.5
                     if direction is 8:
                         self.y = min(self.background.h, self.y - self.height/2)
                     if direction is 2:
-                        self.y = max(0, self.y + self.height/2)
+                        self.y = max(0, self.y + self.height)
                     if direction is 4:
-                        self.x = max(0, self.x + self.width/2)
+                        self.x = max(0, self.x + self.width)
                     if direction is 6:
                         self.x = min(self.background.w, self.x - self.width/2)
                     if direction is 1:
-                        self.x = max(0, self.x + self.width/2)
-                        self.y = max(0, self.y + self.height/2)
+                        self.x = max(0, self.x + self.width)
+                        self.y = max(0, self.y + self.height)
                     if direction is 3:
                         self.x = min(self.background.w, self.x - self.width/2)
-                        self.y = max(0, self.y + self.height/2)
+                        self.y = max(0, self.y + self.height)
                     if direction is 7:
-                        self.x = max(0, self.x + self.width/2)
+                        self.x = max(0, self.x + self.width)
                         self.y = min(self.background.h, self.y - self.height/2)
                     if direction is 9:
-                        self.x = min(self.background.w, self.x - self.width)
-                        self.y = min(self.background.h, self.y - self.height)
+                        self.x = min(self.background.w, self.x - self.width/2)
+                        self.y = min(self.background.h, self.y - self.height/2)
 
     def hit_by_str(self, damage):
         if self.invincibility is False:
@@ -131,7 +132,7 @@ class BaseUnit(BaseObject):
         # 프레임 타임 애니메이션 관련 변수들 정의
         self.total_frames_run = 0.0
         self.total_frames_atk = 0.0
-        self.life_time = 0.0
+
         self.RUN_SPEED_KMPH = self.MOVE_SPEED  # Km / Hour
         self.RUN_SPEED_MPM = (self.RUN_SPEED_KMPH * 1000.0 / 60.0)
         self.RUN_SPEED_MPS = (self.RUN_SPEED_MPM / 60.0)
@@ -198,7 +199,7 @@ class BaseZone:
                        self.get_bb()[3] - self.background.window_bottom)
 
 
-class NonDataBaseZone:
+class DataNoneBaseZone:
     def __init__(self, x, y, w, h):
         self.x, self.y = x, y
         self.width = w

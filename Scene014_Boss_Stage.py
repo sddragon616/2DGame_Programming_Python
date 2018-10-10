@@ -2,6 +2,7 @@ from pico2d import *
 from random import *
 import Project_SceneFrameWork
 import Scene003_BaseBattletScene
+import Scene012_Stage02
 import ObjectData000_BaseObject_BaseUnit
 import ObjectData003_Monster
 import Scene005_GameClear
@@ -9,6 +10,7 @@ import Mapdata
 
 
 name = "Boss_Stage"
+slashers = []
 Bosses = []
 BGM = None
 background = None
@@ -16,6 +18,8 @@ Cannot_Move_Zone = []
 collide_zone = []
 size_width = 0
 size_height = 0
+BeforeStageZone = None
+Before_Loading_Trigger = False
 
 
 class Boss_Bgm:
@@ -26,31 +30,54 @@ class Boss_Bgm:
 
 
 def enter():
-    global Bosses
+    global slashers, Bosses
     global BGM
     global background
-    global Cannot_Move_Zone
+    global Cannot_Move_Zone, BeforeStageZone
     global size_width
     global size_height
     size_width = get_canvas_width()
     size_height = get_canvas_height()
     Scene003_BaseBattletScene.enter()
     Scene003_BaseBattletScene.user.x = 768
-    Scene003_BaseBattletScene.user.y = 32
+    Scene003_BaseBattletScene.user.y = 96
     background = Mapdata.BackGround_Tilemap('Map\\Mapdata\\BossMap.json',
-                                            'Map\\Mapdata\\BossMap.png')
-    Cannot_Move_Zone = [ObjectData000_BaseObject_BaseUnit.BaseZone(
-        Mapdata.load_tile_map('Map\\Mapdata\\BossMap.json').layers[2]['objects'][i], 2400) for i in range(65)]
+                                            'Map\\Mapdata\\BossMap_Ground.png')
 
     background.set_center_object(Scene003_BaseBattletScene.user)
     Scene003_BaseBattletScene.user.set_background(background)
 
+    BeforeStageZone = ObjectData000_BaseObject_BaseUnit.DataNoneBaseZone(768, 8, 128, 16)
+
+    Cannot_Move_Zone = [ObjectData000_BaseObject_BaseUnit.BaseZone(
+        Mapdata.load_tile_map('Map\\Mapdata\\BossMap.json').layers[2]['objects'][i], 4800)
+        for i in range(len(Mapdata.load_tile_map('Map\\Mapdata\\BossMap.json').layers[2]['objects']))]
+
+    slashers = [ObjectData003_Monster.Slasher(
+        Mapdata.load_tile_map('Map\\Mapdata\\BossMap.json').layers[3]['objects'][i], 4800)
+        for i in range(len(Mapdata.load_tile_map('Map\\Mapdata\\BossMap.json').layers[3]['objects']))]
+
+    Bosses = [ObjectData003_Monster.GigantSlasher(
+        Mapdata.load_tile_map('Map\\Mapdata\\BossMap.json').layers[4]['objects'][i], 4800)
+        for i in range(1)]
+
+    for slasher in slashers:
+        slasher.image = Scene003_BaseBattletScene.slasher_image
+        slasher.hit_sound = Scene003_BaseBattletScene.slasher_hit_sound
+        slasher.MONSTER_HP_BAR = Scene003_BaseBattletScene.ui_bar_image
+        slasher.set_background(background)
+
+    for gigantslasher in Bosses:
+        gigantslasher.x = gigantslasher.x + 10
+        gigantslasher.y = gigantslasher.y - 50
+        gigantslasher.image = Scene003_BaseBattletScene.slasher_image
+        gigantslasher.hit_sound = Scene003_BaseBattletScene.slasher_hit_sound
+        gigantslasher.MONSTER_HP_BAR = Scene003_BaseBattletScene.ui_bar_image
+        gigantslasher.set_background(background)
+
     for Zone in Cannot_Move_Zone:
         Zone.set_background(background)
 
-    Bosses = [ObjectData003_Monster.Slasher(768, 2400-416)]
-    for Boss in Bosses:
-        Boss.set_background(background)
     if BGM is None:
         BGM = Boss_Bgm()
 
@@ -73,9 +100,17 @@ def draw(frame_time):
 def draw_scene(frame_time):
     global size_width
     global size_height
-    global Bosses
+    global Bosses, slashers
     background.draw()
     Scene003_BaseBattletScene.draw_scene(frame_time)
+
+    for slasher in slashers:
+        if abs(Scene003_BaseBattletScene.user.x - slasher.x) < size_width and \
+                        abs(Scene003_BaseBattletScene.user.y - slasher.y) < size_height:
+            slasher.draw()
+        if Scene003_BaseBattletScene.user.box_draw_Trigger:
+            slasher.draw_bb()
+
     for Boss in Bosses:
         if abs(Scene003_BaseBattletScene.user.x - Boss.x) < size_width and \
                         abs(Scene003_BaseBattletScene.user.y - Boss.y) < size_height:
@@ -86,23 +121,39 @@ def draw_scene(frame_time):
         if Scene003_BaseBattletScene.user.box_draw_Trigger:
             Zone.draw_bb()
 
+    if Before_Loading_Trigger is True:
+        Scene003_BaseBattletScene.Message_font.draw(125, Project_SceneFrameWork.Window_H / 2,
+                                                    '이전 스테이지를 로딩중입니다, 조금 기다려 주세요!', (225, 0, 0))
+
 
 def update(frame_time):
     global collide_zone
     global size_width
     global size_height
-    global Bosses
+    global Bosses, slashers
+    global Before_Loading_Trigger
     background.update(frame_time)
     collide_zone = []
     for Zone in Cannot_Move_Zone:
         if abs(Scene003_BaseBattletScene.user.x - Zone.x) < size_width and \
                         abs(Scene003_BaseBattletScene.user.y - Zone.y) < size_height:
             collide_zone.append(Zone)
+    Scene003_BaseBattletScene.update(frame_time, slashers, collide_zone)
     Scene003_BaseBattletScene.update(frame_time, Bosses, collide_zone)
 
-    if Bosses is []:
-        Project_SceneFrameWork.scene_push(Scene005_GameClear)
+    if collide(Scene003_BaseBattletScene.user, BeforeStageZone):
+        Before_Loading_Trigger = True
+        draw(frame_time)
+        Project_SceneFrameWork.scene_change(Scene012_Stage02)
         Scene003_BaseBattletScene.user.state = 0
+        Scene003_BaseBattletScene.user.x = 2350
+        Scene003_BaseBattletScene.user.y = 3057
+        Before_Loading_Trigger = False
+
+    for Boss in Bosses:
+        if Boss.Hp < 10 :
+            Project_SceneFrameWork.scene_push(Scene005_GameClear)
+            Scene003_BaseBattletScene.user.state = 0
 
 
 def pause(): pass

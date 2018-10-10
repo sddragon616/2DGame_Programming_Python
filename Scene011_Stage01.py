@@ -18,10 +18,12 @@ KeyItem = None
 KeyTrigger = False
 StageMoveZone = None
 JumpZone = None
+Message_font = None
 Cannot_Move_Zone = []
 collide_zone = []
 size_width = 0
 size_height = 0
+Loading_Trigger = False
 
 
 class Stage1_Bgm:
@@ -43,21 +45,33 @@ def enter():
     global JumpZone
     global KeyEvent
     global KeyItem
+    global Message_font
+
     KeyEvent = load_wav('Resource_Sound\\Effect_Sound\\Drinking.wav')
     KeyEvent.set_volume(64)
     size_width = get_canvas_width()
     size_height = get_canvas_height()
     Scene003_BaseBattletScene.enter()
-    KeyZone = ObjectData000_BaseObject_BaseUnit.NonDataBaseZone(3450, 2400 - 350, 32, 32)
-    StageMoveZone = ObjectData000_BaseObject_BaseUnit.NonDataBaseZone(10, 550, 20, 100)
-    JumpZone = ObjectData000_BaseObject_BaseUnit.NonDataBaseZone(925, 1550, 300, 100)
+
+    # 돌 신발
+    KeyZone = ObjectData000_BaseObject_BaseUnit.DataNoneBaseZone(3450, 2400 - 350, 32, 32)
+
+    # 다음 스테이지로 이동하는 영역
+    StageMoveZone = ObjectData000_BaseObject_BaseUnit.DataNoneBaseZone(10, 550, 20, 100)
+
+    # 돌 신을 신고 뛰어보자 폴짝
+    JumpZone = ObjectData000_BaseObject_BaseUnit.DataNoneBaseZone(900, 1550, 300, 50)
+
     if KeyItem is None:
         KeyItem = load_image('Resource_Image\\stone_shoes.png')
+
     background = Mapdata.BackGround_Tilemap('Map\\Mapdata\\Forest_Shining.json',
                                             'Map\\Mapdata\\Forest_Shining_Ground.png')
+
+    # 이동불가 영역
     Cannot_Move_Zone = [ObjectData000_BaseObject_BaseUnit.BaseZone(
         Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[3]['objects'][i], 2400) for i in range(199)]
-    fly_image = load_image('Resource_Image\\Monster001_fly.png')
+
     flies = [ObjectData003_Monster.Fly(
         Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[2]['objects'][index], 2400)
         for index in range(65)]
@@ -74,8 +88,9 @@ def enter():
 
     for fly in flies:
         fly.set_background(background)
-        fly.image = fly_image
+        fly.image = Scene003_BaseBattletScene.fly_image
         fly.MONSTER_HP_BAR = Scene003_BaseBattletScene.ui_bar_image
+        fly.hit_sound = Scene003_BaseBattletScene.fly_hit_sound
         fly.death_sound = Scene003_BaseBattletScene.death_sound
 
     if BGM is None:
@@ -92,7 +107,7 @@ def exit():
     global KeyEvent
     global KeyItem
     global KeyTrigger
-    flies = []
+    flies.clear()
     BGM = None
     background = None
     KeyEvent = None
@@ -121,6 +136,7 @@ def draw_scene(frame_time):
     global JumpZone
     global KeyItem
     global KeyTrigger
+    global Loading_Trigger
     background.draw()
     for fly in flies:
         if abs(Scene003_BaseBattletScene.user.x - fly.x) < size_width and \
@@ -141,6 +157,23 @@ def draw_scene(frame_time):
         if KeyItem is None:
             KeyItem = load_image('Resource_Image\\stone_shoes.png')
         KeyItem.draw(KeyZone.x - background.window_left, KeyZone.y - background.window_bottom)
+    elif collide(Scene003_BaseBattletScene.user, KeyZone):
+        Scene003_BaseBattletScene.Message_font.draw(150, Project_SceneFrameWork.Window_H - 100,
+                                                    '튼튼한 돌 신발을 주웠다. 이걸 신으면 높은 곳에서 떨어져도 괜찮을 것 같다.', (255, 255, 255))
+        Scene003_BaseBattletScene.Message_font.draw(10, Project_SceneFrameWork.Window_H - 150,
+                                                    '마물이 먹다가 뱉은 것 같다. 전 주인은 돌 신발만 남기고 뱃속에서 소화되었겠지...', (255, 255, 255))
+
+    if collide(Scene003_BaseBattletScene.user, JumpZone):
+        if KeyTrigger is True and Scene003_BaseBattletScene.user.dir is 2:
+            Scene003_BaseBattletScene.user.y -= 250
+            Scene003_BaseBattletScene.user.dir = 2
+        else:
+            Scene003_BaseBattletScene.Message_font.draw(125, Project_SceneFrameWork.Window_H - 150,
+                                                        '높이가 높은 절벽이다. 떨어지면 발이 아플 것 같다...', (0, 0, 0))
+
+    if Loading_Trigger is True:
+        Scene003_BaseBattletScene.Message_font.draw(125, Project_SceneFrameWork.Window_H / 2,
+                                                    '다음 스테이지를 로딩중입니다, 조금 기다려 주세요!', (225, 0, 0))
 
 
 def update(frame_time):
@@ -152,14 +185,17 @@ def update(frame_time):
     global JumpZone
     global StageMoveZone
     global KeyEvent
+    global Loading_Trigger
     background.update(frame_time)
+
     if collide(Scene003_BaseBattletScene.user, KeyZone):
         if KeyTrigger is False:
             KeyEvent.play()
             KeyTrigger = True
+
     if collide(Scene003_BaseBattletScene.user, JumpZone):
         if KeyTrigger is True and Scene003_BaseBattletScene.user.dir is 2:
-            Scene003_BaseBattletScene.user.y -= 350
+            Scene003_BaseBattletScene.user.y -= 250
             Scene003_BaseBattletScene.user.dir = 2
 
     collide_zone = []
@@ -170,7 +206,10 @@ def update(frame_time):
     Scene003_BaseBattletScene.update(frame_time, flies, collide_zone)
 
     if collide(Scene003_BaseBattletScene.user, StageMoveZone):
+        Loading_Trigger = True
+        draw(frame_time)
         Project_SceneFrameWork.scene_push(Scene012_Stage02)
+        Loading_Trigger = False
         Scene003_BaseBattletScene.user.state = 0
 
 

@@ -46,6 +46,10 @@ class Monster(BaseUnit):
         self.MONSTER_HP_BAR = None
         self.death_sound = None
 
+        self.fly_available = False      # 몬스터가 장애물을 뚫는 비행이 가능한가?
+
+        self.max_move_frame = 3         # 그림파일의 이동 애니메이션 프레임 수
+
     def update(self, frame_time, user, others):
         if self.death() is True:            # 대상이 사망했는가>
             if self.exp_pay is False:
@@ -68,7 +72,7 @@ class Monster(BaseUnit):
                 self.user_chase(frame_time, user)
             self.distance = self.RUN_SPEED_PPS * frame_time
             self.total_frames_run += self.FRAMES_PER_ACTION_run * self.ACTION_PER_TIME_run * frame_time
-            self.frame = int(self.total_frames_run) % 3
+            self.frame = int(self.total_frames_run) % self.max_move_frame
             # 바라보는 방향에 따라, 현재 걷기 상태라면 이동한다.
             if self.state is WALK:
                 if self.dir is 2:
@@ -91,29 +95,30 @@ class Monster(BaseUnit):
                 elif self.dir is 9:
                     self.x = min(self.background.w, self.x + self.distance)
                     self.y = min(self.background.h, self.y + self.distance)
-                if others is not []:
-                    for other in others:
-                        if collide(self, other):
-                            if self.dir is 2:
-                                self.y = max(0, self.y + self.distance)
-                            elif self.dir is 8:
-                                self.y = min(self.background.h, self.y - self.distance)
-                            elif self.dir is 4:
-                                self.x = max(0, self.x + self.distance)
-                            elif self.dir is 6:
-                                self.x = min(self.background.w, self.x - self.distance)
-                            elif self.dir is 1:
-                                self.x = max(0, self.x + self.distance)
-                                self.y = max(0, self.y + self.distance)
-                            elif self.dir is 3:
-                                self.x = min(self.background.w, self.x - self.distance)
-                                self.y = max(0, self.y + self.distance)
-                            elif self.dir is 7:
-                                self.x = max(0, self.x + self.distance)
-                                self.y = min(self.background.h, self.y - self.distance)
-                            elif self.dir is 9:
-                                self.x = min(self.background.w, self.x - self.distance)
-                                self.y = min(self.background.h, self.y - self.distance)
+                if self.fly_available is False:
+                    if others is not []:
+                        for other in others:
+                            if collide(self, other):
+                                if self.dir is 2:
+                                    self.y = max(0, self.y + self.distance)
+                                elif self.dir is 8:
+                                    self.y = min(self.background.h, self.y - self.distance)
+                                elif self.dir is 4:
+                                    self.x = max(0, self.x + self.distance)
+                                elif self.dir is 6:
+                                    self.x = min(self.background.w, self.x - self.distance)
+                                elif self.dir is 1:
+                                    self.x = max(0, self.x + self.distance)
+                                    self.y = max(0, self.y + self.distance)
+                                elif self.dir is 3:
+                                    self.x = min(self.background.w, self.x - self.distance)
+                                    self.y = max(0, self.y + self.distance)
+                                elif self.dir is 7:
+                                    self.x = max(0, self.x + self.distance)
+                                    self.y = min(self.background.h, self.y - self.distance)
+                                elif self.dir is 9:
+                                    self.x = min(self.background.w, self.x - self.distance)
+                                    self.y = min(self.background.h, self.y - self.distance)
         # 플레이어에게 공격받았을 때 무적을 0.25초간 걸어서 연속프레임 공격 방지
         if self.invincibility is True:
             self.invincible_time += frame_time
@@ -191,7 +196,7 @@ class Monster(BaseUnit):
                                       self.x - self.background.window_left,
                                       self.y - self.background.window_bottom + int(self.height / 2) + 12,
                                       int(self.width * 6 / 5), 12)
-        # HPs
+        # HP
         self.MONSTER_HP_BAR.clip_draw(0, 0, 10, 6,
                                       self.x - self.background.window_left -
                                       int(self.width * ((self.MAX_HP-self.HP) / (self.MAX_HP * 2))),
@@ -216,10 +221,6 @@ class Fly(Monster):
         self.dir = randint(1, 9)
         if self.dir == 5:
             self.dir = 2
-
-        if self.hit_sound is None:
-            self.hit_sound = load_wav('Resource_Sound\\Effect_Sound\\Damage1.wav')
-            self.hit_sound.set_volume(64)
 
         self.x, self.y = map_coord_data['x'] + self.width / 2, map_height - (map_coord_data['y'] + self.height / 2)
 
@@ -257,6 +258,68 @@ class Fly(Monster):
         return self.x - self.width / 4, self.y - self.height / 4, self.x + self.width / 4, self.y + self.height / 4
 
 
+class StrongFly(Monster):
+    def __init__(self, map_coord_data, map_height):
+        super(StrongFly, self).__init__(Monster_Data['Strong Fly']['HP'], Monster_Data['Strong Fly']['MAX_HP'],
+                                        Monster_Data['Strong Fly']['MP'], Monster_Data['Strong Fly']['MAX_MP'],
+                                        Monster_Data['Strong Fly']['Stamina'],
+                                        Monster_Data['Strong Fly']['MAX_Stamina'],
+                                        Monster_Data['Strong Fly']['STR'], Monster_Data['Strong Fly']['DEF'],
+                                        Monster_Data['Strong Fly']['MAG'], Monster_Data['Strong Fly']['MR'],
+                                        Monster_Data['Strong Fly']['MOVE_SPEED'],
+                                        Monster_Data['Strong Fly']['ATK_SPEED'],
+                                        Monster_Data['Strong Fly']['Sight'], Monster_Data['Strong Fly']['Experience'],
+                                        Monster_Data['Strong Fly']['AI_Type'])
+        self.width = self.height = 32
+
+        self.dir = randint(1, 9)
+        if self.dir == 5:
+            self.dir = 2
+
+        self.x, self.y = map_coord_data['x'] + self.width / 2, map_height - (map_coord_data['y'] + self.height / 2)
+
+    def set_coordinates(self, x, y):
+        self.x, self.y = x, y
+
+    def draw(self):
+        if self.dir is 2:
+            self.image.clip_draw(self.frame * self.width, self.height * 9 + 16, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
+        elif self.dir is 8:
+            self.image.clip_draw(self.frame * self.width, self.height * 5 + 16, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
+        elif self.dir is 4:
+            self.image.clip_draw(self.frame * self.width, self.height * 7 + 16, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
+        elif self.dir is 6:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 7 + 16, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
+        elif self.dir is 1:
+            self.image.clip_draw(self.frame * self.width, self.height * 8 + 16, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
+        elif self.dir is 3:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 8 + 16, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
+        elif self.dir is 7:
+            self.image.clip_draw(self.frame * self.width, self.height * 6 + 16, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
+        elif self.dir is 9:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 6 + 16, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
+        self.draw_hp_bar()
+
+    def get_bb(self):
+        return self.x - self.width, self.y - self.height, self.x + self.width, self.y + self.height
+
+
 class Crab(Monster):
     global Monster_Data
 
@@ -270,14 +333,10 @@ class Crab(Monster):
                                    Monster_Data['Crab']['Sight'], Monster_Data['Crab']['Experience'],
                                    Monster_Data['Crab']['AI_Type'])
         self.width = self.height = 32
-        self.image = load_image('Resource_Image\\Monster002_crab.png')
         self.dir = randint(1, 9)
         if self.dir == 5:
             self.dir = 2
 
-        if self.hit_sound is None:
-            self.hit_sound = load_wav('Resource_Sound\\Effect_Sound\\Slash12.wav')
-            self.hit_sound.set_volume(64)
         self.x, self.y = map_coord_data['x'] + self.width / 2, map_height - (map_coord_data['y'] + self.height / 2)
 
     def set_coordinates(self, x, y):
@@ -314,6 +373,71 @@ class Crab(Monster):
         return self.x - self.width / 3, self.y - self.height / 3, self.x + self.width / 3, self.y + self.height / 3
 
 
+class Gigant_Crab(Monster):
+    global Monster_Data
+
+    def __init__(self, map_coord_data, map_height):
+        super(Gigant_Crab, self).__init__(Monster_Data['Gigant Crab']['HP'], Monster_Data['Gigant Crab']['MAX_HP'],
+                                          Monster_Data['Gigant Crab']['MP'], Monster_Data['Gigant Crab']['MAX_MP'],
+                                          Monster_Data['Gigant Crab']['Stamina'],
+                                          Monster_Data['Gigant Crab']['MAX_Stamina'],
+                                          Monster_Data['Gigant Crab']['STR'], Monster_Data['Gigant Crab']['DEF'],
+                                          Monster_Data['Gigant Crab']['MAG'], Monster_Data['Gigant Crab']['MR'],
+                                          Monster_Data['Gigant Crab']['MOVE_SPEED'], Monster_Data['Gigant Crab']['ATK_SPEED'],
+                                          Monster_Data['Gigant Crab']['Sight'], Monster_Data['Gigant Crab']['Experience'],
+                                          Monster_Data['Gigant Crab']['AI_Type'])
+        self.width = self.height = 32
+        self.dir = randint(1, 9)
+        if self.dir == 5:
+            self.dir = 2
+
+        self.x, self.y = map_coord_data['x'] + self.width / 2, map_height - (map_coord_data['y'] + self.height / 2)
+
+    def set_coordinates(self, x, y):
+        self.x, self.y = x, y
+
+    def draw(self):
+        if self.dir is 2:
+            self.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
+        elif self.dir is 8:
+            self.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
+        elif self.dir is 4:
+            self.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
+        elif self.dir is 6:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
+        elif self.dir is 1:
+            self.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
+        elif self.dir is 3:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
+        elif self.dir is 7:
+            self.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
+        elif self.dir is 9:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 2, self.height * 2)
+        self.draw_hp_bar()
+
+    def get_bb(self):
+        return self.x - self.width * 2 / 3, \
+               self.y - self.height * 2/ 3, \
+               self.x + self.width * 2 / 3, \
+               self.y + self.height * 2 / 3
+
+
 class Skull_Golem(Monster):
     global Monster_Data
 
@@ -330,14 +454,9 @@ class Skull_Golem(Monster):
                                           Monster_Data['Skull Golem']['Experience'],
                                           Monster_Data['Skull Golem']['AI_Type'])
         self.width = self.height = 32
-        self.image = load_image('Resource_Image\\Monster003_SkullGolem.png')
         self.dir = randint(1, 9)
         if self.dir == 5:
             self.dir = 2
-
-        if self.hit_sound is None:
-            self.hit_sound = load_wav('Resource_Sound\\Effect_Sound\\Slash11.wav')
-            self.hit_sound.set_volume(64)
 
         self.x, self.y = map_coord_data['x'] + self.width / 2, map_height - (map_coord_data['y'] + self.height / 2)
 
@@ -377,9 +496,70 @@ class Skull_Golem(Monster):
             self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
                                  self.x - self.background.window_left, self.y - self.background.window_bottom,
                                  self.width * 2, self.height * 2)
+        self.draw_hp_bar()
 
     def get_bb(self):
         return self.x - self.width, self.y - self.height, self.x + self.width, self.y + self.height
+
+
+class Mini_Skull_Golem(Monster):
+    global Monster_Data
+
+    def __init__(self, map_coord_data, map_height):
+        super(Mini_Skull_Golem, self).__init__(Monster_Data['Mini Skull Golem']['HP'],
+                                               Monster_Data['Mini Skull Golem']['MAX_HP'],
+                                               Monster_Data['Mini Skull Golem']['MP'],
+                                               Monster_Data['Mini Skull Golem']['MAX_MP'],
+                                               Monster_Data['Mini Skull Golem']['Stamina'],
+                                               Monster_Data['Mini Skull Golem']['MAX_Stamina'],
+                                               Monster_Data['Mini Skull Golem']['STR'],
+                                               Monster_Data['Mini Skull Golem']['DEF'],
+                                               Monster_Data['Mini Skull Golem']['MAG'],
+                                               Monster_Data['Mini Skull Golem']['MR'],
+                                               Monster_Data['Mini Skull Golem']['MOVE_SPEED'],
+                                               Monster_Data['Mini Skull Golem']['ATK_SPEED'],
+                                               Monster_Data['Mini Skull Golem']['Sight'],
+                                               Monster_Data['Mini Skull Golem']['Experience'],
+                                               Monster_Data['Mini Skull Golem']['AI_Type'])
+        self.width = self.height = 32
+        self.dir = randint(1, 9)
+        if self.dir == 5:
+            self.dir = 2
+
+        self.x, self.y = map_coord_data['x'] + self.width / 2, map_height - (map_coord_data['y'] + self.height / 2)
+
+    def set_coordinates(self, x, y):
+        self.x, self.y = x, y
+
+    def draw(self):
+        if self.dir is 2:
+            self.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 8:
+            self.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 4:
+            self.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 6:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 1:
+            self.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 3:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 7:
+            self.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        elif self.dir is 9:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+        self.draw_hp_bar()
+
+    def get_bb(self):
+        return self.x - self.width / 2, self.y - self.height / 2, self.x + self.width / 2, self.y + self.height / 2
 
 
 class Spear(Monster):
@@ -395,14 +575,11 @@ class Spear(Monster):
                                     Monster_Data['Spear']['Sight'], Monster_Data['Spear']['Experience'],
                                     Monster_Data['Spear']['AI_Type'])
         self.width = self.height = 64
-        self.image = load_image('Resource_Image\\Monster004_Spear.png')
+
         self.dir = randint(1, 9)
         if self.dir == 5:
             self.dir = 2
 
-        if self.hit_sound is None:
-            self.hit_sound = load_wav('Resource_Sound\\Effect_Sound\\Slash11.wav')
-            self.hit_sound.set_volume(64)
         self.x, self.y = map_coord_data['x'] + self.width / 2, map_height - (map_coord_data['y'] + self.height / 2)
 
     def set_coordinates(self, x, y):
@@ -412,35 +589,102 @@ class Spear(Monster):
         if self.dir is 2:
             self.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
                                  self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+                                 )
         elif self.dir is 8:
             self.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
                                  self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+                                 )
         elif self.dir is 4:
             self.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
                                  self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+                                 )
         elif self.dir is 6:
             self.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
                                  self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+                                 )
         elif self.dir is 1:
             self.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
                                  self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+                                 )
         elif self.dir is 3:
             self.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
                                  self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+                                 )
         elif self.dir is 7:
             self.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
                                  self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+                                 )
         elif self.dir is 9:
             self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
                                  self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+                                 )
+        self.draw_hp_bar()
+
+    def get_bb(self):
+        return self.x - self.width / 2, self.y - self.height / 2, self.x + self.width / 2, self.y + self.height / 2
+
+
+class FlyingSpear(Monster):
+    global Monster_Data
+
+    def __init__(self, map_coord_data, map_height):
+        super(FlyingSpear, self).__init__(Monster_Data['Flying Spear']['HP'], Monster_Data['Flying Spear']['MAX_HP'],
+                                          Monster_Data['Flying Spear']['MP'], Monster_Data['Flying Spear']['MAX_MP'],
+                                          Monster_Data['Flying Spear']['Stamina'],
+                                          Monster_Data['Flying Spear']['MAX_Stamina'],
+                                          Monster_Data['Flying Spear']['STR'], Monster_Data['Flying Spear']['DEF'],
+                                          Monster_Data['Flying Spear']['MAG'], Monster_Data['Flying Spear']['MR'],
+                                          Monster_Data['Flying Spear']['MOVE_SPEED'],
+                                          Monster_Data['Flying Spear']['ATK_SPEED'],
+                                          Monster_Data['Flying Spear']['Sight'],
+                                          Monster_Data['Flying Spear']['Experience'],
+                                          Monster_Data['Flying Spear']['AI_Type'])
+        self.width = self.height = 64
+
+        self.dir = randint(1, 9)
+        if self.dir == 5:
+            self.dir = 2
+
+        self.x, self.y = map_coord_data['x'] + self.width / 2, map_height - (map_coord_data['y'] + self.height / 2)
+        self.max_move_frame = 2
+        self.fly_available = True
+
+    def set_coordinates(self, x, y):
+        self.x, self.y = x, y
+
+    def draw(self):
+        if self.dir is 2:
+            self.image.clip_draw((self.frame + 2) * self.width, self.height * 12 + 48, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 )
+        elif self.dir is 8:
+            self.image.clip_draw((self.frame + 2) * self.width, self.height * 8, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 )
+        elif self.dir is 4:
+            self.image.clip_draw((self.frame + 2) * self.width, self.height * 10 + 16, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 )
+        elif self.dir is 6:
+            self.image.clip_draw((self.frame + 4) * self.width, self.height * 10 + 16, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 )
+        elif self.dir is 1:
+            self.image.clip_draw((self.frame + 2) * self.width, self.height * 11 + 32, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 )
+        elif self.dir is 3:
+            self.image.clip_draw((self.frame + 4) * self.width, self.height * 11 + 32, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 )
+        elif self.dir is 7:
+            self.image.clip_draw((self.frame + 2) * self.width, self.height * 9, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 )
+        elif self.dir is 9:
+            self.image.clip_draw((self.frame + 4) * self.width, self.height * 9, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 )
         self.draw_hp_bar()
 
     def get_bb(self):
@@ -460,14 +704,10 @@ class Slasher(Monster):
                                       Monster_Data['Slasher']['Sight'], Monster_Data['Slasher']['Experience'],
                                       Monster_Data['Slasher']['AI_Type'])
         self.width = self.height = 32
-        self.image = load_image('Resource_Image\\Monster005_Slasher.png')
+
         self.dir = randint(1, 9)
         if self.dir == 5:
             self.dir = 2
-
-        if self.hit_sound is None:
-            self.hit_sound = load_wav('Resource_Sound\\Effect_Sound\\Slash10.wav')
-            self.hit_sound.set_volume(128)
 
         self.x, self.y = map_coord_data['x'] + self.width / 2, map_height - (map_coord_data['y'] + self.height / 2)
 
@@ -511,6 +751,76 @@ class Slasher(Monster):
 
     def get_bb(self):
         return self.x - self.width, self.y - self.height, self.x + self.width, self.y + self.height
+
+
+class GigantSlasher(Monster):
+    global Monster_Data
+
+    def __init__(self, map_coord_data, map_height):
+        super(GigantSlasher, self).__init__(Monster_Data['Gigant Slasher']['HP'],
+                                            Monster_Data['Gigant Slasher']['MAX_HP'],
+                                            Monster_Data['Gigant Slasher']['MP'],
+                                            Monster_Data['Gigant Slasher']['MAX_MP'],
+                                            Monster_Data['Gigant Slasher']['Stamina'],
+                                            Monster_Data['Gigant Slasher']['MAX_Stamina'],
+                                            Monster_Data['Gigant Slasher']['STR'],
+                                            Monster_Data['Gigant Slasher']['DEF'],
+                                            Monster_Data['Gigant Slasher']['MAG'],
+                                            Monster_Data['Gigant Slasher']['MR'],
+                                            Monster_Data['Gigant Slasher']['MOVE_SPEED'],
+                                            Monster_Data['Gigant Slasher']['ATK_SPEED'],
+                                            Monster_Data['Gigant Slasher']['Sight'],
+                                            Monster_Data['Gigant Slasher']['Experience'],
+                                            Monster_Data['Gigant Slasher']['AI_Type'])
+        self.width = self.height = 32
+
+        self.dir = randint(1, 9)
+        if self.dir == 5:
+            self.dir = 2
+
+        self.x, self.y = map_coord_data['x'] + self.width / 2, map_height - (map_coord_data['y'] + self.height / 2)
+
+    def set_coordinates(self, x, y):
+        self.x, self.y = x, y
+
+    def draw(self):
+        if self.dir is 2:
+            self.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 4, self.height * 4)
+        elif self.dir is 8:
+            self.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 4, self.height * 4)
+        elif self.dir is 4:
+            self.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 4, self.height * 4)
+        elif self.dir is 6:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 4, self.height * 4)
+        elif self.dir is 1:
+            self.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 4, self.height * 4)
+        elif self.dir is 3:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 4, self.height * 4)
+        elif self.dir is 7:
+            self.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 4, self.height * 4)
+        elif self.dir is 9:
+            self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
+                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                 self.width * 4, self.height * 4)
+        self.draw_hp_bar()
+
+    def get_bb(self):
+        return self.x - (self.width * 2), self.y - (self.height * 2), \
+               self.x + (self.width * 2), self.y + (self.height * 2)
 
 
 def collide(a, b):

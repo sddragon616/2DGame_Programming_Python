@@ -41,7 +41,7 @@ def handle_events(frame_time):
                 if cursor > 0:
                     cursor -= 1
                 else:
-                    cursor = 7
+                    cursor = 6
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_DOWN):
                 if cursor < 7:
                     cursor += 1
@@ -64,13 +64,15 @@ def handle_events(frame_time):
                         Scene003_BaseBattletScene.user.INT += 1
                     elif cursor == 5:
                         Scene003_BaseBattletScene.user.DEF += 1
-                    elif cursor == 6:
-                        Scene003_BaseBattletScene.user.MR += 1
+                    # elif cursor == 6:
+                        # Scene003_BaseBattletScene.user.MR += 1
                     Scene003_BaseBattletScene.user.Ability_Point -= 1
-                if Scene003_BaseBattletScene.user.Skill_Point > 0 and cursor > 6:
-                    if cursor == 7:
-                        if Scene003_BaseBattletScene.user.class_num == 2:
-                            Scene003_BaseBattletScene.user.air_splitter_level += 1
+                if Scene003_BaseBattletScene.user.Skill_Point > 0 and cursor > 5:
+                    if Scene003_BaseBattletScene.user.class_num == 2:
+                        if cursor == 6:
+                            Scene003_BaseBattletScene.user.Typhoon_Slash.Level += 1
+                        elif cursor == 7:
+                            Scene003_BaseBattletScene.user.Air_split.Level += 1
                     Scene003_BaseBattletScene.user.Skill_Point -= 1
 
 
@@ -93,9 +95,9 @@ def draw(frame_time):
     status_font.draw(15, Project_SceneFrameWork.Window_H - 275,
                      '마법 공격력 %d' % Scene003_BaseBattletScene.user.INT, (0, 0, 128))
     status_font.draw(15, Project_SceneFrameWork.Window_H - 315,
-                     '물리 방어력 %d' % Scene003_BaseBattletScene.user.DEF, (128, 35, 35))
-    status_font.draw(15, Project_SceneFrameWork.Window_H - 355,
-                     '마법 저항력 %d' % Scene003_BaseBattletScene.user.MR, (35, 35, 128))
+                     '방어력 %d' % Scene003_BaseBattletScene.user.DEF, (128, 35, 35))
+    #status_font.draw(15, Project_SceneFrameWork.Window_H - 355,
+    #                 '마법 저항력 %d' % Scene003_BaseBattletScene.user.MR, (35, 35, 128))
     status_font.draw(15, Project_SceneFrameWork.Window_H - 410,
                      'Ability Point %d' % Scene003_BaseBattletScene.user.Ability_Point, (0, 255, 255))
     status_font.draw(15, Project_SceneFrameWork.Window_H - 455,
@@ -104,7 +106,7 @@ def draw(frame_time):
                      '경험치 %d/%d' % (Scene003_BaseBattletScene.user.Experience,
                                     Scene003_BaseBattletScene.user.Max_Experience), (35, 255, 35))
     status_font.draw(15, Project_SceneFrameWork.Window_H - 650,
-                     '↑↓키로 스탯을 선택', (235, 255, 235))
+                     '↑↓키로 항목 선택', (235, 255, 235))
     status_font.draw(15, Project_SceneFrameWork.Window_H - 710,
                      'Space 키로 육성.', (235, 255, 235))
 
@@ -120,10 +122,13 @@ def draw(frame_time):
 
     if Scene003_BaseBattletScene.user.class_num == 2:
         Scene003_BaseBattletScene.user.skill_image.clip_draw(
+            7 * 32, 8 * 32, 32, 32, 527, Project_SceneFrameWork.Window_H - 70, 32, 32)
+        status_font.draw(570, Project_SceneFrameWork.Window_H - 70,
+                         '회전베기 Lv.%d' % Scene003_BaseBattletScene.user.Typhoon_Slash.Level, (255, 255, 255))
+        Scene003_BaseBattletScene.user.skill_image.clip_draw(
             2 * 32, 14 * 32, 32, 32, 527, Project_SceneFrameWork.Window_H - 110, 32, 32)
         status_font.draw(570, Project_SceneFrameWork.Window_H - 110,
-                         '바람쪼개기 Lv.%d'
-                         % Scene003_BaseBattletScene.user.air_splitter_level, (255, 255, 255))
+                         '바람 쪼개기 Lv.%d' % Scene003_BaseBattletScene.user.Air_split.Level, (255, 255, 255))
 
     if cursor == 0:
         cursor_image.draw(450, Project_SceneFrameWork.Window_H - 110)
@@ -137,8 +142,10 @@ def draw(frame_time):
         cursor_image.draw(450, Project_SceneFrameWork.Window_H - 275)
     elif cursor == 5:
         cursor_image.draw(450, Project_SceneFrameWork.Window_H - 315)
+    # elif cursor == 6:
+    #   cursor_image.draw(450, Project_SceneFrameWork.Window_H - 355)
     elif cursor == 6:
-        cursor_image.draw(450, Project_SceneFrameWork.Window_H - 355)
+        cursor_image.draw(Project_SceneFrameWork.Window_W - 50, Project_SceneFrameWork.Window_H - 70)
     elif cursor == 7:
         cursor_image.draw(Project_SceneFrameWork.Window_W - 50, Project_SceneFrameWork.Window_H - 110)
 

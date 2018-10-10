@@ -1,0 +1,12 @@
+{ "columns":30,
+ "image":"Map\/TileSet\/Crystal_Dungeon.png",
+ "imageheight":512,
+ "imagewidth":960,
+ "margin":0,
+ "name":"Crystal_Dungeon",
+ "spacing":0,
+ "tilecount":480,
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset"
+}

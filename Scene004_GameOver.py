@@ -52,7 +52,8 @@ def handle_events(frame_time):
             Project_SceneFrameWork.quit()
         else:
             if event.type == SDL_KEYDOWN or event.type == SDL_MOUSEBUTTONDOWN:
-                Project_SceneFrameWork.scene_restart()
+                if event.key == SDLK_ESCAPE or event.button == SDL_BUTTON_LEFT:
+                    Project_SceneFrameWork.scene_restart()
 
 
 def pause(): pass

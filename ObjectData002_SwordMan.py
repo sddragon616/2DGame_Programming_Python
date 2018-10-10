@@ -1,4 +1,5 @@
 from ObjectData001_BasePlayer import *
+from ObjectData005_Skill import *
 import math
 import json
 
@@ -9,7 +10,6 @@ SwordMan_data_file.close()
 
 
 class SwordMan(Player):
-    global SwordMan_Data
 
     def __init__(self, x, y):
         super(SwordMan, self).__init__(SwordMan_Data['SwordMan']['HP'], SwordMan_Data['SwordMan']['MAX_HP'],
@@ -25,24 +25,21 @@ class SwordMan(Player):
         self.HpPotion.number += 2
         self.StaminaPotion.number += 1
 
-        # 스킬레벨 변수
-        self.typhoon_slash_level = 0
-        self.air_splitter_level = 1
+        # 스킬
+        self.Typhoon_Slash = None
+
+        if self.Typhoon_Slash is None:
+            self.Typhoon_Slash = TyphoonAttack()
+            self.Typhoon_Slash.ATK_SPEED = self.ATK_SPEED
+
+        self.Air_split = None
+        if self.Air_split is None:
+            self.Air_split = AirSplit()
+            self.Air_split.MOVE_SPEED = self.MOVE_SPEED
 
         self.skill_image = None
         if self.skill_image is None:
             self.skill_image = load_image("Resource_Image\\Effects_000.png")
-
-        # 바람 가르기 스킬용 변수
-        self.old_dir = 0
-        self.air_splitter_flag = False
-        self.air_splitter_frame = 0
-        self.air_splitter_frame_time = 0
-        self.air_splitter_x, self.air_splitter_y = 0, 0
-        self.air_splitter_rad = 0.0
-        self.air_splitter_size = 0
-        self.air_splitter_mp = 3
-        self.air_splitter_sp = 1
 
         # 소드맨의 효과음
         if self.attack_sound is None:
@@ -56,11 +53,26 @@ class SwordMan(Player):
         super(SwordMan, self).show_stat()
         print('\n')
 
+    def set_background(self, background):
+        super(SwordMan, self).set_background(background)
+        self.Typhoon_Slash.set_background(background)
+        self.Air_split.set_background(background)
+
     def update(self, frame_time, others):
         super(SwordMan, self).update(frame_time, others)
 
+        # 회전베기
+        if self.state == SKILL_ATTACK_1 and self.Typhoon_Slash.Level > 0:
+            self.Typhoon_Slash.x, self.Typhoon_Slash.y = self.x, self.y
+            if self.Typhoon_Slash.frame == 0:
+                self.Typhoon_Slash.attack_motion = self.dir
+            self.Typhoon_Slash.update(frame_time, others)
+            if self.Typhoon_Slash.frame >= 8:
+                self.Typhoon_Slash.frame = 0
+                self.state = STAND
+
         # 바람 쪼개기
-        if self.state == SKILL_ATTACK_2:
+        if self.state == SKILL_ATTACK_2 and self.Air_split.Level > 0:
             # 공격범위 변수
             self.melee_atk_point_LeftX = self.x - self.width / 2
             self.melee_atk_point_DownY = self.y - self.height / 4
@@ -74,56 +86,54 @@ class SwordMan(Player):
                 self.attack_motion = 0
                 self.state = STAND
                 self.total_frames_atk = 0.0
-                if self.air_splitter_flag is False:
-                    if self.MP >= self.air_splitter_mp and self.STAMINA >= self.air_splitter_sp:
-                        self.MP -= self.air_splitter_mp
-                        self.STAMINA -= self.air_splitter_sp
-                        self.air_splitter_flag = True
-                        self.air_splitter_x, self.air_splitter_y = self.x, self.y
-                        self.air_splitter_size = self.air_splitter_level * 2 + 32
-                    self.old_dir = self.dir
-        if self.air_splitter_flag is True:
-            air_splitter_time_limit = 2.5
-            self.air_splitter_frame_time += ((1.0 / self.air_splitter_level) *
-                                             self.FRAMES_PER_ACTION_atk * self.ACTION_PER_TIME_atk * frame_time)
-            if self.air_splitter_frame_time > (self.air_splitter_frame + 1) * air_splitter_time_limit / 4.0:
-                self.air_splitter_frame += 1
-            if self.old_dir is 2:
-                self.air_splitter_rad = 3 * math.pi / 2.0
-                self.air_splitter_y -= (self.distance * 8)
-            elif self.old_dir is 8:
-                self.air_splitter_rad = math.pi / 2.0
-                self.air_splitter_y += (self.distance * 8)
-            elif self.old_dir is 4:
-                self.air_splitter_rad = math.pi
-                self.air_splitter_x -= (self.distance * 8)
-            elif self.old_dir is 6:
-                self.air_splitter_rad = 0.0
-                self.air_splitter_x += (self.distance * 8)
-            elif self.old_dir is 1:
-                self.air_splitter_rad = 5 * math.pi / 4.0
-                self.air_splitter_x -= (self.distance * 8)
-                self.air_splitter_y -= (self.distance * 8)
-            elif self.old_dir is 3:
-                self.air_splitter_rad = 7 * math.pi / 4.0
-                self.air_splitter_x += (self.distance * 8)
-                self.air_splitter_y -= (self.distance * 8)
-            elif self.old_dir is 7:
-                self.air_splitter_rad = 3 * math.pi / 4.0
-                self.air_splitter_x -= (self.distance * 8)
-                self.air_splitter_y += (self.distance * 8)
-            elif self.old_dir is 9:
-                self.air_splitter_rad = 1 * math.pi / 4.0
-                self.air_splitter_x += (self.distance * 8)
-                self.air_splitter_y += (self.distance * 8)
-            if self.air_splitter_frame_time > air_splitter_time_limit:
-                self.air_splitter_x, self.air_splitter_y = -100, -100
-                self.air_splitter_frame_time = 0
-                self.air_splitter_frame = 0
-                self.air_splitter_flag = False
+                if self.Air_split.flag is False:
+                    if self.MP >= self.Air_split.use_mp and self.STAMINA >= self.Air_split.use_sp:
+                        self.MP -= self.Air_split.use_mp
+                        self.STAMINA -= self.Air_split.use_sp
+                        self.Air_split.flag = True
+                        self.Air_split.x, self.Air_split.y = self.x, self.y
+                    self.Air_split.start_dir = self.dir
+                if self.distance > 0:
+                    self.Air_split.distance = self.distance
+        self.Air_split.update(frame_time, others)
 
     def draw(self):
         super(SwordMan, self).draw()
+        if self.state == SKILL_ATTACK_1:
+            if self.Typhoon_Slash.attack_motion == 2:
+                self.image.clip_draw(self.width * 2, self.height * 3, self.width * 2, self.height,
+                                     self.x - self.background.window_left, self.y - self.background.window_bottom)
+            elif self.Typhoon_Slash.attack_motion == 8:
+                self.image.clip_draw(self.width * 4, self.height * 3, self.width * 2, self.height,
+                                     self.x - self.background.window_left, self.y - self.background.window_bottom)
+            elif self.Typhoon_Slash.attack_motion == 4:
+                self.image.clip_draw(self.width * 4, self.height * 1, self.width * 2, self.height,
+                                     self.x - self.width / 2 - self.background.window_left,
+                                     self.y - self.background.window_bottom)
+            elif self.Typhoon_Slash.attack_motion == 6:
+                self.image.clip_draw(self.width * 2, self.height * 1, self.width * 2, self.height,
+                                     self.x - self.background.window_left + self.width / 2,
+                                     self.y - self.background.window_bottom)
+            elif self.Typhoon_Slash.attack_motion == 1:
+                self.image.clip_draw(self.width * 4, self.height * 0, self.width * 2, self.height,
+                                     self.x - self.background.window_left - 7,
+                                     self.y - self.background.window_bottom)
+            elif self.Typhoon_Slash.attack_motion == 3:
+                self.image.clip_draw(self.width * 2, self.height * 2, self.width * 2, self.height,
+                                     self.x - self.background.window_left,
+                                     self.y - self.background.window_bottom)
+            elif self.Typhoon_Slash.attack_motion == 7:
+                self.image.clip_draw(self.width * 4, self.height * 2, self.width * 2, self.height,
+                                     self.x - self.background.window_left,
+                                     self.y - self.background.window_bottom)
+            elif self.Typhoon_Slash.attack_motion == 9:
+                self.image.clip_draw(self.width * 2, self.height * 0, self.width * 2, self.height,
+                                     self.x - self.background.window_left + 11,
+                                     self.y - self.background.window_bottom)
+
+            if self.box_draw_Trigger is True:
+                self.Typhoon_Slash.draw_hb()
+
         if self.state == SKILL_ATTACK_2:
             if self.dir is 2:
                 if self.box_draw_Trigger:
@@ -210,38 +220,39 @@ class SwordMan(Player):
                     self.image.clip_draw(self.width * 0, self.height * 0, self.width * 2, self.height,
                                          self.x - self.background.window_left + 2,
                                          self.y - self.background.window_bottom)
-        if self.air_splitter_flag is True:
-            self.draw_air_splitter_effects()
+        if self.Air_split.flag is True:
+            self.Air_split.draw()
             if self.box_draw_Trigger is True:
-                self.draw_air_splitter_hb()
+                self.Air_split.draw_hb()
 
     def handle_events(self, event):
         super(SwordMan, self).handle_events(event)
-        if self.state != MELEE_ATTACK:
+        if self.state == STAND or self.state == WALK:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_a):
-                self.state = SKILL_ATTACK_1
+                if self.Typhoon_Slash.Level > 0 and \
+                                self.MP >= self.Typhoon_Slash.use_mp and self.STAMINA >= self.Typhoon_Slash.use_sp:
+                    self.MP -= self.Typhoon_Slash.use_mp
+                    self.STAMINA -= self.Typhoon_Slash.use_sp
+                    self.state = SKILL_ATTACK_1
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_s):
-                self.state = SKILL_ATTACK_2
+                if self.Air_split.Level > 0:
+                    self.state = SKILL_ATTACK_2
 
-    def draw_air_splitter_effects(self):
-        self.skill_image.clip_composite_draw((self.air_splitter_frame + 2) * self.width, 14 * self.width, 32, 32,
-                                             self.air_splitter_rad, 'v',
-                                             self.air_splitter_x - self.background.window_left,
-                                             self.air_splitter_y - self.background.window_bottom,
-                                             self.air_splitter_size, self.air_splitter_size)
-
-    def air_splitter_hb(self):
-        return self.air_splitter_x - self.air_splitter_size / 2, self.air_splitter_y - self.air_splitter_size / 2, \
-               self.air_splitter_x + self.air_splitter_size / 2, self.air_splitter_y + self.air_splitter_size / 2
-
-    def draw_air_splitter_hb(self):
-        draw_rectangle(self.air_splitter_hb()[0] - self.background.window_left,
-                       self.air_splitter_hb()[1] - self.background.window_bottom,
-                       self.air_splitter_hb()[2] - self.background.window_left,
-                       self.air_splitter_hb()[3] - self.background.window_bottom)
+    def level_up(self):
+        super(SwordMan, self).level_up()
+        self.skill_image.clip_draw(96, 9, 32, 32, self.x, self.y + self.height * 2)
+        self.MAX_HP += 3
+        self.MAX_MP += 1
+        self.MAX_STAMINA += 2
+        if self.LEVEL % 3 == 2:
+            self.HpPotion.number += 1
+        elif self.LEVEL % 3 == 0:
+            self.MpPotion.number += 1
+        elif self.LEVEL % 3 == 1:
+            self.StaminaPotion.number += 1
 
     def air_splitter_collide(self, enemy):
-        left_a, bottom_a, right_a, top_a = self.air_splitter_hb()
+        left_a, bottom_a, right_a, top_a = self.Air_split.get_hb()
         left_b, bottom_b, right_b, top_b = enemy.get_bb()
         if left_a > right_b:
             return False
@@ -251,7 +262,7 @@ class SwordMan(Player):
             return False
         if bottom_a > top_b:
             return False
-        if self.air_splitter_flag is True:
+        if self.Air_split.flag is True:
             return True
 
     def melee_atk_collide(self, enemy):
@@ -267,3 +278,4 @@ class SwordMan(Player):
             return False
         if self.state is MELEE_ATTACK or self.state is SKILL_ATTACK_2:
             return True
+        return False

@@ -10,12 +10,10 @@ logo_time = 0.0
 
 def enter():
     global image
-    global fly_image
-    global crab_image
-    global skull_golem_image
-    global spear_image
-    global slasher_image
     open_canvas(Project_SceneFrameWork.Window_W, Project_SceneFrameWork.Window_H)
+    caption = ('DungeonSlayer (' + str(Project_SceneFrameWork.Window_W) + 'x' + str(Project_SceneFrameWork.Window_H) +
+               ')' + ' 1000.0 FPS').encode('UTF-8')
+    SDL_SetWindowTitle(pico2d.window, caption)
     hide_lattice()
     image = load_image('Resource_Image\\GoldDragon_Logo_1024x773-by_solstice_arctic_luna-d6yrudl.png')
 
@@ -28,16 +26,16 @@ def exit():
 
 def update(frame_time):
     global logo_time
-    if logo_time > 1.0:
+    if logo_time > 2.5:
         logo_time = 0
         Project_SceneFrameWork.scene_push(Scene001_Title)
-    delay(0.01)
-    logo_time += 0.01
+    logo_time += frame_time
 
 
 def draw(frame_time):
     global image
     clear_canvas()
+
     image.draw(Project_SceneFrameWork.Window_W / 2, Project_SceneFrameWork.Window_H / 2)
     update_canvas()
 

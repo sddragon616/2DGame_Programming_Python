@@ -9,7 +9,7 @@ image = None
 BGM = None
 
 
-class GameOverBGM:
+class GameClearBGM:
     def __init__(self):
         self.bgm = load_music('Resource_Sound\\BGM\\GameClear.mp3')
         self.bgm.set_volume(128)
@@ -22,7 +22,7 @@ def enter():
     hide_lattice()
     image = load_image('Resource_Image\\GameClear.png')
     if BGM is None:
-        BGM = GameOverBGM()
+        BGM = GameClearBGM()
 
 
 def exit():
@@ -50,8 +50,8 @@ def handle_events(frame_time):
             Project_SceneFrameWork.quit()
         else:
             if event.type == SDL_KEYDOWN or event.type == SDL_MOUSEBUTTONDOWN:
-                Project_SceneFrameWork.scene_reset()
-                Project_SceneFrameWork.scene_push(Scene001_Title)
+                if event.key == SDLK_ESCAPE or event.button == SDL_BUTTON_LEFT:
+                    Project_SceneFrameWork.scene_restart()
 
 
 def pause(): pass
