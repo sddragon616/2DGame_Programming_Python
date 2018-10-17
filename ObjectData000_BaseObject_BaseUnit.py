@@ -47,22 +47,22 @@ class BaseObject:
     def knock_back(self, direction, walls):
         if direction is 8:
             self.y = min(self.background.h, self.y + self.height/2)
-        if direction is 2:
+        elif direction is 2:
             self.y = max(0, self.y - self.height/2)
-        if direction is 4:
+        elif direction is 4:
             self.x = max(0, self.x - self.width/2)
-        if direction is 6:
+        elif direction is 6:
             self.x = min(self.background.w, self.x + self.width/2)
-        if direction is 1:
-            self.x = max(0, self.x - self.width / 2)
+        elif direction is 1:
+            self.x = max(0, self.x - self.width/2)
             self.y = max(0, self.y - self.height / 2)
-        if direction is 3:
+        elif direction is 3:
             self.x = min(self.background.w, self.x + self.width/2)
             self.y = max(0, self.y - self.height/2)
-        if direction is 7:
+        elif direction is 7:
             self.x = max(0, self.x - self.width/2)
             self.y = min(self.background.h, self.y + self.height/2)
-        if direction is 9:
+        elif direction is 9:
             self.x = min(self.background.w, self.x + self.width/2)
             self.y = min(self.background.h, self.y + self.height/2)
         if walls is not []:
@@ -72,22 +72,22 @@ class BaseObject:
                     self.invincible_time = -0.5
                     if direction is 8:
                         self.y = min(self.background.h, self.y - self.height/2)
-                    if direction is 2:
+                    elif direction is 2:
                         self.y = max(0, self.y + self.height)
-                    if direction is 4:
+                    elif direction is 4:
                         self.x = max(0, self.x + self.width)
-                    if direction is 6:
+                    elif direction is 6:
                         self.x = min(self.background.w, self.x - self.width/2)
-                    if direction is 1:
+                    elif direction is 1:
                         self.x = max(0, self.x + self.width)
                         self.y = max(0, self.y + self.height)
-                    if direction is 3:
+                    elif direction is 3:
                         self.x = min(self.background.w, self.x - self.width/2)
                         self.y = max(0, self.y + self.height)
-                    if direction is 7:
+                    elif direction is 7:
                         self.x = max(0, self.x + self.width)
                         self.y = min(self.background.h, self.y - self.height/2)
-                    if direction is 9:
+                    elif direction is 9:
                         self.x = min(self.background.w, self.x - self.width/2)
                         self.y = min(self.background.h, self.y - self.height/2)
 

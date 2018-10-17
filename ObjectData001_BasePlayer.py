@@ -2,6 +2,7 @@ from pico2d import *
 from ObjectData000_BaseObject_BaseUnit import *
 from ObjectData004_Item import *
 import Project_SceneFrameWork
+import math
 
 # define
 STAND = 0   # 서 있기
@@ -43,12 +44,11 @@ class Player(BaseUnit):
         self.walk_motion = 0
         self.attack_motion = 0
 
-        # 공격범위 변수.
-        self.melee_atk_point_LeftX = self.x - self.width / 2
-        self.melee_atk_point_DownY = self.y - self.height / 4
-        self.melee_atk_point_RightX = self.x + self.width / 2
-        self.melee_atk_point_UpY = self.y + self.height / 4
-        self.attack_size = 40   # 공격범위 1.25m
+        # 공격범위 변수. 공격위치의 중점 좌표와, 공격 히트박스의 크기를 의미한다.
+        self.melee_atk_point_x = self.x
+        self.melee_atk_point_y = self.y
+        self.melee_atk_reach = 36   # 공격범위 1.125m
+        self.attack_size = 32       # 공격범위 1m
 
         self.life_regenerate_time = 0.0
         self.mana_regenerate_time = 0.0
@@ -77,15 +77,15 @@ class Player(BaseUnit):
 
         # 자연치유
         if self.life_regenerate_time >= 1.5:
-            self.hp_heal(1)
+            self.hp_heal(1 + (self.MAX_HP / 100))
             self.life_regenerate_time = 0
 
         if self.mana_regenerate_time >= 2.5:
-            self.mp_heal(1)
+            self.mp_heal(1 + (self.MAX_MP / 100))
             self.mana_regenerate_time = 0
 
         if self.stamina_regenerate_time >= 2.0:
-            self.sp_heal(1)
+            self.sp_heal(1 + (self.MAX_STAMINA / 100))
             self.stamina_regenerate_time = 0
 
         # 걷거나 서 있을 때
@@ -106,17 +106,17 @@ class Player(BaseUnit):
             elif self.dir is 6:
                 self.x = min(self.background.w, self.x + self.distance)
             elif self.dir is 1:
-                self.x = max(0, self.x - self.distance)
-                self.y = max(0, self.y - self.distance)
+                self.x = max(0, self.x - (math.sqrt(0.5) * self.distance))
+                self.y = max(0, self.y - (math.sqrt(0.5) * self.distance))
             elif self.dir is 3:
-                self.x = min(self.background.w, self.x + self.distance)
-                self.y = max(0, self.y - self.distance)
+                self.x = min(self.background.w, self.x + (math.sqrt(0.5) * self.distance))
+                self.y = max(0, self.y - (math.sqrt(0.5) * self.distance))
             elif self.dir is 7:
-                self.x = max(0, self.x - self.distance)
-                self.y = min(self.background.h, self.y + self.distance)
+                self.x = max(0, self.x - (math.sqrt(0.5) * self.distance))
+                self.y = min(self.background.h, self.y + (math.sqrt(0.5) * self.distance))
             elif self.dir is 9:
-                self.x = min(self.background.w, self.x + self.distance)
-                self.y = min(self.background.h, self.y + self.distance)
+                self.x = min(self.background.w, self.x + (math.sqrt(0.5) * self.distance))
+                self.y = min(self.background.h, self.y + (math.sqrt(0.5) * self.distance))
             if others is not []:
                 for other in others:
                     if collide(self, other):
@@ -129,25 +129,45 @@ class Player(BaseUnit):
                         elif self.dir is 6:
                             self.x = min(self.background.w, self.x - self.distance)
                         elif self.dir is 1:
-                            self.x = max(0, self.x + self.distance)
-                            self.y = max(0, self.y + self.distance)
+                            self.x = max(0, self.x + (math.sqrt(0.5) * self.distance))
+                            self.y = max(0, self.y + (math.sqrt(0.5) * self.distance))
                         elif self.dir is 3:
-                            self.x = min(self.background.w, self.x - self.distance)
-                            self.y = max(0, self.y + self.distance)
+                            self.x = min(self.background.w, self.x - (math.sqrt(0.5) * self.distance))
+                            self.y = max(0, self.y + (math.sqrt(0.5) * self.distance))
                         elif self.dir is 7:
-                            self.x = max(0, self.x + self.distance)
-                            self.y = min(self.background.h, self.y - self.distance)
+                            self.x = max(0, self.x + (math.sqrt(0.5) * self.distance))
+                            self.y = min(self.background.h, self.y - (math.sqrt(0.5) * self.distance))
                         elif self.dir is 9:
-                            self.x = min(self.background.w, self.x - self.distance)
-                            self.y = min(self.background.h, self.y - self.distance)
+                            self.x = min(self.background.w, self.x - (math.sqrt(0.5) * self.distance))
+                            self.y = min(self.background.h, self.y - (math.sqrt(0.5) * self.distance))
 
         # 근접 공격 중일 때
         elif self.state is MELEE_ATTACK:
             # 공격범위 변수
-            self.melee_atk_point_LeftX = self.x - self.width / 2
-            self.melee_atk_point_DownY = self.y - self.height / 4
-            self.melee_atk_point_RightX = self.x + self.width / 2
-            self.melee_atk_point_UpY = self.y + self.height / 4
+            if self.dir == 2:
+                self.melee_atk_point_x = self.x
+                self.melee_atk_point_y = self.y - self.melee_atk_reach
+            elif self.dir == 4:
+                self.melee_atk_point_x = self.x - self.melee_atk_reach
+                self.melee_atk_point_y = self.y
+            elif self.dir == 6:
+                self.melee_atk_point_x = self.x + self.melee_atk_reach
+                self.melee_atk_point_y = self.y
+            elif self.dir == 8:
+                self.melee_atk_point_x = self.x
+                self.melee_atk_point_y = self.y + self.melee_atk_reach
+            elif self.dir == 1:
+                self.melee_atk_point_x = self.x - (math.sqrt(0.5) * self.melee_atk_reach)
+                self.melee_atk_point_y = self.y - (math.sqrt(0.5) * self.melee_atk_reach)
+            elif self.dir == 3:
+                self.melee_atk_point_x = self.x + (math.sqrt(0.5) * self.melee_atk_reach)
+                self.melee_atk_point_y = self.y - (math.sqrt(0.5) * self.melee_atk_reach)
+            elif self.dir == 7:
+                self.melee_atk_point_x = self.x - (math.sqrt(0.5) * self.melee_atk_reach)
+                self.melee_atk_point_y = self.y + (math.sqrt(0.5) * self.melee_atk_reach)
+            elif self.dir == 9:
+                self.melee_atk_point_x = self.x + (math.sqrt(0.5) * self.melee_atk_reach)
+                self.melee_atk_point_y = self.y + (math.sqrt(0.5) * self.melee_atk_reach)
             self.total_frames_atk += self.FRAMES_PER_ACTION_atk * self.ACTION_PER_TIME_atk * frame_time
             self.attack_motion = int(self.total_frames_atk) % 3
             if self.attack_motion >= 2:
@@ -197,7 +217,7 @@ class Player(BaseUnit):
         elif self.state is MELEE_ATTACK:
             if self.dir is 2:
                 if self.box_draw_Trigger:
-                    self.draw_hbs(self.x, self.melee_atk_point_DownY - self.height / 4, self.attack_size)
+                    self.draw_hbs(self.melee_atk_point_x, self.melee_atk_point_y, self.attack_size)
                 if self.attack_motion is 0:
                     self.image.clip_draw(self.width * 2, self.height * 3, self.width * 2, self.height,
                                          self.x - self.background.window_left, self.y - self.background.window_bottom)
@@ -206,7 +226,7 @@ class Player(BaseUnit):
                                          self.x - self.background.window_left, self.y - self.background.window_bottom)
             elif self.dir is 8:
                 if self.box_draw_Trigger:
-                    self.draw_hbs(self.x, self.melee_atk_point_UpY + self.height / 4, self.attack_size)
+                    self.draw_hbs(self.melee_atk_point_x, self.melee_atk_point_y, self.attack_size)
                 if self.attack_motion is 0:
                     self.image.clip_draw(self.width * 4, self.height * 3, self.width * 2, self.height,
                                          self.x - self.background.window_left, self.y - self.background.window_bottom)
@@ -215,7 +235,7 @@ class Player(BaseUnit):
                                          self.x - self.background.window_left, self.y - self.background.window_bottom)
             elif self.dir is 4:
                 if self.box_draw_Trigger:
-                    self.draw_hbs(self.melee_atk_point_LeftX - self.width / 2, self.y, self.attack_size)
+                    self.draw_hbs(self.melee_atk_point_x, self.melee_atk_point_y, self.attack_size)
                 if self.attack_motion is 0:
                     self.image.clip_draw(self.width * 4, self.height * 1, self.width * 2, self.height,
                                          self.x - self.width / 2 - self.background.window_left,
@@ -226,7 +246,7 @@ class Player(BaseUnit):
                                          self.y - self.background.window_bottom)
             elif self.dir is 6:
                 if self.box_draw_Trigger:
-                    self.draw_hbs(self.melee_atk_point_RightX + self.width / 2, self.y, self.attack_size)
+                    self.draw_hbs(self.melee_atk_point_x, self.melee_atk_point_y, self.attack_size)
                 if self.attack_motion is 0:
                     self.image.clip_draw(self.width * 2, self.height * 1, self.width * 2, self.height,
                                          self.x - self.background.window_left + self.width / 2,
@@ -238,7 +258,7 @@ class Player(BaseUnit):
             # 대각선 이미지인 경우 프레임 위치 조정
             elif self.dir is 1:
                 if self.box_draw_Trigger:
-                    self.draw_hbs(self.melee_atk_point_LeftX, self.melee_atk_point_DownY, self.attack_size)
+                    self.draw_hbs(self.melee_atk_point_x, self.melee_atk_point_y, self.attack_size)
                 if self.attack_motion is 0:
                     self.image.clip_draw(self.width * 4, self.height * 0, self.width * 2, self.height,
                                          self.x - self.background.window_left - 7,
@@ -249,7 +269,7 @@ class Player(BaseUnit):
                                          self.y - self.background.window_bottom)
             elif self.dir is 3:
                 if self.box_draw_Trigger:
-                    self.draw_hbs(self.melee_atk_point_RightX, self.melee_atk_point_DownY, self.attack_size)
+                    self.draw_hbs(self.melee_atk_point_x, self.melee_atk_point_y, self.attack_size)
                 if self.attack_motion is 0:
                     self.image.clip_draw(self.width * 2, self.height * 2, self.width * 2, self.height,
                                          self.x - self.background.window_left,
@@ -260,7 +280,7 @@ class Player(BaseUnit):
                                          self.y - self.background.window_bottom)
             elif self.dir is 7:
                 if self.box_draw_Trigger:
-                    self.draw_hbs(self.melee_atk_point_LeftX, self.melee_atk_point_UpY, self.attack_size)
+                    self.draw_hbs(self.melee_atk_point_x, self.melee_atk_point_y, self.attack_size)
                 if self.attack_motion is 0:
                     self.image.clip_draw(self.width * 4, self.height * 2, self.width * 2, self.height,
                                          self.x - self.background.window_left,
@@ -271,7 +291,7 @@ class Player(BaseUnit):
                                          self.y - self.background.window_bottom)
             elif self.dir is 9:
                 if self.box_draw_Trigger:
-                    self.draw_hbs(self.melee_atk_point_RightX, self.melee_atk_point_UpY, self.attack_size)
+                    self.draw_hbs(self.melee_atk_point_x, self.melee_atk_point_y, self.attack_size)
                 if self.attack_motion is 0:
                     self.image.clip_draw(self.width * 2, self.height * 0, self.width * 2, self.height,
                                          self.x - self.background.window_left + 11,
@@ -407,46 +427,10 @@ class Player(BaseUnit):
 
     # 근접 평타공격 충돌체크 박스
     def get_melee_atk_hb(self):
-        if self.dir == 2:
-            return self.x - (self.attack_size / 2), \
-                   self.melee_atk_point_DownY - self.height / 4 - (self.attack_size / 2), \
-                   self.x + (self.attack_size / 2), \
-                   self.melee_atk_point_DownY - self.height / 4 + (self.attack_size / 2)
-        elif self.dir == 8:
-            return self.x - (self.attack_size / 2), \
-                   self.melee_atk_point_UpY + self.height / 4 - (self.attack_size / 2), \
-                   self.x + (self.attack_size / 2), \
-                   self.melee_atk_point_UpY + self.height / 4 + (self.attack_size / 2)
-        elif self.dir == 4:
-            return self.melee_atk_point_LeftX - self.width / 2 - (self.attack_size / 2), \
-                   self.y - (self.attack_size / 2), \
-                   self.melee_atk_point_LeftX - self.width / 2 + (self.attack_size / 2), \
-                   self.y + (self.attack_size / 2)
-        elif self.dir == 6:
-            return self.melee_atk_point_RightX + self.width / 2 - (self.attack_size / 2), \
-                   self.y - (self.attack_size / 2), \
-                   self.melee_atk_point_RightX + self.width / 2 + (self.attack_size / 2), \
-                   self.y + (self.attack_size / 2)
-        elif self.dir == 7:
-            return self.melee_atk_point_LeftX - (self.attack_size / 2), \
-                   self.melee_atk_point_UpY - (self.attack_size / 2), \
-                   self.melee_atk_point_LeftX + (self.attack_size / 2), \
-                   self.melee_atk_point_UpY + (self.attack_size / 2)
-        elif self.dir == 9:
-            return self.melee_atk_point_RightX - (self.attack_size / 2), \
-                   self.melee_atk_point_UpY - (self.attack_size / 2), \
-                   self.melee_atk_point_RightX + (self.attack_size / 2), \
-                   self.melee_atk_point_UpY + (self.attack_size / 2)
-        elif self.dir == 1:
-            return self.melee_atk_point_LeftX - (self.attack_size / 2), \
-                   self.melee_atk_point_DownY - (self.attack_size / 2), \
-                   self.melee_atk_point_LeftX + (self.attack_size / 2), \
-                   self.melee_atk_point_DownY + (self.attack_size / 2)
-        elif self.dir == 3:
-            return self.melee_atk_point_RightX - (self.attack_size / 2), \
-                   self.melee_atk_point_DownY - (self.attack_size / 2), \
-                   self.melee_atk_point_RightX + (self.attack_size / 2), \
-                   self.melee_atk_point_DownY + (self.attack_size / 2)
+        return self.melee_atk_point_x - (self.attack_size / 2), \
+               self.melee_atk_point_y - (self.attack_size / 2), \
+               self.melee_atk_point_x + (self.attack_size / 2), \
+               self.melee_atk_point_y + (self.attack_size / 2)
 
     # 근접 평타공격 객체간 충돌체크
     def melee_atk_collide(self, enemy):

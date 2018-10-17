@@ -1,6 +1,7 @@
 from ObjectData000_BaseObject_BaseUnit import *
 from random import *
-import Project_SceneFrameWork
+import Resource_Manager as rssmgr
+import math
 
 
 Monster_data_file = open('UnitData\\Monster.json', 'r')
@@ -34,17 +35,13 @@ class Monster(BaseUnit):
         self.get_exp = experience       # 몬스터를 쓰러뜨리면 획득할 수 있는 경험치량
         self.AI_type = ai_type          # 해당 몬스터의 인공지능 형태
 
-        self.dir = 2
+        self.dir = 2                    # 몬스터가 바라보고 있는 진행 방향
         self.state = STAND
         self.exp_pay = False            # 이 몬스터가 경험치를 지급했는가 여부
         self.contact = False            # 이 몬스터가 유저를 인식했는가 여부
         self.box_draw_Trigger = False
 
-        self.distance = 0
-
-        self.image = None
-        self.MONSTER_HP_BAR = None
-        self.death_sound = None
+        self.distance = 0               # 이동 거리
 
         self.fly_available = False      # 몬스터가 장애물을 뚫는 비행이 가능한가?
 
@@ -59,6 +56,8 @@ class Monster(BaseUnit):
             if self.AI_type is PREEMPTIVE:
                 if self.recognize(user) and user.death() is False:      # 생존중인 플레이어가 시야 내에 접근하였을 때
                     self.contact = True     # 플레이어를 인식
+                elif self.HP < self.MAX_HP:
+                    self.contact = True
             elif self.AI_type is NON_PREEMPTIVE:
                 if self.HP < self.MAX_HP:   # 플레이어에게 피격당하여 HP가 깎였을 때
                     self.contact = True     # 플레이어를 인식
@@ -84,19 +83,19 @@ class Monster(BaseUnit):
                 elif self.dir is 6:
                     self.x = min(self.background.w, self.x + self.distance)
                 elif self.dir is 1:
-                    self.x = max(0, self.x - self.distance)
-                    self.y = max(0, self.y - self.distance)
+                    self.x = max(0, self.x - (math.sqrt(0.5) * self.distance))
+                    self.y = max(0, self.y - (math.sqrt(0.5) * self.distance))
                 elif self.dir is 3:
-                    self.x = min(self.background.w, self.x + self.distance)
-                    self.y = max(0, self.y - self.distance)
+                    self.x = min(self.background.w, self.x + (math.sqrt(0.5) * self.distance))
+                    self.y = max(0, self.y - (math.sqrt(0.5) * self.distance))
                 elif self.dir is 7:
-                    self.x = max(0, self.x - self.distance)
-                    self.y = min(self.background.h, self.y + self.distance)
+                    self.x = max(0, self.x - (math.sqrt(0.5) * self.distance))
+                    self.y = min(self.background.h, self.y + (math.sqrt(0.5) * self.distance))
                 elif self.dir is 9:
-                    self.x = min(self.background.w, self.x + self.distance)
-                    self.y = min(self.background.h, self.y + self.distance)
+                    self.x = min(self.background.w, self.x + (math.sqrt(0.5) * self.distance))
+                    self.y = min(self.background.h, self.y + (math.sqrt(0.5) * self.distance))
                 if self.fly_available is False:
-                    if others is not []:
+                    if others:
                         for other in others:
                             if collide(self, other):
                                 if self.dir is 2:
@@ -108,17 +107,17 @@ class Monster(BaseUnit):
                                 elif self.dir is 6:
                                     self.x = min(self.background.w, self.x - self.distance)
                                 elif self.dir is 1:
-                                    self.x = max(0, self.x + self.distance)
-                                    self.y = max(0, self.y + self.distance)
+                                    self.x = max(0, self.x + (math.sqrt(0.5) * self.distance))
+                                    self.y = max(0, self.y + (math.sqrt(0.5) * self.distance))
                                 elif self.dir is 3:
-                                    self.x = min(self.background.w, self.x - self.distance)
-                                    self.y = max(0, self.y + self.distance)
+                                    self.x = min(self.background.w, self.x - (math.sqrt(0.5) * self.distance))
+                                    self.y = max(0, self.y + (math.sqrt(0.5) * self.distance))
                                 elif self.dir is 7:
-                                    self.x = max(0, self.x + self.distance)
-                                    self.y = min(self.background.h, self.y - self.distance)
+                                    self.x = max(0, self.x + (math.sqrt(0.5) * self.distance))
+                                    self.y = min(self.background.h, self.y - (math.sqrt(0.5) * self.distance))
                                 elif self.dir is 9:
-                                    self.x = min(self.background.w, self.x - self.distance)
-                                    self.y = min(self.background.h, self.y - self.distance)
+                                    self.x = min(self.background.w, self.x - (math.sqrt(0.5) * self.distance))
+                                    self.y = min(self.background.h, self.y - (math.sqrt(0.5) * self.distance))
         # 플레이어에게 공격받았을 때 무적을 0.25초간 걸어서 연속프레임 공격 방지
         if self.invincibility is True:
             self.invincible_time += frame_time
@@ -127,23 +126,23 @@ class Monster(BaseUnit):
                 self.invincible_time = 0
 
     def user_chase(self, frame_time, user):
-        if user.x < self.x - (self.width / 2):
-            if user.y < self.y - (self.height / 2):
+        if user.x + (user.width / 2) < self.x:
+            if user.y + (user.height / 4) < self.y:
                 self.dir = 1
-            elif user.y > self.y + (self.height / 2):
+            elif user.y - (user.height / 4) > self.y:
                 self.dir = 7
             else:
                 self.dir = 4
-        elif user.x > self.x + (self.width / 2):
-            if user.y < self.y - (self.height / 2):
+        elif user.x - (user.width / 2) > self.x:
+            if user.y + (user.height / 4) < self.y:
                 self.dir = 3
-            elif user.y > self.y + (self.height / 2):
+            elif user.y - (user.height / 4) > self.y:
                 self.dir = 9
             else:
                 self.dir = 6
-        elif user.y > self.y + (self.height / 2):
+        elif user.y - (user.height / 4) > self.y:
             self.dir = 8
-        elif user.y < self.y - (self.height / 2):
+        elif user.y + (user.height / 4) < self.y:
             self.dir = 2
 
     def hit_by_str(self, damage, direction, others):
@@ -192,14 +191,14 @@ class Monster(BaseUnit):
 
     def draw_hp_bar(self):
         # Border
-        self.MONSTER_HP_BAR.clip_draw(0, 6, 10, 6,
+        rssmgr.UI_bar.image.clip_draw(0, 6, 10, 6,
                                       self.x - self.background.window_left,
                                       self.y - self.background.window_bottom + int(self.height / 2) + 12,
                                       int(self.width * 6 / 5), 12)
         # HP
-        self.MONSTER_HP_BAR.clip_draw(0, 0, 10, 6,
-                                      self.x - self.background.window_left -
-                                      int(self.width * ((self.MAX_HP-self.HP) / (self.MAX_HP * 2))),
+        rssmgr.UI_bar.image.clip_draw(0, 0, 10, 6,
+                                      self.x - self.background.window_left
+                                      - int(self.width * ((self.MAX_HP-self.HP) / (self.MAX_HP * 2))),
                                       self.y - self.background.window_bottom + int(self.height / 2) + 12,
                                       int(self.width * 6 / 5)*(self.HP/self.MAX_HP), 12)
 
@@ -228,31 +227,32 @@ class Fly(Monster):
         self.x, self.y = x, y
 
     def draw(self):
-        if self.dir is 2:
-            self.image.clip_draw(self.frame * self.width, self.height * 9 + 16, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
-        elif self.dir is 8:
-            self.image.clip_draw(self.frame * self.width, self.height * 5 + 16, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
-        elif self.dir is 4:
-            self.image.clip_draw(self.frame * self.width, self.height * 7 + 16, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
-        elif self.dir is 6:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 7 + 16, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
-        elif self.dir is 1:
-            self.image.clip_draw(self.frame * self.width, self.height * 8 + 16, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
-        elif self.dir is 3:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 8 + 16, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
-        elif self.dir is 7:
-            self.image.clip_draw(self.frame * self.width, self.height * 6 + 16, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
-        elif self.dir is 9:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 6 + 16, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
-        self.draw_hp_bar()
+        if rssmgr.fly is not None:
+            if self.dir is 2:
+                rssmgr.fly.image.clip_draw(self.frame * self.width, self.height * 9 + 16, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom)
+            elif self.dir is 8:
+                rssmgr.fly.image.clip_draw(self.frame * self.width, self.height * 5 + 16, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom)
+            elif self.dir is 4:
+                rssmgr.fly.image.clip_draw(self.frame * self.width, self.height * 7 + 16, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom)
+            elif self.dir is 6:
+                rssmgr.fly.image.clip_draw((self.frame + 3) * self.width, self.height * 7 + 16, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom)
+            elif self.dir is 1:
+                rssmgr.fly.image.clip_draw(self.frame * self.width, self.height * 8 + 16, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom)
+            elif self.dir is 3:
+                rssmgr.fly.image.clip_draw((self.frame + 3) * self.width, self.height * 8 + 16, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom)
+            elif self.dir is 7:
+                rssmgr.fly.image.clip_draw(self.frame * self.width, self.height * 6 + 16, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom)
+            elif self.dir is 9:
+                rssmgr.fly.image.clip_draw((self.frame + 3) * self.width, self.height * 6 + 16, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom)
+            self.draw_hp_bar()
 
     def get_bb(self):
         return self.x - self.width / 4, self.y - self.height / 4, self.x + self.width / 4, self.y + self.height / 4
@@ -283,41 +283,41 @@ class StrongFly(Monster):
 
     def draw(self):
         if self.dir is 2:
-            self.image.clip_draw(self.frame * self.width, self.height * 9 + 16, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.fly.image.clip_draw(self.frame * self.width, self.height * 9 + 16, self.width, self.height,
+                                       self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                       self.width * 2, self.height * 2)
         elif self.dir is 8:
-            self.image.clip_draw(self.frame * self.width, self.height * 5 + 16, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.fly.image.clip_draw(self.frame * self.width, self.height * 5 + 16, self.width, self.height,
+                                       self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                       self.width * 2, self.height * 2)
         elif self.dir is 4:
-            self.image.clip_draw(self.frame * self.width, self.height * 7 + 16, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.fly.image.clip_draw(self.frame * self.width, self.height * 7 + 16, self.width, self.height,
+                                       self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                       self.width * 2, self.height * 2)
         elif self.dir is 6:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 7 + 16, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.fly.image.clip_draw((self.frame + 3) * self.width, self.height * 7 + 16, self.width, self.height,
+                                       self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                       self.width * 2, self.height * 2)
         elif self.dir is 1:
-            self.image.clip_draw(self.frame * self.width, self.height * 8 + 16, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.fly.image.clip_draw(self.frame * self.width, self.height * 8 + 16, self.width, self.height,
+                                       self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                       self.width * 2, self.height * 2)
         elif self.dir is 3:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 8 + 16, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.fly.image.clip_draw((self.frame + 3) * self.width, self.height * 8 + 16, self.width, self.height,
+                                       self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                       self.width * 2, self.height * 2)
         elif self.dir is 7:
-            self.image.clip_draw(self.frame * self.width, self.height * 6 + 16, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.fly.image.clip_draw(self.frame * self.width, self.height * 6 + 16, self.width, self.height,
+                                       self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                       self.width * 2, self.height * 2)
         elif self.dir is 9:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 6 + 16, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.fly.image.clip_draw((self.frame + 3) * self.width, self.height * 6 + 16, self.width, self.height,
+                                       self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                       self.width * 2, self.height * 2)
         self.draw_hp_bar()
 
     def get_bb(self):
-        return self.x - self.width, self.y - self.height, self.x + self.width, self.y + self.height
+        return self.x - self.width / 2, self.y - self.height / 2, self.x + self.width / 2, self.y + self.height / 2
 
 
 class Crab(Monster):
@@ -344,29 +344,29 @@ class Crab(Monster):
 
     def draw(self):
         if self.dir is 2:
-            self.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+            rssmgr.crab.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
+                                        self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 8:
-            self.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+            rssmgr.crab.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
+                                        self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 4:
-            self.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+            rssmgr.crab.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
+                                        self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 6:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+            rssmgr.crab.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
+                                        self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 1:
-            self.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+            rssmgr.crab.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
+                                        self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 3:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+            rssmgr.crab.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
+                                        self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 7:
-            self.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+            rssmgr.crab.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
+                                        self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 9:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+            rssmgr.crab.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
+                                        self.x - self.background.window_left, self.y - self.background.window_bottom)
         self.draw_hp_bar()
 
     def get_bb(self):
@@ -398,37 +398,37 @@ class Gigant_Crab(Monster):
 
     def draw(self):
         if self.dir is 2:
-            self.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.crab.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
+                                        self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                        self.width * 2, self.height * 2)
         elif self.dir is 8:
-            self.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.crab.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
+                                        self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                        self.width * 2, self.height * 2)
         elif self.dir is 4:
-            self.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.crab.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
+                                        self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                        self.width * 2, self.height * 2)
         elif self.dir is 6:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.crab.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
+                                        self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                        self.width * 2, self.height * 2)
         elif self.dir is 1:
-            self.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.crab.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
+                                        self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                        self.width * 2, self.height * 2)
         elif self.dir is 3:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.crab.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
+                                        self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                        self.width * 2, self.height * 2)
         elif self.dir is 7:
-            self.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.crab.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
+                                        self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                        self.width * 2, self.height * 2)
         elif self.dir is 9:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.crab.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
+                                        self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                        self.width * 2, self.height * 2)
         self.draw_hp_bar()
 
     def get_bb(self):
@@ -465,37 +465,37 @@ class Skull_Golem(Monster):
 
     def draw(self):
         if self.dir is 2:
-            self.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.skull_golem.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
+                                               self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                               self.width * 2, self.height * 2)
         elif self.dir is 8:
-            self.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.skull_golem.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
+                                               self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                               self.width * 2, self.height * 2)
         elif self.dir is 4:
-            self.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.skull_golem.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
+                                               self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                               self.width * 2, self.height * 2)
         elif self.dir is 6:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.skull_golem.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
+                                               self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                               self.width * 2, self.height * 2)
         elif self.dir is 1:
-            self.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.skull_golem.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
+                                               self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                               self.width * 2, self.height * 2)
         elif self.dir is 3:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.skull_golem.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
+                                               self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                               self.width * 2, self.height * 2)
         elif self.dir is 7:
-            self.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.skull_golem.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
+                                               self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                               self.width * 2, self.height * 2)
         elif self.dir is 9:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.skull_golem.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
+                                               self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                               self.width * 2, self.height * 2)
         self.draw_hp_bar()
 
     def get_bb(self):
@@ -533,29 +533,37 @@ class Mini_Skull_Golem(Monster):
 
     def draw(self):
         if self.dir is 2:
-            self.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+            rssmgr.skull_golem.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
+                                               self.x - self.background.window_left,
+                                               self.y - self.background.window_bottom)
         elif self.dir is 8:
-            self.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+            rssmgr.skull_golem.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
+                                               self.x - self.background.window_left,
+                                               self.y - self.background.window_bottom)
         elif self.dir is 4:
-            self.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+            rssmgr.skull_golem.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
+                                               self.x - self.background.window_left,
+                                               self.y - self.background.window_bottom)
         elif self.dir is 6:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+            rssmgr.skull_golem.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
+                                               self.x - self.background.window_left,
+                                               self.y - self.background.window_bottom)
         elif self.dir is 1:
-            self.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+            rssmgr.skull_golem.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
+                                               self.x - self.background.window_left,
+                                               self.y - self.background.window_bottom)
         elif self.dir is 3:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+            rssmgr.skull_golem.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
+                                               self.x - self.background.window_left,
+                                               self.y - self.background.window_bottom)
         elif self.dir is 7:
-            self.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+            rssmgr.skull_golem.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
+                                               self.x - self.background.window_left,
+                                               self.y - self.background.window_bottom)
         elif self.dir is 9:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom)
+            rssmgr.skull_golem.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
+                                               self.x - self.background.window_left,
+                                               self.y - self.background.window_bottom)
         self.draw_hp_bar()
 
     def get_bb(self):
@@ -587,37 +595,29 @@ class Spear(Monster):
 
     def draw(self):
         if self.dir is 2:
-            self.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 )
+            rssmgr.spear.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
+                                         self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 8:
-            self.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 )
+            rssmgr.spear.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
+                                         self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 4:
-            self.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 )
+            rssmgr.spear.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
+                                         self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 6:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 )
+            rssmgr.spear.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
+                                         self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 1:
-            self.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 )
+            rssmgr.spear.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
+                                         self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 3:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 )
+            rssmgr.spear.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
+                                         self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 7:
-            self.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 )
+            rssmgr.spear.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
+                                         self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 9:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 )
+            rssmgr.spear.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
+                                         self.x - self.background.window_left, self.y - self.background.window_bottom)
         self.draw_hp_bar()
 
     def get_bb(self):
@@ -654,37 +654,29 @@ class FlyingSpear(Monster):
 
     def draw(self):
         if self.dir is 2:
-            self.image.clip_draw((self.frame + 2) * self.width, self.height * 12 + 48, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 )
+            rssmgr.spear.image.clip_draw((self.frame + 2) * self.width, self.height * 12 + 48, self.width, self.height,
+                                         self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 8:
-            self.image.clip_draw((self.frame + 2) * self.width, self.height * 8, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 )
+            rssmgr.spear.image.clip_draw((self.frame + 2) * self.width, self.height * 8, self.width, self.height,
+                                         self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 4:
-            self.image.clip_draw((self.frame + 2) * self.width, self.height * 10 + 16, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 )
+            rssmgr.spear.image.clip_draw((self.frame + 2) * self.width, self.height * 10 + 16, self.width, self.height,
+                                         self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 6:
-            self.image.clip_draw((self.frame + 4) * self.width, self.height * 10 + 16, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 )
+            rssmgr.spear.image.clip_draw((self.frame + 4) * self.width, self.height * 10 + 16, self.width, self.height,
+                                         self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 1:
-            self.image.clip_draw((self.frame + 2) * self.width, self.height * 11 + 32, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 )
+            rssmgr.spear.image.clip_draw((self.frame + 2) * self.width, self.height * 11 + 32, self.width, self.height,
+                                         self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 3:
-            self.image.clip_draw((self.frame + 4) * self.width, self.height * 11 + 32, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 )
+            rssmgr.spear.image.clip_draw((self.frame + 4) * self.width, self.height * 11 + 32, self.width, self.height,
+                                         self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 7:
-            self.image.clip_draw((self.frame + 2) * self.width, self.height * 9, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 )
+            rssmgr.spear.image.clip_draw((self.frame + 2) * self.width, self.height * 9, self.width, self.height,
+                                         self.x - self.background.window_left, self.y - self.background.window_bottom)
         elif self.dir is 9:
-            self.image.clip_draw((self.frame + 4) * self.width, self.height * 9, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 )
+            rssmgr.spear.image.clip_draw((self.frame + 4) * self.width, self.height * 9, self.width, self.height,
+                                         self.x - self.background.window_left, self.y - self.background.window_bottom)
         self.draw_hp_bar()
 
     def get_bb(self):
@@ -716,37 +708,37 @@ class Slasher(Monster):
 
     def draw(self):
         if self.dir is 2:
-            self.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.slasher.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                           self.width * 2, self.height * 2)
         elif self.dir is 8:
-            self.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.slasher.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                           self.width * 2, self.height * 2)
         elif self.dir is 4:
-            self.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.slasher.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                           self.width * 2, self.height * 2)
         elif self.dir is 6:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.slasher.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                           self.width * 2, self.height * 2)
         elif self.dir is 1:
-            self.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.slasher.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                           self.width * 2, self.height * 2)
         elif self.dir is 3:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.slasher.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                           self.width * 2, self.height * 2)
         elif self.dir is 7:
-            self.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.slasher.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                           self.width * 2, self.height * 2)
         elif self.dir is 9:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 2, self.height * 2)
+            rssmgr.slasher.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                           self.width * 2, self.height * 2)
         self.draw_hp_bar()
 
     def get_bb(self):
@@ -785,37 +777,37 @@ class GigantSlasher(Monster):
 
     def draw(self):
         if self.dir is 2:
-            self.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 4, self.height * 4)
+            rssmgr.slasher.image.clip_draw(self.frame * self.width, self.height * 4, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                           self.width * 4, self.height * 4)
         elif self.dir is 8:
-            self.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 4, self.height * 4)
+            rssmgr.slasher.image.clip_draw(self.frame * self.width, self.height * 0, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                           self.width * 4, self.height * 4)
         elif self.dir is 4:
-            self.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 4, self.height * 4)
+            rssmgr.slasher.image.clip_draw(self.frame * self.width, self.height * 2, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                           self.width * 4, self.height * 4)
         elif self.dir is 6:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 4, self.height * 4)
+            rssmgr.slasher.image.clip_draw((self.frame + 3) * self.width, self.height * 2, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                           self.width * 4, self.height * 4)
         elif self.dir is 1:
-            self.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 4, self.height * 4)
+            rssmgr.slasher.image.clip_draw(self.frame * self.width, self.height * 3, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                           self.width * 4, self.height * 4)
         elif self.dir is 3:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 4, self.height * 4)
+            rssmgr.slasher.image.clip_draw((self.frame + 3) * self.width, self.height * 3, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                           self.width * 4, self.height * 4)
         elif self.dir is 7:
-            self.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 4, self.height * 4)
+            rssmgr.slasher.image.clip_draw(self.frame * self.width, self.height * 1, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                           self.width * 4, self.height * 4)
         elif self.dir is 9:
-            self.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
-                                 self.x - self.background.window_left, self.y - self.background.window_bottom,
-                                 self.width * 4, self.height * 4)
+            rssmgr.slasher.image.clip_draw((self.frame + 3) * self.width, self.height * 1, self.width, self.height,
+                                           self.x - self.background.window_left, self.y - self.background.window_bottom,
+                                           self.width * 4, self.height * 4)
         self.draw_hp_bar()
 
     def get_bb(self):

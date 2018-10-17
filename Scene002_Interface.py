@@ -34,7 +34,7 @@ def handle_events(frame_time):
             Project_SceneFrameWork.quit()
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
-                Project_SceneFrameWork.quit()
+                Project_SceneFrameWork.scene_pop()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_u):
                 Project_SceneFrameWork.scene_pop()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_UP):
@@ -48,10 +48,10 @@ def handle_events(frame_time):
                 else:
                     cursor = 0
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
-                if Scene003_BaseBattletScene.user.Ability_Point > 0 and cursor < 7:
+                if Scene003_BaseBattletScene.user.Ability_Point > 0 and cursor < 6:
                     if cursor == 0:
-                        Scene003_BaseBattletScene.user.HP += 2
-                        Scene003_BaseBattletScene.user.MAX_HP += 2
+                        Scene003_BaseBattletScene.user.HP += 3
+                        Scene003_BaseBattletScene.user.MAX_HP += 3
                     elif cursor == 1:
                         Scene003_BaseBattletScene.user.MP += 1
                         Scene003_BaseBattletScene.user.MAX_MP += 1

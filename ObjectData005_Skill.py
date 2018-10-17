@@ -1,4 +1,5 @@
 from pico2d import *
+import math
 
 PIXEL_PER_METER = (32.0 / 1.0)  # 32pixel == 1m
 
@@ -151,20 +152,20 @@ class AirSplit(DirectionRangeSkill):
                 self.x += (self.distance * 8)
             elif self.start_dir is 1:
                 self.rad = 5 * math.pi / 4.0
-                self.x -= (self.distance * 8)
-                self.y -= (self.distance * 8)
+                self.x -= math.sqrt(0.5) * (self.distance * 5)
+                self.y -= math.sqrt(0.5) * (self.distance * 5)
             elif self.start_dir is 3:
                 self.rad = 7 * math.pi / 4.0
-                self.x += (self.distance * 8)
-                self.y -= (self.distance * 8)
+                self.x += math.sqrt(0.5) * (self.distance * 5)
+                self.y -= math.sqrt(0.5) * (self.distance * 5)
             elif self.start_dir is 7:
                 self.rad = 3 * math.pi / 4.0
-                self.x -= (self.distance * 8)
-                self.y += (self.distance * 8)
+                self.x -= math.sqrt(0.5) * (self.distance * 5)
+                self.y += math.sqrt(0.5) * (self.distance * 5)
             elif self.start_dir is 9:
                 self.rad = 1 * math.pi / 4.0
-                self.x += (self.distance * 8)
-                self.y += (self.distance * 8)
+                self.x += math.sqrt(0.5) * (self.distance * 5)
+                self.y += math.sqrt(0.5) * (self.distance * 5)
             if self.skill_frame_time > air_splitter_time_limit:
                 self.x, self.y = -100, -100
                 self.skill_frame_time = 0

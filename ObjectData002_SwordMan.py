@@ -251,9 +251,9 @@ class SwordMan(Player):
         elif self.LEVEL % 3 == 1:
             self.StaminaPotion.number += 1
 
-    def air_splitter_collide(self, enemy):
+    def air_splitter_collide(self, other):
         left_a, bottom_a, right_a, top_a = self.Air_split.get_hb()
-        left_b, bottom_b, right_b, top_b = enemy.get_bb()
+        left_b, bottom_b, right_b, top_b = other.get_bb()
         if left_a > right_b:
             return False
         if right_a < left_b:

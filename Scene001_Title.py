@@ -4,6 +4,7 @@ import Scene011_Stage01
 import Scene012_Stage02
 import Scene014_Boss_Stage
 import Scene002_Hint_Interface
+import Resource_Manager
 
 name = "Title_Scene"
 image = None

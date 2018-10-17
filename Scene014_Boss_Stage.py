@@ -7,6 +7,7 @@ import ObjectData000_BaseObject_BaseUnit
 import ObjectData003_Monster
 import Scene005_GameClear
 import Mapdata
+import Resource_Manager as rssmgr
 
 
 name = "Boss_Stage"
@@ -62,17 +63,11 @@ def enter():
         for i in range(1)]
 
     for slasher in slashers:
-        slasher.image = Scene003_BaseBattletScene.slasher_image
-        slasher.hit_sound = Scene003_BaseBattletScene.slasher_hit_sound
-        slasher.MONSTER_HP_BAR = Scene003_BaseBattletScene.ui_bar_image
         slasher.set_background(background)
 
     for gigantslasher in Bosses:
         gigantslasher.x = gigantslasher.x + 10
         gigantslasher.y = gigantslasher.y - 50
-        gigantslasher.image = Scene003_BaseBattletScene.slasher_image
-        gigantslasher.hit_sound = Scene003_BaseBattletScene.slasher_hit_sound
-        gigantslasher.MONSTER_HP_BAR = Scene003_BaseBattletScene.ui_bar_image
         gigantslasher.set_background(background)
 
     for Zone in Cannot_Move_Zone:
@@ -122,8 +117,8 @@ def draw_scene(frame_time):
             Zone.draw_bb()
 
     if Before_Loading_Trigger is True:
-        Scene003_BaseBattletScene.Message_font.draw(125, Project_SceneFrameWork.Window_H / 2,
-                                                    '이전 스테이지를 로딩중입니다, 조금 기다려 주세요!', (225, 0, 0))
+        rssmgr.Korean_font.draw(125, Project_SceneFrameWork.Window_H / 2,
+                                '이전 스테이지를 로딩중입니다, 조금 기다려 주세요!', (225, 0, 0))
 
 
 def update(frame_time):
@@ -132,6 +127,8 @@ def update(frame_time):
     global size_height
     global Bosses, slashers
     global Before_Loading_Trigger
+    global BeforeStageZone
+
     background.update(frame_time)
     collide_zone = []
     for Zone in Cannot_Move_Zone:
@@ -150,10 +147,9 @@ def update(frame_time):
         Scene003_BaseBattletScene.user.y = 3057
         Before_Loading_Trigger = False
 
-    for Boss in Bosses:
-        if Boss.Hp < 10 :
-            Project_SceneFrameWork.scene_push(Scene005_GameClear)
-            Scene003_BaseBattletScene.user.state = 0
+    if not Bosses:
+        Project_SceneFrameWork.scene_push(Scene005_GameClear)
+        Scene003_BaseBattletScene.user = None
 
 
 def pause(): pass

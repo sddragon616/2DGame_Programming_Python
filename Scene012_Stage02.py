@@ -8,6 +8,7 @@ import Scene011_Stage01
 import Scene013_Stage03
 import Scene014_Boss_Stage
 import Mapdata
+import Resource_Manager as rssmgr
 
 
 name = "Stage_02"
@@ -82,9 +83,6 @@ def enter():
         for index in range(len(Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[3]['objects']))]
 
     for strong_fly in strong_flies:
-        strong_fly.image = Scene003_BaseBattletScene.fly_image
-        strong_fly.hit_sound = Scene003_BaseBattletScene.fly_hit_sound
-        strong_fly.MONSTER_HP_BAR = Scene003_BaseBattletScene.ui_bar_image
         strong_fly.set_background(background)
 
     # 게 생성
@@ -92,9 +90,6 @@ def enter():
         Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[4]['objects'][index], 3200)
         for index in range(len(Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[4]['objects']))]
     for crab in crabs:
-        crab.image = Scene003_BaseBattletScene.crab_image
-        crab.hit_sound = Scene003_BaseBattletScene.crab_hit_sound
-        crab.MONSTER_HP_BAR = Scene003_BaseBattletScene.ui_bar_image
         crab.set_background(background)
 
     # 작은 골렘 생성
@@ -102,9 +97,6 @@ def enter():
         Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[5]['objects'][index], 3200)
         for index in range(len(Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[5]['objects']))]
     for mini_golem in mini_golems:
-        mini_golem.image = Scene003_BaseBattletScene.skull_golem_image
-        mini_golem.hit_sound = Scene003_BaseBattletScene.slasher_hit_sound
-        mini_golem.MONSTER_HP_BAR = Scene003_BaseBattletScene.ui_bar_image
         mini_golem.set_background(background)
 
     # 골렘 생성
@@ -112,9 +104,6 @@ def enter():
         Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[6]['objects'][index], 3200)
         for index in range(len(Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[6]['objects']))]
     for golem in golems:
-        golem.image = Scene003_BaseBattletScene.skull_golem_image
-        golem.hit_sound = Scene003_BaseBattletScene.slasher_hit_sound
-        golem.MONSTER_HP_BAR = Scene003_BaseBattletScene.ui_bar_image
         golem.set_background(background)
 
     # 거대 게 생성
@@ -122,9 +111,6 @@ def enter():
         Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[7]['objects'][index], 3200)
         for index in range(len(Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[7]['objects']))]
     for gigant_crab in gigant_crabs:
-        gigant_crab.image = Scene003_BaseBattletScene.crab_image
-        gigant_crab.hit_sound = Scene003_BaseBattletScene.crab_hit_sound
-        gigant_crab.MONSTER_HP_BAR = Scene003_BaseBattletScene.ui_bar_image
         gigant_crab.set_background(background)
 
     # 스피어 생성
@@ -132,9 +118,6 @@ def enter():
         Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[8]['objects'][index], 3200)
         for index in range(len(Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[8]['objects']))]
     for spear in spears:
-        spear.image = Scene003_BaseBattletScene.spear_image
-        spear.hit_sound = Scene003_BaseBattletScene.spear_hit_sound
-        spear.MONSTER_HP_BAR = Scene003_BaseBattletScene.ui_bar_image
         spear.set_background(background)
 
     # 비행형 스피어 생성
@@ -142,9 +125,6 @@ def enter():
         Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[9]['objects'][index], 3200)
         for index in range(len(Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[9]['objects']))]
     for flying_spear in flying_spears:
-        flying_spear.image = Scene003_BaseBattletScene.spear_image
-        flying_spear.hit_sound = Scene003_BaseBattletScene.spear_hit_sound
-        flying_spear.MONSTER_HP_BAR = Scene003_BaseBattletScene.ui_bar_image
         flying_spear.set_background(background)
 
     monsters = crabs + golems + strong_flies + mini_golems + gigant_crabs + spears + flying_spears
@@ -194,12 +174,12 @@ def draw_scene(frame_time):
             Zone.draw_bb()
     Scene003_BaseBattletScene.draw_scene(frame_time)
     if Loading_Trigger is True:
-        Scene003_BaseBattletScene.Message_font.draw(125, Project_SceneFrameWork.Window_H / 2,
-                                                    '다음 스테이지를 로딩중입니다, 조금 기다려 주세요!', (225, 0, 0))
+        rssmgr.Korean_font.draw(125, Project_SceneFrameWork.Window_H / 2,
+                                '다음 스테이지를 로딩중입니다, 조금 기다려 주세요!', (225, 0, 0))
 
     if Before_Loading_Trigger is True:
-        Scene003_BaseBattletScene.Message_font.draw(125, Project_SceneFrameWork.Window_H / 2,
-                                                    '이전 스테이지를 로딩중입니다, 조금 기다려 주세요!', (225, 0, 0))
+        rssmgr.Korean_font.draw(125, Project_SceneFrameWork.Window_H / 2,
+                                '이전 스테이지를 로딩중입니다, 조금 기다려 주세요!', (225, 0, 0))
 
 
 def update(frame_time):
@@ -234,6 +214,7 @@ def update(frame_time):
         Scene003_BaseBattletScene.user.x = 50
         Scene003_BaseBattletScene.user.y = 550
         Before_Loading_Trigger = False
+
 
 def pause(): pass
 

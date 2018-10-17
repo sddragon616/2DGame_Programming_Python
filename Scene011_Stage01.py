@@ -1,11 +1,11 @@
 from pico2d import *
-from random import *
 import Project_SceneFrameWork
 import Scene003_BaseBattletScene
 import ObjectData000_BaseObject_BaseUnit
 import ObjectData003_Monster
 import Scene012_Stage02
 import Mapdata
+import Resource_Manager as rssmgr
 
 
 name = "Stage_01"
@@ -47,11 +47,11 @@ def enter():
     global KeyItem
     global Message_font
 
+    Scene003_BaseBattletScene.enter()
     KeyEvent = load_wav('Resource_Sound\\Effect_Sound\\Drinking.wav')
     KeyEvent.set_volume(64)
     size_width = get_canvas_width()
     size_height = get_canvas_height()
-    Scene003_BaseBattletScene.enter()
 
     # 돌 신발
     KeyZone = ObjectData000_BaseObject_BaseUnit.DataNoneBaseZone(3450, 2400 - 350, 32, 32)
@@ -60,7 +60,7 @@ def enter():
     StageMoveZone = ObjectData000_BaseObject_BaseUnit.DataNoneBaseZone(10, 550, 20, 100)
 
     # 돌 신을 신고 뛰어보자 폴짝
-    JumpZone = ObjectData000_BaseObject_BaseUnit.DataNoneBaseZone(900, 1550, 300, 50)
+    JumpZone = ObjectData000_BaseObject_BaseUnit.DataNoneBaseZone(905, 1550, 295, 65)
 
     if KeyItem is None:
         KeyItem = load_image('Resource_Image\\stone_shoes.png')
@@ -70,11 +70,12 @@ def enter():
 
     # 이동불가 영역
     Cannot_Move_Zone = [ObjectData000_BaseObject_BaseUnit.BaseZone(
-        Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[3]['objects'][i], 2400) for i in range(199)]
+        Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[3]['objects'][i], 2400)
+        for i in range(len(Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[3]['objects']))]
 
     flies = [ObjectData003_Monster.Fly(
         Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[2]['objects'][index], 2400)
-        for index in range(65)]
+        for index in range(len(Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[2]['objects']))]
 
     KeyZone.set_background(background)
     StageMoveZone.set_background(background)
@@ -88,13 +89,11 @@ def enter():
 
     for fly in flies:
         fly.set_background(background)
-        fly.image = Scene003_BaseBattletScene.fly_image
-        fly.MONSTER_HP_BAR = Scene003_BaseBattletScene.ui_bar_image
-        fly.hit_sound = Scene003_BaseBattletScene.fly_hit_sound
-        fly.death_sound = Scene003_BaseBattletScene.death_sound
 
     if BGM is None:
         BGM = Stage1_Bgm()
+    else:
+        BGM.bgm.repeat_play()
 
 
 def exit():
@@ -142,6 +141,8 @@ def draw_scene(frame_time):
         if abs(Scene003_BaseBattletScene.user.x - fly.x) < size_width and \
                         abs(Scene003_BaseBattletScene.user.y - fly.y) < size_height:
             fly.draw()
+        else:
+            fly.contact = False
         if Scene003_BaseBattletScene.user.box_draw_Trigger:
             fly.draw_bb()
     Scene003_BaseBattletScene.draw_scene(frame_time)
@@ -158,22 +159,22 @@ def draw_scene(frame_time):
             KeyItem = load_image('Resource_Image\\stone_shoes.png')
         KeyItem.draw(KeyZone.x - background.window_left, KeyZone.y - background.window_bottom)
     elif collide(Scene003_BaseBattletScene.user, KeyZone):
-        Scene003_BaseBattletScene.Message_font.draw(150, Project_SceneFrameWork.Window_H - 100,
-                                                    '튼튼한 돌 신발을 주웠다. 이걸 신으면 높은 곳에서 떨어져도 괜찮을 것 같다.', (255, 255, 255))
-        Scene003_BaseBattletScene.Message_font.draw(10, Project_SceneFrameWork.Window_H - 150,
-                                                    '마물이 먹다가 뱉은 것 같다. 전 주인은 돌 신발만 남기고 뱃속에서 소화되었겠지...', (255, 255, 255))
+        rssmgr.Korean_font.draw(150, Project_SceneFrameWork.Window_H - 100,
+                                '튼튼한 돌 신발을 주웠다. 이걸 신으면 높은 곳에서 떨어져도 괜찮을 것 같다.', (255, 255, 255))
+        rssmgr.Korean_font.draw(10, Project_SceneFrameWork.Window_H - 150,
+                                '마물이 먹다가 뱉은 것 같다. 전 주인은 돌 신발만 남기고 뱃속에서 소화되었겠지...', (255, 255, 255))
 
     if collide(Scene003_BaseBattletScene.user, JumpZone):
         if KeyTrigger is True and Scene003_BaseBattletScene.user.dir is 2:
             Scene003_BaseBattletScene.user.y -= 250
             Scene003_BaseBattletScene.user.dir = 2
         else:
-            Scene003_BaseBattletScene.Message_font.draw(125, Project_SceneFrameWork.Window_H - 150,
-                                                        '높이가 높은 절벽이다. 떨어지면 발이 아플 것 같다...', (0, 0, 0))
+            rssmgr.Korean_font.draw(125, Project_SceneFrameWork.Window_H - 150,
+                                    '높이가 높은 절벽이다. 떨어지면 발이 아플 것 같다...', (0, 0, 0))
 
     if Loading_Trigger is True:
-        Scene003_BaseBattletScene.Message_font.draw(125, Project_SceneFrameWork.Window_H / 2,
-                                                    '다음 스테이지를 로딩중입니다, 조금 기다려 주세요!', (225, 0, 0))
+        rssmgr.Korean_font.draw(125, Project_SceneFrameWork.Window_H / 2,
+                                '다음 스테이지를 로딩중입니다, 조금 기다려 주세요!', (225, 0, 0))
 
 
 def update(frame_time):

@@ -1,8 +1,8 @@
 {
-	"SwordMan" : {"HP":100, "MAX_HP":100, "MP":25, "MAX_MP":25, "Stamina":50, "MAX_Stamina":50, "STR":667, "DEF":555, "MAG":4, "MR":5, "MOVE_SPEED":22.2, "ATK_SPEED":3},
+	"SwordMan" : {"HP":100, "MAX_HP":100, "MP":25, "MAX_MP":25, "Stamina":50, "MAX_Stamina":50, "STR":6, "DEF":5, "MAG":4, "MR":5, "MOVE_SPEED":22.5, "ATK_SPEED":3},
 	"Warrior" : {"HP":125, "MAX_HP":125, "MP":15, "MAX_MP":15, "Stamina":75, "MAX_Stamina":75, "STR":9, "DEF":9, "MAG":1, "MR":1, "MOVE_SPEED":20.0, "ATK_SPEED":2},
-	"Archer" : {"HP":75, "MAX_HP":75, "MP":50, "MAX_MP":50, "Stamina":35, "MAX_Stamina":35, "STR":8, "DEF":4, "MAG":4, "MR":4, "MOVE_SPEED":25.0, "ATK_SPEED":1},
-	"Witch" : {"HP":50, "MAX_HP":50, "MP":65, "MAX_MP":65, "Stamina":25, "MAX_Stamina":25, "STR":5, "DEF":1, "MAG":8, "MR":6, "MOVE_SPEED":24.5, "ATK_SPEED":4}
+	"Archer" : {"HP":75, "MAX_HP":75, "MP":50, "MAX_MP":50, "Stamina":35, "MAX_Stamina":35, "STR":8, "DEF":4, "MAG":4, "MR":4, "MOVE_SPEED":22.5, "ATK_SPEED":1},
+	"Witch" : {"HP":50, "MAX_HP":50, "MP":65, "MAX_MP":65, "Stamina":25, "MAX_Stamina":25, "STR":5, "DEF":1, "MAG":8, "MR":6, "MOVE_SPEED":20.0, "ATK_SPEED":4}
 }
 
 

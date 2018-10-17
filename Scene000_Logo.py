@@ -2,6 +2,7 @@ import Project_SceneFrameWork
 from pico2d import *
 
 import Scene001_Title
+import Resource_Manager
 
 name = "LogoScene"
 image = None
@@ -16,6 +17,7 @@ def enter():
     SDL_SetWindowTitle(pico2d.window, caption)
     hide_lattice()
     image = load_image('Resource_Image\\GoldDragon_Logo_1024x773-by_solstice_arctic_luna-d6yrudl.png')
+    Resource_Manager.upload_data()
 
 
 def exit():
