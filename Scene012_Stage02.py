@@ -63,8 +63,8 @@ def enter():
                                             'Map\\Mapdata\\High_Field_Ground.png')
 
     Cannot_Move_Zone = [ObjectData000_BaseObject_BaseUnit.BaseZone(
-        Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[2]['objects'][i], 3200)
-        for i in range(len(Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[2]['objects']))]
+        background.tile_map.layers[2]['objects'][i], 3200)
+        for i in range(len(background.tile_map.layers[2]['objects']))]
 
     # 다음 지역으로 이동할 영역
     StageMoveZone = ObjectData000_BaseObject_BaseUnit.DataNoneBaseZone(2350, 3136, 128, 80)
@@ -79,51 +79,51 @@ def enter():
 
     # 파리들 생성
     strong_flies = [ObjectData003_Monster.StrongFly(
-        Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[3]['objects'][index], 3200)
-        for index in range(len(Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[3]['objects']))]
+        background.tile_map.layers[3]['objects'][index], 3200)
+        for index in range(len(background.tile_map.layers[3]['objects']))]
 
     for strong_fly in strong_flies:
         strong_fly.set_background(background)
 
     # 게 생성
     crabs = [ObjectData003_Monster.Crab(
-        Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[4]['objects'][index], 3200)
-        for index in range(len(Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[4]['objects']))]
+        background.tile_map.layers[4]['objects'][index], 3200)
+        for index in range(len(background.tile_map.layers[4]['objects']))]
     for crab in crabs:
         crab.set_background(background)
 
     # 작은 골렘 생성
     mini_golems = [ObjectData003_Monster.Mini_Skull_Golem(
-        Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[5]['objects'][index], 3200)
-        for index in range(len(Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[5]['objects']))]
+        background.tile_map.layers[5]['objects'][index], 3200)
+        for index in range(len(background.tile_map.layers[5]['objects']))]
     for mini_golem in mini_golems:
         mini_golem.set_background(background)
 
     # 골렘 생성
     golems = [ObjectData003_Monster.Skull_Golem(
-        Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[6]['objects'][index], 3200)
-        for index in range(len(Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[6]['objects']))]
+        background.tile_map.layers[6]['objects'][index], 3200)
+        for index in range(len(background.tile_map.layers[6]['objects']))]
     for golem in golems:
         golem.set_background(background)
 
     # 거대 게 생성
     gigant_crabs = [ObjectData003_Monster.Gigant_Crab(
-        Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[7]['objects'][index], 3200)
-        for index in range(len(Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[7]['objects']))]
+        background.tile_map.layers[7]['objects'][index], 3200)
+        for index in range(len(background.tile_map.layers[7]['objects']))]
     for gigant_crab in gigant_crabs:
         gigant_crab.set_background(background)
 
     # 스피어 생성
     spears = [ObjectData003_Monster.Spear(
-        Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[8]['objects'][index], 3200)
-        for index in range(len(Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[8]['objects']))]
+        background.tile_map.layers[8]['objects'][index], 3200)
+        for index in range(len(background.tile_map.layers[8]['objects']))]
     for spear in spears:
         spear.set_background(background)
 
     # 비행형 스피어 생성
     flying_spears = [ObjectData003_Monster.FlyingSpear(
-        Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[9]['objects'][index], 3200)
-        for index in range(len(Mapdata.load_tile_map('Map\\Mapdata\\High_Field.json').layers[9]['objects']))]
+        background.tile_map.layers[9]['objects'][index], 3200)
+        for index in range(len(background.tile_map.layers[9]['objects']))]
     for flying_spear in flying_spears:
         flying_spear.set_background(background)
 

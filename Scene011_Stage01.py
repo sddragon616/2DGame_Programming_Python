@@ -46,6 +46,7 @@ def enter():
     global KeyEvent
     global KeyItem
     global Message_font
+    global Map_Data
 
     Scene003_BaseBattletScene.enter()
     KeyEvent = load_wav('Resource_Sound\\Effect_Sound\\Drinking.wav')
@@ -70,12 +71,12 @@ def enter():
 
     # 이동불가 영역
     Cannot_Move_Zone = [ObjectData000_BaseObject_BaseUnit.BaseZone(
-        Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[3]['objects'][i], 2400)
-        for i in range(len(Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[3]['objects']))]
+        background.tile_map.layers[3]['objects'][i], 2400)
+        for i in range(len(background.tile_map.layers[3]['objects']))]
 
     flies = [ObjectData003_Monster.Fly(
-        Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[2]['objects'][index], 2400)
-        for index in range(len(Mapdata.load_tile_map('Map\\Mapdata\\Forest_Shining.json').layers[2]['objects']))]
+        background.tile_map.layers[2]['objects'][index], 2400)
+        for index in range(len(background.tile_map.layers[2]['objects']))]
 
     KeyZone.set_background(background)
     StageMoveZone.set_background(background)

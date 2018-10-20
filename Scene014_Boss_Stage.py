@@ -51,15 +51,15 @@ def enter():
     BeforeStageZone = ObjectData000_BaseObject_BaseUnit.DataNoneBaseZone(768, 8, 128, 16)
 
     Cannot_Move_Zone = [ObjectData000_BaseObject_BaseUnit.BaseZone(
-        Mapdata.load_tile_map('Map\\Mapdata\\BossMap.json').layers[2]['objects'][i], 4800)
-        for i in range(len(Mapdata.load_tile_map('Map\\Mapdata\\BossMap.json').layers[2]['objects']))]
+        background.tile_map.layers[2]['objects'][i], 4800)
+        for i in range(len(background.tile_map.layers[2]['objects']))]
 
     slashers = [ObjectData003_Monster.Slasher(
-        Mapdata.load_tile_map('Map\\Mapdata\\BossMap.json').layers[3]['objects'][i], 4800)
-        for i in range(len(Mapdata.load_tile_map('Map\\Mapdata\\BossMap.json').layers[3]['objects']))]
+        background.tile_map.layers[3]['objects'][i], 4800)
+        for i in range(len(background.tile_map.layers[3]['objects']))]
 
     Bosses = [ObjectData003_Monster.GigantSlasher(
-        Mapdata.load_tile_map('Map\\Mapdata\\BossMap.json').layers[4]['objects'][i], 4800)
+        background.tile_map.layers[4]['objects'][i], 4800)
         for i in range(1)]
 
     for slasher in slashers:
